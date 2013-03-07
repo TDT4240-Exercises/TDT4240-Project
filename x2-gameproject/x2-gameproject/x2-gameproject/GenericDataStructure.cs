@@ -94,6 +94,10 @@ namespace X2Game
                 case "texture2d":
                     return ResourceManager.getTexture(xml.ReadElementContentAsString());
 
+                case "particle":
+                    Console.WriteLine("Loaded particle!");
+                    return ResourceManager.getParticleTemplate(xml.ReadElementContentAsString());
+
                 default:
                     Console.WriteLine("Unknown data type parsed: " + typeName + " (treating it as string)");
                     return xml.ReadElementContentAsString();
@@ -114,12 +118,19 @@ namespace X2Game
 
         public T getValue<T>(string valueID)
         {
-            return (T)values[valueID];
+            try
+            {
+                return (T)values[valueID];
+            }
+            catch
+            {
+                return default(T);  //null, 0.0, "" or whatever
+            }
         }
 
         public T getValue<T>(Enum valueID)
         {
-            return (T)values[valueID.ToString()];
+            return getValue<T>(valueID.ToString());
         }
 
         public void writeToFile(string fileUri)
@@ -140,7 +151,21 @@ namespace X2Game
                     xml.WriteStartElement(entry.Key.ToString());
                     xml.WriteAttributeString("type", entry.Value.GetType().Name);
 
-                    xml.WriteValue(entry.Value.GetType() == typeof(Texture2D) ? ((Texture2D)entry.Value).Name : entry.Value);
+                    switch (entry.Value.GetType().Name)
+                    {
+                        case "ParticleTemplate":
+                            xml.WriteValue(((ParticleTemplate)entry.Value).particleID);
+                            break;
+
+                        case "Texture2D":
+                            xml.WriteValue(((Texture2D)entry.Value).Name);
+                            break;
+
+                        default:
+                            xml.WriteValue(entry.Value);
+                            break;
+                    }
+
                     xml.WriteEndElement();
 
                     xml.WriteWhitespace("\n");

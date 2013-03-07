@@ -14,26 +14,30 @@ namespace X2Game
         SIZE_ADD,
         INITIAL_ROTATION,
         ROTATION_ADD,
-        LIFE_TIME,
+        LIFETIME,
         TEXTURE,
         VELOCITY_ADD,
         INITIAL_ALPHA,
-        ALPHA_ADD
+        ALPHA_ADD,
+        SPAWN_PARTICLE_ON_END
     }
 
     class ParticleTemplate : GenericDataStructure
     {
+        public readonly string particleID;
+
         public ParticleTemplate(string filePath)
             : base(filePath, typeof(ParticleValues))
         {
+            particleID = filePath;
             setDefaultValue(ParticleValues.INITIAL_SIZE, 1.0f);
-            setDefaultValue(ParticleValues.SIZE_ADD, 0.0f);
+            /*setDefaultValue(ParticleValues.SIZE_ADD, 0.0f);
             setDefaultValue(ParticleValues.INITIAL_ROTATION, 0.0f);
             setDefaultValue(ParticleValues.ROTATION_ADD, 0.0f);
             setDefaultValue(ParticleValues.VELOCITY_ADD, 0.0f);
             setDefaultValue(ParticleValues.INITIAL_ALPHA, 0.0f);
-            setDefaultValue(ParticleValues.ALPHA_ADD, 0.0f);
-            setDefaultValue(ParticleValues.LIFE_TIME, TimeSpan.TicksPerSecond * 3L);
+            setDefaultValue(ParticleValues.ALPHA_ADD, 0.0f);*/
+            setDefaultValue(ParticleValues.LIFETIME, 3.0f);
             setDefaultValue(ParticleValues.TEXTURE, ResourceManager.getTexture("INVALID_TEXTURE"));
         }
     }

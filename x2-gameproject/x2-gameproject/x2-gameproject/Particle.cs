@@ -13,14 +13,12 @@ namespace X2Game
     class Particle : GameObject
     {
         private ParticleTemplate template;
-        private long ticksRemaining;
+        private float secondsRemaining;
         private float rotation;
         private float size;
         private float alpha;
 
         public bool isDestroyed;
-
-
 
         private Rectangle renderArea
         {
@@ -41,10 +39,23 @@ namespace X2Game
             position = initialPosition;
             rotation = template.getValue<float>(ParticleValues.INITIAL_ROTATION);
             size = template.getValue<float>(ParticleValues.INITIAL_SIZE);
-            ticksRemaining = template.getValue<long>(ParticleValues.LIFE_TIME);
+            secondsRemaining = template.getValue<float>(ParticleValues.LIFETIME);
             texture = texture = template.getValue<Texture2D>(ParticleValues.TEXTURE);
             centre = new Vector2(texture.Width / 2, texture.Height / 2);
             alpha = 1.0f - template.getValue<float>(ParticleValues.INITIAL_ALPHA);
+        }
+
+        public void destroy()
+        {
+            if (isDestroyed) return;
+            isDestroyed = true;
+
+            //Spawn other particles on death?
+            ParticleTemplate spawn = template.getValue<ParticleTemplate>(ParticleValues.SPAWN_PARTICLE_ON_END);
+            if (spawn != null)
+            {
+                ParticleEngine.spawnParticle(position, spawn);
+            }
         }
 
         public override void update(TimeSpan delta)
@@ -64,17 +75,17 @@ namespace X2Game
 
             //Update alpha
             alpha -= template.getValue<float>(ParticleValues.ALPHA_ADD);
-            if (alpha <= 0) isDestroyed = true;
+            if (alpha <= 0) this.destroy();
 
             //Update size
             size += template.getValue<float>(ParticleValues.SIZE_ADD);
-            if (size <= 0) isDestroyed = true;
+            if (size <= 0) this.destroy();
 
             //Has this particle expired and needs to be removed?
-            if (ticksRemaining != TimeSpan.MaxValue.Ticks)
+            if (secondsRemaining != float.MaxValue)
             {
-                ticksRemaining -= delta.Ticks;
-                if (ticksRemaining <= 0) isDestroyed = true;
+                secondsRemaining -= (delta.Ticks/(float)TimeSpan.TicksPerSecond);
+                if (secondsRemaining <= 0) this.destroy();
             }
 
         }
