@@ -19,6 +19,8 @@ namespace X2Game
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+		Stack<GameState> stateStack;
+
         public GameInstance()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -35,6 +37,9 @@ namespace X2Game
         {
             // TODO: Add your initialization logic here
             ResourceManager.initialize(GraphicsDevice, "");
+
+			stateStack = new Stack<GameState> ();
+			stateStack.Push (new IntroState ());
 
             base.Initialize();
         }
@@ -85,6 +90,10 @@ namespace X2Game
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+			spriteBatch.Begin ();
+			stateStack.Peek ().Draw (spriteBatch);
+			spriteBatch.End ();
+
 
             base.Draw(gameTime);
         }
