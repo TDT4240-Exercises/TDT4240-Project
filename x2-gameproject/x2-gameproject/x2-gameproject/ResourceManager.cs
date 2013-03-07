@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.GamerServices;
 using System.IO;
 
 namespace X2Game
@@ -17,6 +20,7 @@ namespace X2Game
         private static GraphicsDevice device;
         private static string graphicsFolder;
         private static Texture2D debugTexture;
+		private static SpriteFont debugFont;
 
         public static void freeResources()
         {
@@ -38,6 +42,7 @@ namespace X2Game
             ResourceManager.device = device;
             loadedTextures = new Dictionary<String, Texture2D>();
             ResourceManager.graphicsFolder = graphicsFolder;
+
 			debugTexture = new Texture2D (device, 1, 1);
 			debugTexture.SetData (new[] {Color.White});
         }
@@ -45,6 +50,16 @@ namespace X2Game
 		public static Texture2D GetDebugTexture()
 		{
 			return debugTexture;
+		}
+
+		public static void LoadDebugFont(ContentManager Content)
+		{
+			debugFont = Content.Load<SpriteFont> ("DefaultFont");
+		}
+
+		public static SpriteFont GetDebugFont()
+		{
+			return debugFont;
 		}
 
         /**

@@ -15,8 +15,9 @@ namespace X2Game {
 			isOverlay = overlay;
 		}
 
-		public abstract void Update();
+		public abstract bool Update();
 		public abstract void Draw(SpriteBatch spriteBatch);
 		public abstract void Input(KeyboardState keyboard);
+		public abstract GameState getNextState();
 	}
 }
