@@ -37,7 +37,7 @@ namespace X2Game
             controller = setController;
         }
 
-        public override void update(GameTime delta)
+        public override void update(TimeSpan delta)
         {
             position += velocity;
             velocity *= VELOCITY_FALLOFF;
@@ -53,9 +53,5 @@ namespace X2Game
             return controller;
         }
 
-        public override bool collidesWith(GameObject other)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

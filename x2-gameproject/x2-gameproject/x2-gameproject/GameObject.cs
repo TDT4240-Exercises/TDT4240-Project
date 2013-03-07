@@ -11,21 +11,17 @@ namespace X2Game
     /// A high-level abstraction for all interactive objects in the game (players, enemies, projectiles and whatnot).
     /// This utilizes the Composite pattern.
     /// </summary>
-    class GameObject
+    abstract class GameObject
     {
         protected Vector2 velocity;
+        protected Vector2 position;
 
-        public Vector2 position 
-        { 
-            public get{ return new Vector2(position.X, position.Y); } 
-            public set; 
-        }
         public int width { get; private set; }
         public int height { get; private set; }
 
         public Rectangle hitBox
         {
-            public get
+            get
             {
                 return new Rectangle((int)position.X, (int)position.Y, width, height); //XNA does not support float rectangles natively
             }
@@ -34,18 +30,19 @@ namespace X2Game
         public GameObject()
         {
             velocity = new Vector2();
+            position = new Vector2();
         }
 
         /// <summary>
         /// Abstract update function that is called every update frame
         /// </summary>
         /// <param name="delta">Time since last update</param>
-        abstract void update(GameTime delta);
+        public abstract void update(TimeSpan delta);
 
         /// <summary>
         /// Abstract function for rendering this GameObject on the screen
         /// </summary>
-        abstract void render(SpriteBatch spriteBatch);
+        public abstract void render(SpriteBatch spriteBatch);
 
         public float getX()
         {
@@ -59,7 +56,7 @@ namespace X2Game
 
         public Vector2 getPosition()
         {
-            return new Vector2(hitBox.X, hitBox.Y); //return new instance so that they dont have a reference to our private variable
+            return new Vector2(position.X, position.Y); //return new instance so that they dont have a reference to our private variable
         }
 
         public Vector2 getVelocity()
@@ -78,7 +75,7 @@ namespace X2Game
         /// </summary>
         /// <param name="other">Which object to check the collision with</param>
         /// <returns>true if it has collided with the GameObject, false otherwise</returns>
-        public virtual Boolean collidesWith(GameObject other)
+        public virtual bool collidesWith(GameObject other)
         {
             //Never collide with ourselves
             if (other.Equals(this)) return false;
