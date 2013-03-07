@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 
@@ -36,7 +37,14 @@ namespace X2Game
             ResourceManager.device = device;
             loadedTextures = new Dictionary<String, Texture2D>();
             ResourceManager.graphicsFolder = graphicsFolder;
+			debugTexture = new Texture2D (device, 1, 1);
+			debugTexture.SetData (new[] {Color.White});
         }
+
+		public static Texture2D GetDebugTexture()
+		{
+			return debugTexture;
+		}
 
         /**
          * Retrieves the custom Texture2D object or loads it into memory if not already loaded.
