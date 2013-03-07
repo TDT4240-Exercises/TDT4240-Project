@@ -59,6 +59,7 @@ namespace X2Game
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+			ResourceManager.LoadDebugFont (Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -81,6 +82,20 @@ namespace X2Game
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+
+			stateStack.Peek ().Input (Keyboard.GetState ());
+
+			if (stateStack.Peek ().Update ()) {
+				// TODO: get next state from this state and push it
+				// 		 if it is null, then pop current
+				GameState newState = stateStack.Peek().getNextState();
+
+				if (newState == null){
+					if (stateStack.Count == 1) this.Exit();
+					stateStack.Pop();
+				}
+				else stateStack.Push(newState);
+			}
 
             // TODO: Add your update logic here
             ParticleEngine.update(gameTime.ElapsedGameTime);
