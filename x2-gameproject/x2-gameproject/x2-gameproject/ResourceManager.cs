@@ -16,6 +16,7 @@ namespace X2Game
         private static Dictionary<String, Texture2D> loadedTextures;
         private static GraphicsDevice device;
         private static string graphicsFolder;
+        private static Texture2D debugTexture;
 
         public static void freeResources()
         {
