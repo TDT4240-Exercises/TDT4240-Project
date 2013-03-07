@@ -23,7 +23,7 @@ namespace X2Game
             this.graphicsFolder = graphicsFolder;
         }
 
-        public ~ResourceManager()
+        ~ResourceManager()
         {
             //Deconstructor... unload textures
             foreach (Texture2D texture in loadedTextures.Values)

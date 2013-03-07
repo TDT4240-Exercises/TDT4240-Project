@@ -20,7 +20,7 @@ namespace X2Game
             spriteBatch.Draw(texture, hitBox, Color.White);
         }
 
-        public override void update(GameTime delta)
+        public override void update(TimeSpan delta)
         {
             position += velocity;
         }
