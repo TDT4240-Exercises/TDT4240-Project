@@ -42,7 +42,7 @@ namespace X2Game
 			stateStack.Push (new IntroState ());
 
             //PARTICLE ENGINE TEST
-            ParticleTemplate test = new ParticleTemplate("oldFile.xml");
+            ParticleTemplate test = new ParticleTemplate("blueEnergyBall.xml");
             test.writeToFile("test.xml");
             ParticleEngine.spawnParticle(new Vector2(100, 100), test);
             //PARTICLE ENGINE TEST END
