@@ -10,51 +10,38 @@ namespace X2Game
     /**
      * Atomic class to handle assets and resources
      */
-    class ResourceManager
+    static class ResourceManager
     {
-        private static ResourceManager instance;
-        private Dictionary<String, Texture2D> loadedTextures;
+        private static Dictionary<String, Texture2D> loadedTextures;
         private static GraphicsDevice device;
-        private String graphicsFolder;
+        private static string graphicsFolder;
 
-        private ResourceManager(String graphicsFolder)
+        public static void freeResources()
         {
-            loadedTextures = new Dictionary<String, Texture2D>();
-            this.graphicsFolder = graphicsFolder;
-        }
-
-        ~ResourceManager()
-        {
-            //Deconstructor... unload textures
+            //Unload textures
             foreach (Texture2D texture in loadedTextures.Values)
             {
                 texture.Dispose();
             }
+            loadedTextures.Clear();
         }
 
-        /**
-         * Retrieves the ResourceManager singleton
-         */
-        public static ResourceManager getInstance()
-        {
-            if (instance == null) throw new Exception("ResourceManager was used before it was properly initialized!");
-            return instance;
-        }
 
         /**
          * Must be called befure using the ResourceManager to initialize the location for the graphics files and which
          * GraphicsDevice to load the textures for.
          */
-        public static void initialize(GraphicsDevice device, String graphicsFolder)
+        public static void initialize(GraphicsDevice device, string graphicsFolder)
         {
             ResourceManager.device = device;
-            instance = new ResourceManager(graphicsFolder);
+            loadedTextures = new Dictionary<String, Texture2D>();
+            ResourceManager.graphicsFolder = graphicsFolder;
         }
 
         /**
          * Retrieves the custom Texture2D object or loads it into memory if not already loaded.
          */
-        public Texture2D getTexture(String textureID)
+        public static Texture2D getTexture(String textureID)
         {
             if (!loadedTextures.ContainsKey(textureID))
             {

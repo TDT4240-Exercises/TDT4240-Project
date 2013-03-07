@@ -12,7 +12,7 @@ namespace X2Game
         private Texture2D texture;
         public Projectile(String textureID)
         {
-            texture = ResourceManager.getInstance().getTexture(textureID);
+            texture = ResourceManager.getTexture(textureID);
         }
 
         public override void render(SpriteBatch spriteBatch)

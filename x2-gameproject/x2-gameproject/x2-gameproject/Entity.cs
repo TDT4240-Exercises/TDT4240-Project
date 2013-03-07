@@ -33,7 +33,7 @@ namespace X2Game
         /// <param name="setController">Is this entity controlled by an AI or a player?</param>
         public Entity(String textureID, EntityController setController)
         {
-            texture = ResourceManager.getInstance().getTexture(textureID);
+            texture = ResourceManager.getTexture(textureID);
             controller = setController;
         }
 
