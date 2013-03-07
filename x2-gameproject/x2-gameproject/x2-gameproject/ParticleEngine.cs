@@ -28,13 +28,13 @@ namespace X2Game
             foreach (Particle p in particleList) p.render(spriteBatch);
         }
 
-        public static void spawnParticle(Vector2 position)
+        public static void spawnParticle(Vector2 position, ParticleTemplate template)
         {
             //Don't spawn more particles than the set limit
             if (particleList.Count >= maxParticles) return;
 
             //Spawn it and add it last in our list
-            particleList.AddLast(new Particle(position, null)); //TODO: not implemented
+            particleList.AddLast(new Particle(position, template));
         }
 
         public static void clear()

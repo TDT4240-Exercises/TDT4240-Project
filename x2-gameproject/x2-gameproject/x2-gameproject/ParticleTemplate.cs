@@ -8,69 +8,34 @@ using System.Xml;
 
 namespace X2Game
 {
-    class ParticleTemplate
+    enum ParticleValues
     {
-        private Dictionary<string, Object> values;
+        INITIAL_SIZE,
+        SIZE_ADD,
+        INITIAL_ROTATION,
+        ROTATION_ADD,
+        LIFE_TIME,
+        TEXTURE,
+        VELOCITY_ADD,
+        INITIAL_ALPHA,
+        ALPHA_ADD
+    }
 
-        public Texture2D texture { get; private set; }
-
-        public float velocityAdd { get; private set; }
-
-        public TimeSpan lifeTime { get; private set; }
-
-        public float initialRotation { get; private set; }
-        public float rotationAdd { get; private set; }
-
-        public float initialSize { get; private set; }
-        public float sizeAdd { get; private set; }
-
-        //TODO: Load these from file and get from resource manager?
-        public ParticleTemplate(string textureID, float velocityAdd, TimeSpan lifeTime, float initialRotation, float rotationAdd, float initialSize, float sizeAdd)
-        {
-            texture = ResourceManager.getTexture(textureID);
-            this.velocityAdd = velocityAdd;
-            this.lifeTime = lifeTime;
-            this.initialRotation = initialRotation;
-            this.rotationAdd = rotationAdd;
-            this.initialSize = initialSize;
-            this.sizeAdd = sizeAdd;
-        }
-
-        public T getValue<T>(string valueID)
-        {
-            return (T) values[valueID];
-        }
-
-        private Object parseType(string typeID, string value)
-        {
-            switch (typeID)
-            {
-                case "float":
-                    return float.Parse(value);
-                case "integer":
-                    return int.Parse(value);
-                case "texture":
-                    return ResourceManager.getTexture(value);
-            }
-
-            return value;
-        }
-
+    class ParticleTemplate : GenericDataStructure
+    {
         public ParticleTemplate(string filePath)
+            : base(filePath, typeof(ParticleValues))
         {
-            // Create an XmlReader
-            using (XmlReader xml = XmlReader.Create(filePath))
-            {
-                // Parse the file and display each of the nodes.
-                while (xml.Read())
-                {
-                    if (xml.NodeType == XmlNodeType.Element)
-                    {
-                        values.Add(xml.Name, parseType(xml.GetAttribute("type"), xml.Value));
-                    }
-                }
-            }
-            
+            setDefaultValue(ParticleValues.INITIAL_SIZE, 1.0f);
+            setDefaultValue(ParticleValues.SIZE_ADD, 0.0f);
+            setDefaultValue(ParticleValues.INITIAL_ROTATION, 0.0f);
+            setDefaultValue(ParticleValues.ROTATION_ADD, 0.0f);
+            setDefaultValue(ParticleValues.VELOCITY_ADD, 0.0f);
+            setDefaultValue(ParticleValues.INITIAL_ALPHA, 0.0f);
+            setDefaultValue(ParticleValues.ALPHA_ADD, 0.0f);
+            setDefaultValue(ParticleValues.LIFE_TIME, TimeSpan.TicksPerSecond * 3L);
+            setDefaultValue(ParticleValues.TEXTURE, ResourceManager.getTexture("INVALID_TEXTURE"));
         }
     }
+
 }

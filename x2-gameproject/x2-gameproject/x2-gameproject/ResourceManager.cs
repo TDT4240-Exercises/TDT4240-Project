@@ -58,17 +58,19 @@ namespace X2Game
 
                 try
                 {
-                    using (FileStream fileStream = new FileStream("graphics/" + textureID, FileMode.Open))
+                    using (FileStream fileStream = new FileStream(graphicsFolder + textureID, FileMode.Open))
                     {
                         texture = Texture2D.FromStream(device, fileStream);
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
-                    throw new System.IO.FileLoadException("Cannot load '" + textureID + "' file!");
+                    Console.WriteLine("Cannot load '" + textureID + "' file! - " + ex.Message);
+                    texture = new Texture2D(device, 64, 64);
                 }
 
                 loadedTextures.Add(textureID, texture);
+                texture.Name = textureID;
             }
 
             return loadedTextures[textureID];

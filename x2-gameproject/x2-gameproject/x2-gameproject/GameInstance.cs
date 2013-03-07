@@ -41,6 +41,12 @@ namespace X2Game
 			stateStack = new Stack<GameState> ();
 			stateStack.Push (new IntroState ());
 
+            //PARTICLE ENGINE TEST
+            ParticleTemplate test = new ParticleTemplate("oldFile.xml");
+            test.writeToFile("test.xml");
+            ParticleEngine.spawnParticle(new Vector2(100, 100), test);
+            //PARTICLE ENGINE TEST END
+
             base.Initialize();
         }
 
@@ -77,6 +83,7 @@ namespace X2Game
                 this.Exit();
 
             // TODO: Add your update logic here
+            ParticleEngine.update(gameTime.ElapsedGameTime);
 
             base.Update(gameTime);
         }
@@ -87,14 +94,16 @@ namespace X2Game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            //Start new frame
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
-			spriteBatch.Begin ();
-			stateStack.Peek ().Draw (spriteBatch);
-			spriteBatch.End ();
+            //Render current state
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            stateStack.Peek().Draw(spriteBatch);
+            ParticleEngine.render(spriteBatch);
+			spriteBatch.End();
 
-
+            //Finished this frame
             base.Draw(gameTime);
         }
     }

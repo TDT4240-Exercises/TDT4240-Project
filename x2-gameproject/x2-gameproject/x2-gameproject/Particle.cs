@@ -7,32 +7,44 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace X2Game
 {
+    /// <summary>
+    /// A Particle is a lightweight rendering sprite. Use ParticleEngine to create and manage Particle effects.
+    /// </summary>
     class Particle : GameObject
     {
         private ParticleTemplate template;
-        private TimeSpan timeRemaining;
+        private long ticksRemaining;
         private float rotation;
         private float size;
+        private float alpha;
 
         public bool isDestroyed;
 
-        private Color tint { get; set; }
+
 
         private Rectangle renderArea
         {
             get
             {
-                return new Rectangle((int)position.X, (int)position.Y, (int)(template.texture.Width * size), (int)(template.texture.Height * size)); //XNA does not support float rectangles natively
+                Texture2D texture = template.getValue<Texture2D>(ParticleValues.TEXTURE);
+                return new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width * size), (int)(texture.Height * size)); //XNA does not support float rectangles natively
             }
         }
+
+        //These two are cached for performance reasons
+        private Vector2 centre;
+        private Texture2D texture;
 
         public Particle(Vector2 initialPosition, ParticleTemplate template)
         {
             this.template = template;
             position = initialPosition;
-            rotation = template.initialRotation;
-            size = template.initialSize;
-            timeRemaining = template.lifeTime;
+            rotation = template.getValue<float>(ParticleValues.INITIAL_ROTATION);
+            size = template.getValue<float>(ParticleValues.INITIAL_SIZE);
+            ticksRemaining = template.getValue<long>(ParticleValues.LIFE_TIME);
+            texture = texture = template.getValue<Texture2D>(ParticleValues.TEXTURE);
+            centre = new Vector2(texture.Width / 2, texture.Height / 2);
+            alpha = 1.0f - template.getValue<float>(ParticleValues.INITIAL_ALPHA);
         }
 
         public override void update(TimeSpan delta)
@@ -41,24 +53,28 @@ namespace X2Game
             if (isDestroyed) return;
 
             //Update rotation
-            rotation += template.rotationAdd;
+            rotation += template.getValue<float>(ParticleValues.ROTATION_ADD);
 
             //Update position
             position += velocity;
 
             //Update velocity
-            velocity.X += template.velocityAdd;     //TODO: add velocity based on rotation?
-            velocity.Y += template.velocityAdd;
+            velocity.X += template.getValue<float>(ParticleValues.VELOCITY_ADD);     //TODO: add velocity based on rotation?
+            velocity.Y += template.getValue<float>(ParticleValues.VELOCITY_ADD);
+
+            //Update alpha
+            alpha -= template.getValue<float>(ParticleValues.ALPHA_ADD);
+            if (alpha <= 0) isDestroyed = true;
 
             //Update size
-            size += template.sizeAdd;
+            size += template.getValue<float>(ParticleValues.SIZE_ADD);
             if (size <= 0) isDestroyed = true;
 
             //Has this particle expired and needs to be removed?
-            if (timeRemaining != TimeSpan.MaxValue)
+            if (ticksRemaining != TimeSpan.MaxValue.Ticks)
             {
-                timeRemaining -= delta;
-                if (timeRemaining.Ticks <= 0) isDestroyed = true;
+                ticksRemaining -= delta.Ticks;
+                if (ticksRemaining <= 0) isDestroyed = true;
             }
 
         }
@@ -67,8 +83,7 @@ namespace X2Game
         {
             //Do we still exist?
             if (isDestroyed) return;
-
-            spriteBatch.Draw(template.texture, renderArea, null, tint, rotation, new Vector2(), SpriteEffects.None, 0);
+            spriteBatch.Draw(template.getValue<Texture2D>(ParticleValues.TEXTURE), renderArea, null, Color.White * alpha, rotation, centre, SpriteEffects.None, 0);
         }
     }
 }
