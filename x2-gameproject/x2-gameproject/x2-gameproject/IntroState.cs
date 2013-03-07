@@ -24,7 +24,7 @@ namespace X2Game {
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			spriteBatch.Draw (ResourceManager.GetDebugTexture (), new Rectangle (100, 200, 150, 250), Color.White);
-			spriteBatch.DrawString (ResourceManager.GetDebugFont (), "AwesomeGame", new Vector2 (100, 100), Color.Black);
+			spriteBatch.DrawString (ResourceManager.GetDebugFont (), "AwesomeGame", new Vector2 (100, 100), Color.White);
 		}
 
 		public override void Input(KeyboardState keyboard)
