@@ -17,6 +17,8 @@ namespace X2Game
     static class ResourceManager
     {
         private static Dictionary<String, Texture2D> loadedTextures;
+        private static Dictionary<String, ParticleTemplate> loadedParticles;
+
         private static GraphicsDevice device;
         private static string graphicsFolder;
         private static Texture2D debugTexture;
@@ -32,6 +34,16 @@ namespace X2Game
             loadedTextures.Clear();
         }
 
+        public static ParticleTemplate getParticleTemplate(string particleID)
+        {
+            if (!loadedParticles.ContainsKey(particleID))
+            {
+                loadedParticles[particleID] = new ParticleTemplate(particleID);
+            }
+
+            return loadedParticles[particleID];
+        }
+
 
         /**
          * Must be called befure using the ResourceManager to initialize the location for the graphics files and which
@@ -41,6 +53,7 @@ namespace X2Game
         {
             ResourceManager.device = device;
             loadedTextures = new Dictionary<String, Texture2D>();
+            loadedParticles = new Dictionary<String, ParticleTemplate>();
             ResourceManager.graphicsFolder = graphicsFolder;
 
 			debugTexture = new Texture2D (device, 1, 1);
