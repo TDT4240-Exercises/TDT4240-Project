@@ -37,6 +37,11 @@ namespace X2Game
             particleList.AddLast(new Particle(position, template));
         }
 
+		public static int Count()
+		{
+			return particleList.Count;
+		}
+
         public static void clear()
         {
             particleList.Clear();
