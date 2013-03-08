@@ -38,12 +38,12 @@ namespace X2Game {
 			if (keyboard.IsKeyDown (Keys.Escape)) {
 				buttonPressed = true;
 			} else if (keyboard.IsKeyDown (Keys.P) && !spawnParticle) {
-				ParticleEngine.spawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), ResourceManager.getParticleTemplate ("fireball.xml"));
+				ParticleEngine.SpawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), ResourceManager.getParticleTemplate ("fireball.xml"));
 				spawnParticle = true;
 			} else if (keyboard.IsKeyUp (Keys.P) && spawnParticle)
 				spawnParticle = false;
 			else if (keyboard.IsKeyDown (Keys.S))
-				ParticleEngine.spawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), ResourceManager.getParticleTemplate ("fireball.xml"));
+				ParticleEngine.SpawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), ResourceManager.getParticleTemplate ("fireball.xml"));
 		}
 		
 		public override GameState getNextState ()
