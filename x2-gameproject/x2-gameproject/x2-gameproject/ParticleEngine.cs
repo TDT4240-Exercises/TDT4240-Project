@@ -8,7 +8,7 @@ namespace X2Game
 {
     static class ParticleEngine
     {
-        public static uint maxParticles = 4000;
+        public static uint maxParticles = 10000;
         private static readonly LinkedList<Particle> particleList = new LinkedList<Particle>();
 
         public static void update(TimeSpan delta)
@@ -68,7 +68,7 @@ namespace X2Game
 
 		public static int Count()
 		{
-			return particleList.Count;
+		    return particleList.Count;
 		}
 
         public static void clear()

@@ -17,21 +17,13 @@ namespace X2Game
         private float rotation;
         private float size;
         private float alpha;
-
+        
         public bool isDestroyed;
-
-        private Rectangle renderArea
-        {
-            get
-            {
-                Texture2D texture = template.getValue<Texture2D>(ParticleValues.TEXTURE);
-                return new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width * size), (int)(texture.Height * size)); //XNA does not support float rectangles natively
-            }
-        }
 
         //These two are cached for performance reasons
         private Vector2 centre;
         private Texture2D texture;
+        private Rectangle renderArea;
 
         public Particle(Vector2 initialPosition, ParticleTemplate template)
         {
@@ -43,6 +35,8 @@ namespace X2Game
             texture = texture = template.getValue<Texture2D>(ParticleValues.TEXTURE);
             centre = new Vector2(texture.Width / 2, texture.Height / 2);
             alpha = 1.0f - template.getValue<float>(ParticleValues.INITIAL_ALPHA);
+
+            renderArea = new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width * size), (int)(texture.Height * size));
         }
 
         public void destroy()
@@ -60,10 +54,34 @@ namespace X2Game
 
         public override void update(TimeSpan delta)
         {
-            //Do we still exist?
-            if (isDestroyed) return;
-
             float timeUnit = delta.Ticks/(float)TimeSpan.TicksPerSecond;
+
+            //Has this particle expired and needs to be removed?
+            if (!float.IsInfinity(secondsRemaining))
+            {
+                secondsRemaining -= (delta.Ticks / (float)TimeSpan.TicksPerSecond);
+                if (secondsRemaining <= 0)
+                {
+                    destroy();
+                    return;
+                }
+            }
+
+            //Update alpha
+            alpha -= template.getValue<float>(ParticleValues.ALPHA_ADD) * timeUnit;
+            if (alpha <= 0)
+            {
+                destroy();
+                return;
+            }
+
+            //Update size
+            size += template.getValue<float>(ParticleValues.SIZE_ADD) * timeUnit;
+            if (size <= 0)
+            {
+                destroy();
+                return;
+            }
 
             //Update rotation
             rotation += template.getValue<float>(ParticleValues.ROTATION_ADD) * timeUnit;
@@ -75,28 +93,15 @@ namespace X2Game
             velocity.X += template.getValue<float>(ParticleValues.VELOCITY_ADD) * timeUnit;     //TODO: add velocity based on rotation?
             velocity.Y += template.getValue<float>(ParticleValues.VELOCITY_ADD) * timeUnit;
 
-            //Update alpha
-            alpha -= template.getValue<float>(ParticleValues.ALPHA_ADD) * timeUnit;
-            if (alpha <= 0) destroy();
-
-            //Update size
-            size += template.getValue<float>(ParticleValues.SIZE_ADD) * timeUnit;
-            if (size <= 0) destroy();
-
-            //Has this particle expired and needs to be removed?
-            if (!float.IsInfinity(secondsRemaining))
-            {
-                secondsRemaining -= (delta.Ticks/(float)TimeSpan.TicksPerSecond);
-                if (secondsRemaining <= 0) destroy();
-            }
-
+            //Update render area
+            renderArea.X = (int)position.X;
+            renderArea.Y = (int)position.Y;
+            renderArea.Width = (int)(texture.Width*size);
+            renderArea.Height = (int)(texture.Height*size);
         }
 
         public override void render(SpriteBatch spriteBatch)
         {
-            //Do we still exist?
-            if (isDestroyed) return;
-
             spriteBatch.Draw(texture, renderArea, null, Color.White * alpha, rotation, centre, SpriteEffects.None, 0);
         }
     }
