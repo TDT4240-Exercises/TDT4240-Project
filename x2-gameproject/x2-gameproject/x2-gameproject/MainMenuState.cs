@@ -38,7 +38,8 @@ namespace X2Game {
 			if (keyboard.IsKeyDown (Keys.Escape)) {
 				buttonPressed = true;
 			} else if (keyboard.IsKeyDown (Keys.P) && !spawnParticle) {
-				ParticleEngine.spawnParticle (new Vector2 (rand.Next(800), rand.Next(600)), new ParticleTemplate ("fireball.xml"));
+                for (int i = 0; i < 1000; i++ )
+                    ParticleEngine.spawnParticle(new Vector2(rand.Next(800), rand.Next(600)), ResourceManager.getParticleTemplate("fireball.xml"));
 				spawnParticle = true;
 			} else if (keyboard.IsKeyUp (Keys.P) && spawnParticle)
 				spawnParticle = false;

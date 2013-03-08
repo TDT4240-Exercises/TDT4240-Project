@@ -1,25 +1,19 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
+using x2_gameproject;
 
 namespace X2Game
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class GameInstance : Microsoft.Xna.Framework.Game
+    public class GameInstance : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-
-		Stack<GameState> stateStack;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private Stack<GameState> stateStack;
 
         public GameInstance()
         {
@@ -41,12 +35,6 @@ namespace X2Game
 			stateStack = new Stack<GameState> ();
 			stateStack.Push (new IntroState ());
 
-            //PARTICLE ENGINE TEST
-            ParticleTemplate test = new ParticleTemplate("blueEnergyBall.xml");
-            test.writeToFile("test.xml");
-            ParticleEngine.spawnParticle(new Vector2(100, 100), test);
-            //PARTICLE ENGINE TEST END
-
             base.Initialize();
         }
 
@@ -59,8 +47,8 @@ namespace X2Game
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			ResourceManager.LoadDebugFont (Content);
-            // TODO: use this.Content to load your game content here
+            ResourceManager.LoadDebugFont(Content);
+            Components.Add(new FPSCounter(this, spriteBatch));
         }
 
         /// <summary>
@@ -113,10 +101,11 @@ namespace X2Game
             GraphicsDevice.Clear(Color.Black);
 
             //Render current state
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             stateStack.Peek().Draw(spriteBatch);
             ParticleEngine.render(spriteBatch);
-			spriteBatch.End();
+            spriteBatch.End();
+
 
             //Finished this frame
             base.Draw(gameTime);

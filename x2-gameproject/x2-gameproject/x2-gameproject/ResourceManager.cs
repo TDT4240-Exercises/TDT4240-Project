@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.GamerServices;
 using System.IO;
 
 namespace X2Game
@@ -38,7 +34,15 @@ namespace X2Game
         {
             if (!loadedParticles.ContainsKey(particleID))
             {
-                loadedParticles[particleID] = new ParticleTemplate(particleID);
+                try
+                {
+                    loadedParticles[particleID] = new ParticleTemplate(particleID);
+                }
+                catch (Exception ex)
+                {
+                    loadedParticles[particleID] = null;
+                }
+                
             }
 
             return loadedParticles[particleID];
@@ -67,7 +71,7 @@ namespace X2Game
 
 		public static void LoadDebugFont(ContentManager Content)
 		{
-			debugFont = Content.Load<SpriteFont> ("DefaultFont");
+            debugFont = Content.Load<SpriteFont>("DebugFont");
 		}
 
 		public static SpriteFont GetDebugFont()

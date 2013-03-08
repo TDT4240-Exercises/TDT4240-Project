@@ -63,29 +63,31 @@ namespace X2Game
             //Do we still exist?
             if (isDestroyed) return;
 
+            float timeUnit = delta.Ticks/(float)TimeSpan.TicksPerSecond;
+
             //Update rotation
-            rotation += template.getValue<float>(ParticleValues.ROTATION_ADD);
+            rotation += template.getValue<float>(ParticleValues.ROTATION_ADD) * timeUnit;
 
             //Update position
             position += velocity;
 
             //Update velocity
-            velocity.X += template.getValue<float>(ParticleValues.VELOCITY_ADD);     //TODO: add velocity based on rotation?
-            velocity.Y += template.getValue<float>(ParticleValues.VELOCITY_ADD);
+            velocity.X += template.getValue<float>(ParticleValues.VELOCITY_ADD) * timeUnit;     //TODO: add velocity based on rotation?
+            velocity.Y += template.getValue<float>(ParticleValues.VELOCITY_ADD) * timeUnit;
 
             //Update alpha
-            alpha -= template.getValue<float>(ParticleValues.ALPHA_ADD);
-            if (alpha <= 0) this.destroy();
+            alpha -= template.getValue<float>(ParticleValues.ALPHA_ADD) * timeUnit;
+            if (alpha <= 0) destroy();
 
             //Update size
-            size += template.getValue<float>(ParticleValues.SIZE_ADD);
-            if (size <= 0) this.destroy();
+            size += template.getValue<float>(ParticleValues.SIZE_ADD) * timeUnit;
+            if (size <= 0) destroy();
 
             //Has this particle expired and needs to be removed?
-            if (secondsRemaining != float.MaxValue)
+            if (!float.IsInfinity(secondsRemaining))
             {
                 secondsRemaining -= (delta.Ticks/(float)TimeSpan.TicksPerSecond);
-                if (secondsRemaining <= 0) this.destroy();
+                if (secondsRemaining <= 0) destroy();
             }
 
         }
@@ -94,7 +96,8 @@ namespace X2Game
         {
             //Do we still exist?
             if (isDestroyed) return;
-            spriteBatch.Draw(template.getValue<Texture2D>(ParticleValues.TEXTURE), renderArea, null, Color.White * alpha, rotation, centre, SpriteEffects.None, 0);
+
+            spriteBatch.Draw(texture, renderArea, null, Color.White * alpha, rotation, centre, SpriteEffects.None, 0);
         }
     }
 }
