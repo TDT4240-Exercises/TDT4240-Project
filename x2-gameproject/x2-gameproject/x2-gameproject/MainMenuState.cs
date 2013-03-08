@@ -43,6 +43,8 @@ namespace X2Game {
 				spawnParticle = true;
 			} else if (keyboard.IsKeyUp (Keys.P) && spawnParticle)
 				spawnParticle = false;
+			else if (keyboard.IsKeyDown (Keys.S))
+				ParticleEngine.spawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), new ParticleTemplate ("fireball.xml"));
 		}
 		
 		public override GameState getNextState ()

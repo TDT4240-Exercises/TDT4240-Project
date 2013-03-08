@@ -102,8 +102,9 @@ namespace X2Game
 
             //Render current state
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+			if (stateStack.Peek().isOverlay) ParticleEngine.render(spriteBatch);
             stateStack.Peek().Draw(spriteBatch);
-            ParticleEngine.render(spriteBatch);
+            if (!stateStack.Peek().isOverlay) ParticleEngine.render(spriteBatch);
             spriteBatch.End();
 
 
