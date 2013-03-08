@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using X2Game;
 
-namespace x2_gameproject
+namespace X2Game
 {
     public class FPSCounter : DrawableGameComponent
     {
