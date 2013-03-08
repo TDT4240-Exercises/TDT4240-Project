@@ -27,7 +27,7 @@ namespace X2Game
             rotation = template.GetValue<float>(ParticleValues.InitialRotation);
             size = template.GetValue<float>(ParticleValues.InitialSize);
             secondsRemaining = template.GetValue<float>(ParticleValues.LifeTime);
-            texture = texture = template.GetValue<Texture2D>(ParticleValues.Texture);
+            texture = template.GetValue<Texture2D>(ParticleValues.Texture);
             centre = new Vector2(texture.Width / 2, texture.Height / 2);
             alpha = 1.0f - template.GetValue<float>(ParticleValues.InitialAlpha);
         }

@@ -101,13 +101,15 @@ namespace X2Game
                         texture = Texture2D.FromStream(device, fileStream);
 
                         //Replace the color BLACK with 100% transparency - TODO: this might be very slow
-                        Color[] bits = new Color[texture.Width * texture.Height];
-                        texture.GetData(bits);
-                        for (int i = 0; i < bits.Length; i++)
-                        {  
-                           if((bits[i].PackedValue & 0xFFFFFF) == 0) bits[i] = Color.FromNonPremultiplied(0,0,0,0);
-                        }
-                        texture.SetData(bits);
+//                        Color[] bits = new Color[texture.Width * texture.Height];
+//                        texture.GetData(bits);
+//                        for (int i = 0; i < bits.Length; i++)
+//                        {  
+//                           if((bits[i].PackedValue & 0xFFFFFF) == 0) bits[i] = Color.FromNonPremultiplied(0,0,0,0);
+//                        }
+//                        texture.SetData(bits);
+
+						Console.WriteLine("Texture \"" + textureID + "\" loaded.");
                     }
                 }
                 catch(Exception ex)
