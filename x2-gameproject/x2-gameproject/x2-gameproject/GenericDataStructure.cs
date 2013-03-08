@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
+using x2_gameproject;
 
 namespace X2Game
 {
@@ -38,7 +39,7 @@ namespace X2Game
                         {
                             if (xml.Name != GetType().Name)
                             {
-                                Console.WriteLine("Wrong XML type: " + filePath + " - " + xml.Name + " requires " + GetType().Name);
+                                Logger.Log("Wrong XML type: " + filePath + " - " + xml.Name + " requires " + GetType().Name, LogLevel.Warning);
                                 return;
                             }
                             continue;
@@ -47,7 +48,7 @@ namespace X2Game
                         //Is this a valid name?
                         if (!enumType.IsEnumDefined(xml.Name))
                         {
-                            Console.WriteLine("Illegal parse: " + filePath + " - " + xml.Name + " is not a valid value");
+                            Logger.Log("Illegal parse: " + filePath + " - " + xml.Name + " is not a valid value", LogLevel.Warning);
                             continue;
                         }
 
@@ -95,11 +96,11 @@ namespace X2Game
                     return ResourceManager.getTexture(xml.ReadElementContentAsString());
 
                 case "particle":
-                    Console.WriteLine("Loaded particle!");
+                    Logger.Log("Loaded particle!", LogLevel.Debug);
                     return ResourceManager.getParticleTemplate(xml.ReadElementContentAsString());
 
                 default:
-                    Console.WriteLine("Unknown data type parsed: " + typeName + " (treating it as string)");
+                    Logger.Log("Unknown data type parsed: " + typeName + " (treating it as string)", LogLevel.Warning);
                     return xml.ReadElementContentAsString();
             }
         }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
+using x2_gameproject;
 
 namespace X2Game
 {
@@ -40,6 +41,7 @@ namespace X2Game
                 }
                 catch
                 {
+                    Logger.Log("Unable to load ParticleTemplate: " + particleID, LogLevel.Warning);
                     loadedParticles[particleID] = null;
                 }
                 
@@ -110,7 +112,7 @@ namespace X2Game
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine("Cannot load '" + textureID + "' file! - " + ex.Message);
+                    Logger.Log("Cannot load '" + textureID + "' file! - " + ex.Message, LogLevel.Warning);
                     texture = new Texture2D(device, 64, 64);
                 }
 

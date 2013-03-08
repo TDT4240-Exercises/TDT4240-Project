@@ -117,6 +117,7 @@
     <Compile Include="GameState.cs" />
     <Compile Include="GenericDataStructure.cs" />
     <Compile Include="IntroState.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="MainMenuState.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="ParticleEngine.cs" />
