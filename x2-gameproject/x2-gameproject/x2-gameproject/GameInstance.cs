@@ -106,7 +106,7 @@ namespace X2Game
             if (!stateStack.Peek().isOverlay) ParticleEngine.Render(spriteBatch);
 
             //Draw makeshift mouse pointer
-            spriteBatch.Draw(ResourceManager.GetDebugTexture(), new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 32, 32), Color.White);
+            spriteBatch.Draw(ResourceManager.getTexture("cursor.png"), new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 32, 32), Color.White);
 
             spriteBatch.End();
 
