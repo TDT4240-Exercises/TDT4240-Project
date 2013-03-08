@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -14,7 +11,6 @@ namespace X2Game
     {
         private ParticleTemplate template;
         private float secondsRemaining;
-        private float rotation;
         private float size;
         private float alpha;
         
@@ -29,30 +25,30 @@ namespace X2Game
         {
             this.template = template;
             position = initialPosition;
-            rotation = template.getValue<float>(ParticleValues.INITIAL_ROTATION);
-            size = template.getValue<float>(ParticleValues.INITIAL_SIZE);
-            secondsRemaining = template.getValue<float>(ParticleValues.LIFETIME);
-            texture = texture = template.getValue<Texture2D>(ParticleValues.TEXTURE);
+            rotation = template.GetValue<float>(ParticleValues.InitialRotation);
+            size = template.GetValue<float>(ParticleValues.InitialSize);
+            secondsRemaining = template.GetValue<float>(ParticleValues.Lifetime);
+            texture = texture = template.GetValue<Texture2D>(ParticleValues.Texture);
             centre = new Vector2(texture.Width / 2, texture.Height / 2);
-            alpha = 1.0f - template.getValue<float>(ParticleValues.INITIAL_ALPHA);
+            alpha = 1.0f - template.GetValue<float>(ParticleValues.InitialAlpha);
 
             renderArea = new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width * size), (int)(texture.Height * size));
         }
 
-        public void destroy()
+        public void Destroy()
         {
             if (isDestroyed) return;
             isDestroyed = true;
 
             //Spawn other particles on death?
-            ParticleTemplate spawn = template.getValue<ParticleTemplate>(ParticleValues.SPAWN_PARTICLE_ON_END);
+            ParticleTemplate spawn = template.GetValue<ParticleTemplate>(ParticleValues.SpawnParticleOnEnd);
             if (spawn != null)
             {
-                ParticleEngine.spawnParticle(position, spawn);
+                ParticleEngine.SpawnParticle(position, spawn);
             }
         }
 
-        public override void update(TimeSpan delta)
+        public override void Update(TimeSpan delta)
         {
             float timeUnit = delta.Ticks/(float)TimeSpan.TicksPerSecond;
 
@@ -62,36 +58,36 @@ namespace X2Game
                 secondsRemaining -= (delta.Ticks / (float)TimeSpan.TicksPerSecond);
                 if (secondsRemaining <= 0)
                 {
-                    destroy();
+                    Destroy();
                     return;
                 }
             }
 
             //Update alpha
-            alpha -= template.getValue<float>(ParticleValues.ALPHA_ADD) * timeUnit;
+            alpha -= template.GetValue<float>(ParticleValues.AlphaAdd) * timeUnit;
             if (alpha <= 0)
             {
-                destroy();
+                Destroy();
                 return;
             }
 
             //Update size
-            size += template.getValue<float>(ParticleValues.SIZE_ADD) * timeUnit;
+            size += template.GetValue<float>(ParticleValues.SizeAdd) * timeUnit;
             if (size <= 0)
             {
-                destroy();
+                Destroy();
                 return;
             }
 
             //Update rotation
-            rotation += template.getValue<float>(ParticleValues.ROTATION_ADD) * timeUnit;
+            rotation += template.GetValue<float>(ParticleValues.RotationAdd) * timeUnit;
 
             //Update position
             position += velocity;
 
             //Update velocity
-            velocity.X += template.getValue<float>(ParticleValues.VELOCITY_ADD) * timeUnit;     //TODO: add velocity based on rotation?
-            velocity.Y += template.getValue<float>(ParticleValues.VELOCITY_ADD) * timeUnit;
+            velocity.X += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;     //TODO: add velocity based on rotation?
+            velocity.Y += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;
 
             //Update render area
             renderArea.X = (int)position.X;
@@ -100,7 +96,7 @@ namespace X2Game
             renderArea.Height = (int)(texture.Height*size);
         }
 
-        public override void render(SpriteBatch spriteBatch)
+        public override void Render(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, renderArea, null, Color.White * alpha, rotation, centre, SpriteEffects.None, 0);
         }

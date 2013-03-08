@@ -6,10 +6,11 @@ namespace X2Game
 {
     public enum EntityController
     {
-        KAMIKAZE_AI,        //Rush towards opponent
-        DEFAULT_AI,         //Default AI
-        SMART_AI,           //Sneaky AI hides behind walls, etc.
-        PLAYER              //This entity is controlled by a player
+        None,              //No controller
+        DefaultAI,         //Default AI
+        KamikazeAI,        //Rush towards opponent
+        SmartAI,           //Sneaky AI hides behind walls, etc.
+        Player             //This entity is controlled by a player
     }
 
     /// <summary>
@@ -34,18 +35,18 @@ namespace X2Game
             controller = setController;
         }
 
-        public override void update(TimeSpan delta)
+        public override void Update(TimeSpan delta)
         {
             position += velocity;
             velocity *= VELOCITY_FALLOFF;
         }
 
-        public override void render(SpriteBatch spriteBatch)
+        public override void Render(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, hitBox, Color.White);
         }
 
-        public EntityController getController()
+        public EntityController GetController()
         {
             return controller;
         }

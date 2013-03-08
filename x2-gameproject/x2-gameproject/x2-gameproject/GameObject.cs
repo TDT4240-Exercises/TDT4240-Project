@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,6 +13,8 @@ namespace X2Game
         protected Vector2 velocity;
         protected Vector2 position;
 
+        protected float rotation;
+
         public int width { get; private set; }
         public int height { get; private set; }
 
@@ -27,7 +26,7 @@ namespace X2Game
             }
         }
 
-        public GameObject()
+        protected GameObject()
         {
             velocity = new Vector2();
             position = new Vector2();
@@ -37,34 +36,34 @@ namespace X2Game
         /// Abstract update function that is called every update frame
         /// </summary>
         /// <param name="delta">Time since last update</param>
-        public abstract void update(TimeSpan delta);
+        public abstract void Update(TimeSpan delta);
 
         /// <summary>
         /// Abstract function for rendering this GameObject on the screen
         /// </summary>
-        public abstract void render(SpriteBatch spriteBatch);
+        public abstract void Render(SpriteBatch spriteBatch);
 
-        public float getX()
+        public float GetX()
         {
-            return hitBox.X;
+            return position.X;
         }
 
-        public float getY()
+        public float GetY()
         {
-            return hitBox.Y;
+            return position.Y;
         }
 
-        public Vector2 getPosition()
+        public Vector2 GetPosition()
         {
             return new Vector2(position.X, position.Y); //return new instance so that they dont have a reference to our private variable
         }
 
-        public Vector2 getVelocity()
+        public Vector2 GetVelocity()
         {
             return new Vector2(velocity.X, velocity.Y); //return new instance so that they dont have a reference to our private variable
         }
 
-        public void addVelocity(float x, float y)
+        public void AddVelocity(float x, float y)
         {
             velocity.X += x;
             velocity.Y += y;
@@ -75,7 +74,7 @@ namespace X2Game
         /// </summary>
         /// <param name="other">Which object to check the collision with</param>
         /// <returns>true if it has collided with the GameObject, false otherwise</returns>
-        public virtual bool collidesWith(GameObject other)
+        public virtual bool CollidesWith(GameObject other)
         {
             //Never collide with ourselves
             if (other.Equals(this)) return false;
