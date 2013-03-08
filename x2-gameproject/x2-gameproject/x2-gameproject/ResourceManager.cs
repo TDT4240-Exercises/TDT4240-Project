@@ -108,8 +108,7 @@ namespace X2Game
 //                           if((bits[i].PackedValue & 0xFFFFFF) == 0) bits[i] = Color.FromNonPremultiplied(0,0,0,0);
 //                        }
 //                        texture.SetData(bits);
-
-						Console.WriteLine("Texture \"" + textureID + "\" loaded.");
+                        Logger.Log("Texture \"" + textureID + "\" loaded.", LogLevel.Info);
                     }
                 }
                 catch(Exception ex)

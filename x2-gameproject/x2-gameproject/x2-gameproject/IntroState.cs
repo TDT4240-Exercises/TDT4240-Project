@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -6,20 +7,21 @@ namespace X2Game {
 	class IntroState : GameState {
 		private bool buttonPressed;
 
-		public IntroState() : base(true) // Set isOverlay to true
+		public IntroState() : base(false) // Set isOverlay to true
 		{
-
+            Random rand = new Random();
+            for (int i = 0; i < 100; i++)
+                ParticleEngine.SpawnParticle(new Vector2(rand.Next(800), rand.Next(640)), ResourceManager.getParticleTemplate("fireball.xml"));
 		}
 		
-		public override bool Update()
+		protected override bool Update()
 		{
 			return buttonPressed;
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			spriteBatch.Draw (ResourceManager.GetDebugTexture (), new Rectangle (100, 200, 150, 250), Color.White);
-			spriteBatch.DrawString (ResourceManager.GetDebugFont (), "AwesomeGame", new Vector2 (100, 100), Color.White);
+        protected override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(ResourceManager.getTexture("splash.jpg"), new Rectangle(0, 0, 800, 640), null, Color.White);
 		}
 
 		public override void Input(KeyboardState keyboard)

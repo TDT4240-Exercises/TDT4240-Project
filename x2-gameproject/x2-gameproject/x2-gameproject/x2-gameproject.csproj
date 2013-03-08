@@ -110,12 +110,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Button.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="FPSCounter.cs" />
     <Compile Include="GameInstance.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="GenericDataStructure.cs" />
+    <Compile Include="GUIComponent.cs" />
     <Compile Include="IntroState.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainMenuState.cs" />

@@ -72,7 +72,7 @@ namespace X2Game
 
 			stateStack.Peek ().Input (Keyboard.GetState ());
 
-			if (stateStack.Peek ().Update ()) {
+			if (stateStack.Peek ().UpdateAll()) {
 				// TODO: get next state from this state and push it
 				// 		 if it is null, then pop current
 				GameState newState = stateStack.Peek().getNextState();
@@ -84,7 +84,6 @@ namespace X2Game
 				else stateStack.Push(newState);
 			}
 
-            // TODO: Add your update logic here
             ParticleEngine.Update(gameTime.ElapsedGameTime);
 
             base.Update(gameTime);
@@ -101,9 +100,14 @@ namespace X2Game
 
             //Render current state
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			if (stateStack.Peek().isOverlay) ParticleEngine.Render(spriteBatch);
-            stateStack.Peek().Draw(spriteBatch);
+			
+            if (stateStack.Peek().isOverlay) ParticleEngine.Render(spriteBatch);
+            stateStack.Peek().DrawAll(spriteBatch);
             if (!stateStack.Peek().isOverlay) ParticleEngine.Render(spriteBatch);
+
+            //Draw makeshift mouse pointer
+            spriteBatch.Draw(ResourceManager.GetDebugTexture(), new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 32, 32), Color.White);
+
             spriteBatch.End();
 
             //Finished this frame
