@@ -109,3 +109,4 @@ UpgradeLog*.XML
 *.userprefs
 
 /x2-gameproject/x2-gameproject/x2-gameproject/x2-gameproject.csproj.Debug.cachefile
+*.orig
