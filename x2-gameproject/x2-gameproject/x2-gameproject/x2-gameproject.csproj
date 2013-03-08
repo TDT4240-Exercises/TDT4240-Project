@@ -1,25 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{AB6B5CA2-F31E-4C73-8C77-F4A0E0841A87}</ProjectGuid>
+    <ProjectGuid>{6642D695-28F8-48C7-A8B0-D9F943D27279}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>X2Game</RootNamespace>
+    <RootNamespace>x2_gameproject</RootNamespace>
     <AssemblyName>x2-gameproject</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>HiDef</XnaProfile>
-    <XnaCrossPlatformGroupID>546c2a85-b70b-4ec9-bc94-b2d79ed8e0bb</XnaCrossPlatformGroupID>
+    <XnaCrossPlatformGroupID>46f80064-3b56-4f50-92d1-f8d454de29f3</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
-    <ApplicationIcon>
-    </ApplicationIcon>
-    <Thumbnail>
-    </Thumbnail>
+    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <Thumbnail>GameThumbnail.png</Thumbnail>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -113,6 +111,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity.cs" />
+    <Compile Include="FPSCounter.cs" />
+    <Compile Include="GameInstance.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="GenericDataStructure.cs" />
@@ -121,11 +121,14 @@
     <Compile Include="Particle.cs" />
     <Compile Include="ParticleEngine.cs" />
     <Compile Include="ParticleTemplate.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="GameInstance.cs" />
     <Compile Include="ResourceManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Game.ico" />
+    <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\x2-gameprojectContent\x2-gameprojectContent.contentproj">

@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.IO;
 
 namespace X2Game {
 	class IntroState : GameState {
-		private bool buttonPressed = false;
+		private bool buttonPressed;
 
 		public IntroState() : base(true) // Set isOverlay to true
 		{

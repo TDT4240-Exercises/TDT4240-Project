@@ -19,7 +19,7 @@ namespace X2Game
         /// All sub-classes must inherit and implement this constructor
         /// </summary>
         /// <param name="filePath">the XML file to parse and load data from</param>
-        /// <param name="valuesEnum">an enumeration of valid valueIDs we are allowed to parse from the XML</param>
+        /// <param name="valueID">an enumeration of valid valueIDs we are allowed to parse from the XML</param>
         protected GenericDataStructure(string filePath, Type valueID)
         {
             enumType = valueID;
@@ -118,14 +118,9 @@ namespace X2Game
 
         public T getValue<T>(string valueID)
         {
-            try
-            {
-                return (T)values[valueID];
-            }
-            catch
-            {
-                return default(T);  //null, 0.0, "" or whatever
-            }
+            if (values[valueID] == null) return default(T);  //null, 0.0, "" or whatever
+
+            return (T) values[valueID];
         }
 
         public T getValue<T>(Enum valueID)
