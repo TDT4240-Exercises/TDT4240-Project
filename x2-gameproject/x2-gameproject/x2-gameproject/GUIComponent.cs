@@ -1,13 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-namespace x2_gameproject
+namespace X2Game
 {
     abstract class GUIComponent
     {
         public Rectangle Bounds;
 
         public abstract void Draw(SpriteBatch spriteBatch);
-        public abstract void Update();
+        public abstract void Update(KeyboardState keyboard, MouseState mouse);
     }
 }

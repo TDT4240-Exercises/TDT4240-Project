@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
-using x2_gameproject;
+using X2Game;
 
 namespace X2Game
 {

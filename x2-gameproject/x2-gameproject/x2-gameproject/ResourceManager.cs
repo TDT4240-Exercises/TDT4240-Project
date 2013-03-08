@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
-using x2_gameproject;
+using X2Game;
 
 namespace X2Game
 {

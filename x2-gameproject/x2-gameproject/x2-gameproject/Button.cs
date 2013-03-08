@@ -1,14 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using X2Game;
+using Microsoft.Xna.Framework.Input;
 
-namespace x2_gameproject
+namespace X2Game
 {
     class Button : GUIComponent
     {
         public string Text = null;
         public Color TextColor = Color.GhostWhite;
         public Color ButtonColor = Color.Brown;
+        private bool _mouseIsOver;
 
         public Button(string buttonText, int x, int y, int width = 150, int height = 50)
         {
@@ -18,7 +19,8 @@ namespace x2_gameproject
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(ResourceManager.GetDebugTexture(), Bounds, ButtonColor);
+
+            spriteBatch.Draw(ResourceManager.GetDebugTexture(), Bounds, _mouseIsOver ? ButtonColor * 1.5f : ButtonColor);
             if (!string.IsNullOrWhiteSpace(Text))
             {
                 SpriteFont font = ResourceManager.GetDebugFont();
@@ -27,9 +29,9 @@ namespace x2_gameproject
             }
         }
 
-        public override void Update()
+        public override void Update(KeyboardState keyboard, MouseState mouse)
         {
-            //TODO
+            _mouseIsOver = Bounds.Contains(mouse.X, mouse.Y);
         }
     }
 }

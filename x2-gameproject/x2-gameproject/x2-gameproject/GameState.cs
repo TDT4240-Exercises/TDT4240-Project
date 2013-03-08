@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using x2_gameproject;
 
 namespace X2Game {
 	abstract class GameState {
@@ -19,12 +18,16 @@ namespace X2Game {
         /// Updates all components in this GameState
         /// </summary>
         /// <returns>Returns true if it is finished and ready for a call to getNextState()</returns>
-		public virtual bool UpdateAll()
+		public virtual bool UpdateAll(KeyboardState keyboard, MouseState mouse)
 		{
+            //Update GUI components
 		    foreach (GUIComponent guiComponent in components)
 		    {
-                guiComponent.Update();
+                guiComponent.Update(keyboard, mouse);
 		    }
+
+            //Update input
+            Input(Keyboard.GetState());
 
 		    return Update();
 		}

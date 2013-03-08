@@ -70,15 +70,13 @@ namespace X2Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-			stateStack.Peek ().Input (Keyboard.GetState ());
-
-			if (stateStack.Peek ().UpdateAll()) {
+			if (stateStack.Peek().UpdateAll(Keyboard.GetState(), Mouse.GetState())) {
 				// TODO: get next state from this state and push it
 				// 		 if it is null, then pop current
 				GameState newState = stateStack.Peek().getNextState();
 
 				if (newState == null){
-					if (stateStack.Count == 1) this.Exit();
+					if (stateStack.Count == 1) Exit();
 					stateStack.Pop();
 				}
 				else stateStack.Push(newState);

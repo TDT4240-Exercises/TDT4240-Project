@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace x2_gameproject
+namespace X2Game
 {
     /// <summary>
     /// Determines the severity and importance of each log message
