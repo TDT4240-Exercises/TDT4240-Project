@@ -1,13 +1,14 @@
-﻿
+﻿using System.ComponentModel;
+
 namespace X2Game
 {
-    enum ParticleValues
+    public enum ParticleValues
     {
         InitialSize,
         SizeAdd,
         InitialRotation,
         RotationAdd,
-        Lifetime,
+        LifeTime,
         Texture,
         VelocityAdd,
         InitialAlpha,
@@ -15,6 +16,7 @@ namespace X2Game
         SpawnParticleOnEnd
     }
 
+    [ImmutableObject(true)]
     class ParticleTemplate : GenericDataStructure
     {
         public readonly string particleID;
@@ -22,9 +24,10 @@ namespace X2Game
         public ParticleTemplate(string filePath)
             : base(filePath, typeof(ParticleValues))
         {
+            ParticleValues.LifeTime.GetType();
             particleID = filePath;
             SetDefaultValue(ParticleValues.InitialSize, 1.0f);
-            SetDefaultValue(ParticleValues.Lifetime, 3.0f);
+            SetDefaultValue(ParticleValues.LifeTime, 3.0f);
             SetDefaultValue(ParticleValues.Texture, ResourceManager.getTexture("INVALID_TEXTURE"));
         }
     }

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<LifeTime type="Float">2.0</LifeTime>
+	<InitialSize type="Float">0.01</InitialSize>
+	<InitialRotation type="Float">0.5</InitialRotation>
+	<SizeAdd type="Float">0.4</SizeAdd>
+	<RotationAdd type="Float">0.3</RotationAdd>
+	<Texture type="Texture">fireball.png</Texture>
+	<AlphaAdd type="Float">0.5</AlphaAdd>
+	<InitialAlpha type="Float">0.0</InitialAlpha>
+</ParticleTemplate>

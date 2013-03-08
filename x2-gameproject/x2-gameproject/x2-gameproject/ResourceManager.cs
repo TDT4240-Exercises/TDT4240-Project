@@ -16,7 +16,7 @@ namespace X2Game
         private static Dictionary<String, ParticleTemplate> loadedParticles;
 
         private static GraphicsDevice device;
-        private static string graphicsFolder;
+        private static string contentFolder;
         private static Texture2D debugTexture;
 		private static SpriteFont debugFont;
 
@@ -36,7 +36,7 @@ namespace X2Game
             {
                 try
                 {
-                    loadedParticles[particleID] = new ParticleTemplate(particleID);
+                    loadedParticles[particleID] = new ParticleTemplate(contentFolder + particleID);
                 }
                 catch
                 {
@@ -49,16 +49,20 @@ namespace X2Game
         }
 
 
-        /**
-         * Must be called befure using the ResourceManager to initialize the location for the graphics files and which
-         * GraphicsDevice to load the textures for.
-         */
-        public static void initialize(GraphicsDevice device, string graphicsFolder)
+        
+        /// <summary>
+        /// Must be called befure using the ResourceManager to initialize the location for the graphics files and which
+        /// GraphicsDevice to load the textures for.
+
+        /// </summary>
+        /// <param name="device">The GraphicsDevice to use when loading textures</param>
+        /// <param name="contentFolder">The location of the game assets</param>
+        public static void initialize(GraphicsDevice device, string contentFolder)
         {
             ResourceManager.device = device;
             loadedTextures = new Dictionary<String, Texture2D>();
             loadedParticles = new Dictionary<String, ParticleTemplate>();
-            ResourceManager.graphicsFolder = graphicsFolder;
+            ResourceManager.contentFolder = contentFolder;
 
 			debugTexture = new Texture2D (device, 1, 1);
 			debugTexture.SetData (new[] {Color.White});
@@ -90,9 +94,18 @@ namespace X2Game
 
                 try
                 {
-                    using (FileStream fileStream = new FileStream(graphicsFolder + textureID, FileMode.Open))
+                    using (FileStream fileStream = new FileStream(contentFolder + textureID, FileMode.Open))
                     {
                         texture = Texture2D.FromStream(device, fileStream);
+
+                        //Replace the color BLACK with 100% transparency - TODO: this might be very slow
+                        Color[] bits = new Color[texture.Width * texture.Height];
+                        texture.GetData(bits);
+                        for (int i = 0; i < bits.Length; i++)
+                        {  
+                           if((bits[i].PackedValue & 0xFFFFFF) == 0) bits[i] = Color.FromNonPremultiplied(0,0,0,0);
+                        }
+                        texture.SetData(bits);
                     }
                 }
                 catch(Exception ex)

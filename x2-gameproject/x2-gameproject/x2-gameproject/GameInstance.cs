@@ -29,7 +29,7 @@ namespace X2Game
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            ResourceManager.initialize(GraphicsDevice, "");
+            ResourceManager.initialize(GraphicsDevice, "Content/");
 
 			stateStack = new Stack<GameState> ();
 			stateStack.Push (new IntroState ());

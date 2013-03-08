@@ -19,7 +19,6 @@ namespace X2Game
         //These two are cached for performance reasons
         private Vector2 centre;
         private Texture2D texture;
-        private Rectangle renderArea;
 
         public Particle(Vector2 initialPosition, ParticleTemplate template)
         {
@@ -27,12 +26,10 @@ namespace X2Game
             position = initialPosition;
             rotation = template.GetValue<float>(ParticleValues.InitialRotation);
             size = template.GetValue<float>(ParticleValues.InitialSize);
-            secondsRemaining = template.GetValue<float>(ParticleValues.Lifetime);
+            secondsRemaining = template.GetValue<float>(ParticleValues.LifeTime);
             texture = texture = template.GetValue<Texture2D>(ParticleValues.Texture);
             centre = new Vector2(texture.Width / 2, texture.Height / 2);
             alpha = 1.0f - template.GetValue<float>(ParticleValues.InitialAlpha);
-
-            renderArea = new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width * size), (int)(texture.Height * size));
         }
 
         public void Destroy()
@@ -88,17 +85,11 @@ namespace X2Game
             //Update velocity
             velocity.X += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;     //TODO: add velocity based on rotation?
             velocity.Y += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;
-
-            //Update render area
-            renderArea.X = (int)position.X;
-            renderArea.Y = (int)position.Y;
-            renderArea.Width = (int)(texture.Width*size);
-            renderArea.Height = (int)(texture.Height*size);
         }
 
         public override void Render(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, renderArea, null, Color.White * alpha, rotation, centre, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, position, null, Color.White * alpha, rotation, centre, size, SpriteEffects.None, 0);
         }
     }
 }
