@@ -38,7 +38,7 @@ namespace X2Game
                 {
                     loadedParticles[particleID] = new ParticleTemplate(particleID);
                 }
-                catch (Exception ex)
+                catch
                 {
                     loadedParticles[particleID] = null;
                 }

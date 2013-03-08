@@ -10,17 +10,25 @@ namespace X2Game
     {
         public static uint maxParticles = 10000;
         private static readonly LinkedList<Particle> particleList = new LinkedList<Particle>();
+        private static readonly LinkedList<Particle> spawnList = new LinkedList<Particle>();
 
-        public static void update(TimeSpan delta)
+        public static void Update(TimeSpan delta)
         {
+            //Add new particles to the current list
+            foreach (Particle particle in spawnList)
+            {
+                particleList.AddLast(particle);
+            }
+            spawnList.Clear();
+
             //Single threaded update
-            if (particleList.Count < 400 || true)
+            if (particleList.Count < 400)
             {
                 LinkedListNode<Particle> node = particleList.First;
                 while (node != null)
                 {
                     //Update particle
-                    node.Value.update(delta);
+                    node.Value.Update(delta);
 
                     //Has this particle been destroyed?
                     if (node.Value.isDestroyed)
@@ -39,7 +47,7 @@ namespace X2Game
             //Parallel update
             else
             {
-                Parallel.ForEach(particleList, particle => particle.update(delta));
+                Parallel.ForEach(particleList, particle => particle.Update(delta));
 
                 //Remove destroyed particles
                 for (LinkedListNode<Particle> node = particleList.First; node != null; )
@@ -52,26 +60,26 @@ namespace X2Game
 
         }
 
-        public static void render(SpriteBatch spriteBatch)
+        public static void Render(SpriteBatch spriteBatch)
         {
-            foreach (Particle particle in particleList) particle.render(spriteBatch);
+            foreach (Particle particle in particleList) particle.Render(spriteBatch);
         }
 
-        public static void spawnParticle(Vector2 position, ParticleTemplate template)
+        public static void SpawnParticle(Vector2 position, ParticleTemplate template)
         {
             //Don't spawn more particles than the set limit
-            if (particleList.Count >= maxParticles || template == null) return;
+            if (Count() >= maxParticles || template == null) return;
 
             //Spawn it and add it last in our list
-            particleList.AddLast(new Particle(position, template));
+            spawnList.AddLast(new Particle(position, template));
         }
 
 		public static int Count()
 		{
-		    return particleList.Count;
+            return particleList.Count + spawnList.Count;
 		}
 
-        public static void clear()
+        public static void Clear()
         {
             particleList.Clear();
         }

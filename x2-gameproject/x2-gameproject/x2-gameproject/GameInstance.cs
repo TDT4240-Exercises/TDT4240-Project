@@ -86,7 +86,7 @@ namespace X2Game
 			}
 
             // TODO: Add your update logic here
-            ParticleEngine.update(gameTime.ElapsedGameTime);
+            ParticleEngine.Update(gameTime.ElapsedGameTime);
 
             base.Update(gameTime);
         }
@@ -102,11 +102,10 @@ namespace X2Game
 
             //Render current state
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			if (stateStack.Peek().isOverlay) ParticleEngine.render(spriteBatch);
+			if (stateStack.Peek().isOverlay) ParticleEngine.Render(spriteBatch);
             stateStack.Peek().Draw(spriteBatch);
-            if (!stateStack.Peek().isOverlay) ParticleEngine.render(spriteBatch);
+            if (!stateStack.Peek().isOverlay) ParticleEngine.Render(spriteBatch);
             spriteBatch.End();
-
 
             //Finished this frame
             base.Draw(gameTime);

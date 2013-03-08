@@ -52,13 +52,13 @@ namespace X2Game
                         }
 
                         //Load value!
-                        values.Add(xml.Name, parseValue(xml));
+                        values.Add(xml.Name, ParseValue(xml));
                     }
                 }
             }
         }
 
-        private object parseValue(XmlReader xml)
+        private object ParseValue(XmlReader xml)
         {
             string typeName = xml.GetAttribute("type");
 
@@ -104,31 +104,31 @@ namespace X2Game
             }
         }
 
-        protected void setDefaultValue(Enum valueID, object value)
+        protected void SetDefaultValue(Enum valueID, object value)
         {
-            setDefaultValue(valueID.ToString(), value);
+            SetDefaultValue(valueID.ToString(), value);
         }
 
-        protected void setDefaultValue(string valueID, object value)
+        protected void SetDefaultValue(string valueID, object value)
         {
             if (!enumType.IsEnumDefined(valueID)) throw new ArgumentException(valueID + " is not a valid enum type!");
             if (values.Contains(valueID)) return; //don't override explicit values
             values.Add(valueID, value);
         }
 
-        public T getValue<T>(string valueID)
+        public T GetValue<T>(string valueID)
         {
             if (values[valueID] == null) return default(T);  //null, 0.0, "" or whatever
 
             return (T) values[valueID];
         }
 
-        public T getValue<T>(Enum valueID)
+        public T GetValue<T>(Enum valueID)
         {
-            return getValue<T>(valueID.ToString());
+            return GetValue<T>(valueID.ToString());
         }
 
-        public void writeToFile(string fileUri)
+        public void WriteToFile(string fileUri)
         {
 
             using (XmlWriter xml = XmlWriter.Create(fileUri))
