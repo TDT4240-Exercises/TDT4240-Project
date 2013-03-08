@@ -14,7 +14,7 @@ namespace X2Game
         public static void update(TimeSpan delta)
         {
             //Single threaded update
-            if (particleList.Count < 400)
+            if (particleList.Count < 400 || true)
             {
                 LinkedListNode<Particle> node = particleList.First;
                 while (node != null)
