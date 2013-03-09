@@ -22,7 +22,7 @@ namespace X2Game
             spawnList.Clear();
 
             //Single threaded update
-            if (particleList.Count < 400)
+            if (particleList.Count < 100)
             {
                 LinkedListNode<Particle> node = particleList.First;
                 while (node != null)

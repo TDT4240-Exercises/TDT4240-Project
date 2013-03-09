@@ -42,7 +42,7 @@ namespace X2Game {
 				spawnParticle = false;
 			else if (keyboard.IsKeyDown (Keys.S))
 				ParticleEngine.SpawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), ResourceManager.getParticleTemplate ("fireball.xml"));
-			else if (keyboard.IsKeyDown(Keys.L))
+			if (keyboard.IsKeyDown(Keys.L))
 				ParticleEngine.SpawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), ResourceManager.getParticleTemplate ("blueEnergyBall.xml"));
 		}
 		
