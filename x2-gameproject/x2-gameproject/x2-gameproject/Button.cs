@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq.Expressions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -6,15 +7,23 @@ namespace X2Game
 {
     class Button : GUIComponent
     {
+        public delegate void OnButtonClick();
+
         public string Text = null;
         public Color TextColor = Color.GhostWhite;
         public Color ButtonColor = Color.Brown;
         private bool _mouseIsOver;
+        private OnButtonClick _onClickFunction;
 
         public Button(string buttonText, int x, int y, int width = 150, int height = 50)
         {
             Text = buttonText;
             Bounds = new Rectangle(x, y, width, height);
+        }
+
+        public void SetOnClickFunction(OnButtonClick onClick)
+        {
+            _onClickFunction = onClick;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -32,6 +41,7 @@ namespace X2Game
         public override void Update(KeyboardState keyboard, MouseState mouse)
         {
             _mouseIsOver = Bounds.Contains(mouse.X, mouse.Y);
+            if (mouse.LeftButton == ButtonState.Pressed && _mouseIsOver && _onClickFunction != null) _onClickFunction();
         }
     }
 }

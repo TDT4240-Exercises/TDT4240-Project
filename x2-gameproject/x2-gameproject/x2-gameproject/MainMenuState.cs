@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using X2Game;
 
 namespace X2Game {
+
 	class MainMenuState : GameState {
 		private bool buttonPressed;
 		private bool spawnParticle;
@@ -16,7 +17,11 @@ namespace X2Game {
 
             components.Add(new Button("New Game", 200, 200));
             components.Add(new Button("Options", 200, 270));
-            components.Add(new Button("Exit Game", 200, 340));
+
+		    Button exitButton = new Button("Exit Game", 200, 340);
+            exitButton.SetOnClickFunction(() => Environment.Exit(0));
+            components.Add(exitButton);
+
             components.Add(new Button("Secret Button", 200, 410));
 		}
 		
