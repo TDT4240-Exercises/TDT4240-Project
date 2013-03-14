@@ -10,6 +10,8 @@ namespace X2Game {
 		private bool buttonPressed;
 		private bool spawnParticle;
 		private Random rand;
+
+		private GameState nextState;
 		
 		public MainMenuState() : base(true) // Set isOverlay to true
 		{
@@ -49,11 +51,16 @@ namespace X2Game {
 				ParticleEngine.SpawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), ResourceManager.getParticleTemplate ("fireball.xml"));
 			if (keyboard.IsKeyDown(Keys.L))
 				ParticleEngine.SpawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), ResourceManager.getParticleTemplate ("blueEnergyBall.xml"));
+			if (keyboard.IsKeyDown(Keys.U)){
+				nextState = new SandboxAndersState();
+				buttonPressed = true;
+			}
 		}
 		
 		public override GameState getNextState ()
 		{
-			return null;
+			buttonPressed = false;
+			return nextState;
 		}
 	}
 }

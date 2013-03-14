@@ -33,6 +33,8 @@ namespace X2Game
         {
             texture = ResourceManager.getTexture(textureID);
             controller = setController;
+			width = texture.Width;
+			height = texture.Height;
         }
 
         public override void Update(TimeSpan delta)
@@ -43,7 +45,18 @@ namespace X2Game
 
         public override void Render(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, hitBox, Color.White);
+            //spriteBatch.Draw(texture, hitBox, Color.White);
+			spriteBatch.Draw (
+				texture, 
+				new Vector2 (GetX (), GetY ()), 
+				null, 
+				Color.White, 
+				rotation, 
+				new Vector2 (width / 2, height / 2), 
+				0.2f, 
+				SpriteEffects.None, 
+				1.0f
+			);
         }
 
         public EntityController GetController()

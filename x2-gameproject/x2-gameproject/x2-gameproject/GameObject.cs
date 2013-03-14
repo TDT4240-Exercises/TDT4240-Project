@@ -15,8 +15,8 @@ namespace X2Game
 
         protected float rotation;
 
-        public int width { get; private set; }
-        public int height { get; private set; }
+        public int width { get; protected set; }
+        public int height { get; protected set; }
 
         public Rectangle hitBox
         {
