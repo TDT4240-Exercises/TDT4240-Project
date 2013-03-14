@@ -27,7 +27,7 @@ namespace X2Game {
 		    }
 
             //Update input
-            Input(Keyboard.GetState());
+            Input(keyboard);
 
 		    return Update();
 		}

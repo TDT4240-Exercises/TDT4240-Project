@@ -12,6 +12,7 @@ namespace X2Game {
 		private Random rand;
 
 		private GameState nextState;
+		private bool forked = false; // TODO: better name and implementation (used to prevent "Escape-spam")
 		
 		public MainMenuState() : base(true) // Set isOverlay to true
 		{
@@ -25,11 +26,18 @@ namespace X2Game {
             components.Add(exitButton);
 
             components.Add(new Button("Secret Button", 200, 410));
+
+			Button sandboxButton = new Button ("Sandbox", 200, 130);
+			sandboxButton.SetOnClickFunction (() => {
+				nextState = new SandboxAndersState();
+				buttonPressed = true;
+			});
+			components.Add (sandboxButton);
 		}
 		
 		protected override bool Update()
 		{
-			return buttonPressed;
+			return buttonPressed && (!forked);
 		}
 
         protected override void Draw(SpriteBatch spriteBatch)
@@ -40,7 +48,14 @@ namespace X2Game {
 		
 		public override void Input(KeyboardState keyboard)
 		{
+			// Prevent "Escape-spam"
+			if (keyboard.IsKeyUp (Keys.Escape) && forked)
+				forked = false;
+			else if (forked)
+				return;
+
 			if (keyboard.IsKeyDown (Keys.Escape)) {
+				nextState = null;
 				buttonPressed = true;
 			} else if (keyboard.IsKeyDown (Keys.P) && !spawnParticle) {
 				ParticleEngine.SpawnParticle (new Vector2 (rand.Next (800), rand.Next (600)), ResourceManager.getParticleTemplate ("fireball.xml"));
@@ -60,6 +75,7 @@ namespace X2Game {
 		public override GameState getNextState ()
 		{
 			buttonPressed = false;
+			forked = true;
 			return nextState;
 		}
 	}
