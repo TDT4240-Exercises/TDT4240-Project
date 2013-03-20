@@ -12,7 +12,7 @@ namespace X2Game
         private Texture2D texture;
         public Projectile(String textureID)
         {
-            texture = ResourceManager.getTexture(textureID);
+            texture = ResourceManager.GetTexture(textureID);
         }
 
         public override void Render(SpriteBatch spriteBatch)

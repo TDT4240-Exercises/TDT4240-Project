@@ -5,11 +5,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace X2Game {
 	class SandboxAndersState : GameState {
-		private bool exitState = false;
-
 		private TankPrototype minTank;
 		
-		public SandboxAndersState() : base(false) // Set isOverlay to false
+		public SandboxAndersState()
 		{
 			minTank = new TankPrototype();
 			minTank.SetController (TankPrototype.Controllers.Forward, 	Keys.W);
@@ -17,13 +15,7 @@ namespace X2Game {
 			minTank.SetController (TankPrototype.Controllers.Left, 		Keys.A);
 			minTank.SetController (TankPrototype.Controllers.Right, 	Keys.D);
 		}
-		
-		protected override bool Update()
-		{
-			minTank.Update (new TimeSpan ());
-			return exitState;
-		}
-		
+				
 		protected override void Draw(SpriteBatch spriteBatch)
 		{
 			minTank.Render (spriteBatch);
@@ -36,20 +28,14 @@ namespace X2Game {
 			);
 		}
 		
-		public override void Input(KeyboardState keyboard)
+		protected override void Update(KeyboardState keyboard, MouseState mouse)
 		{
 			if (keyboard.IsKeyDown(Keys.Escape)) {
-				exitState = true;
+				NextGameState = null; //Go back to main menu
 			}
-			minTank.Input (keyboard);
-		}
+			minTank.Input(keyboard);
+            minTank.Update(new TimeSpan());
+        }
 		
-		public override GameState getNextState ()
-		{
-			if (exitState) {
-				exitState = false;
-			}
-			return null;
-		}
 	}
 }

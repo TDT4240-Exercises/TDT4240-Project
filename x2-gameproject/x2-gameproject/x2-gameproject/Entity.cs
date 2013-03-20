@@ -31,10 +31,10 @@ namespace X2Game
         /// <param name="setController">Is this entity controlled by an AI or a player?</param>
         public Entity(String textureID, EntityController setController)
         {
-            texture = ResourceManager.getTexture(textureID);
+            texture = ResourceManager.GetTexture(textureID);
             controller = setController;
-			width = texture.Width;
-			height = texture.Height;
+            width = texture.Width;
+            height = texture.Height;
         }
 
         public override void Update(TimeSpan delta)
@@ -46,17 +46,17 @@ namespace X2Game
         public override void Render(SpriteBatch spriteBatch)
         {
             //spriteBatch.Draw(texture, hitBox, Color.White);
-			spriteBatch.Draw (
-				texture, 
-				new Vector2 (GetX (), GetY ()), 
-				null, 
-				Color.White, 
-				rotation, 
-				new Vector2 (width / 2, height / 2), 
-				0.2f, 
-				SpriteEffects.None, 
-				1.0f
-			);
+            spriteBatch.Draw (
+                texture, 
+                new Vector2 (GetX (), GetY ()), 
+                null, 
+                Color.White, 
+                rotation, 
+                new Vector2 (width / 2, height / 2), 
+                0.2f, 
+                SpriteEffects.None, 
+                1.0f
+            );
         }
 
         public EntityController GetController()

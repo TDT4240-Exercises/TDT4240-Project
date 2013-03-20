@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
-using X2Game;
 
 namespace X2Game
 {
@@ -13,41 +12,42 @@ namespace X2Game
      */
     static class ResourceManager
     {
-        private static Dictionary<String, Texture2D> loadedTextures;
-        private static Dictionary<String, ParticleTemplate> loadedParticles;
+        private static Dictionary<String, Texture2D> _loadedTextures;
+        private static Dictionary<String, ParticleTemplate> _loadedParticles;
+        private static Dictionary<String, TileType> _loadedTiles;
 
-        private static GraphicsDevice device;
-        private static string contentFolder;
-        private static Texture2D debugTexture;
-		private static SpriteFont debugFont;
+        private static GraphicsDevice _device;
+        public static string ContentFolder { get; private set; }
+        public static Texture2D InvalidTexture { get; private set; }
+		private static SpriteFont _debugFont;
 
-        public static void freeResources()
+        public static void FreeResources()
         {
             //Unload textures
-            foreach (Texture2D texture in loadedTextures.Values)
+            foreach (Texture2D texture in _loadedTextures.Values)
             {
                 texture.Dispose();
             }
-            loadedTextures.Clear();
+            _loadedTextures.Clear();
         }
 
-        public static ParticleTemplate getParticleTemplate(string particleID)
+        public static ParticleTemplate GetParticleTemplate(string particleID)
         {
-            if (!loadedParticles.ContainsKey(particleID))
+            if (!_loadedParticles.ContainsKey(particleID))
             {
                 try
                 {
-                    loadedParticles[particleID] = new ParticleTemplate(contentFolder + particleID);
+                    _loadedParticles[particleID] = new ParticleTemplate(ContentFolder + particleID);
                 }
                 catch
                 {
                     Logger.Log("Unable to load ParticleTemplate: " + particleID, LogLevel.Warning);
-                    loadedParticles[particleID] = null;
+                    _loadedParticles[particleID] = null;
                 }
                 
             }
 
-            return loadedParticles[particleID];
+            return _loadedParticles[particleID];
         }
 
 
@@ -59,48 +59,48 @@ namespace X2Game
         /// </summary>
         /// <param name="device">The GraphicsDevice to use when loading textures</param>
         /// <param name="contentFolder">The location of the game assets</param>
-        public static void initialize(GraphicsDevice device, string contentFolder)
+        public static void Initialize(GraphicsDevice device, string contentFolder)
         {
-            ResourceManager.device = device;
-            loadedTextures = new Dictionary<String, Texture2D>();
-            loadedParticles = new Dictionary<String, ParticleTemplate>();
-            ResourceManager.contentFolder = contentFolder;
+            _device = device;
+            _loadedTextures = new Dictionary<String, Texture2D>();
+            _loadedParticles = new Dictionary<String, ParticleTemplate>();
+            _loadedTiles = new Dictionary<String, TileType>();
+            ContentFolder = contentFolder;
 
-			debugTexture = new Texture2D (device, 1, 1);
-			debugTexture.SetData (new[] {Color.White});
+            //Default white texture
+            InvalidTexture = new Texture2D(_device, 64, 64);
+            Color[] data = new Color[InvalidTexture.Width*InvalidTexture.Height];
+            for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
+            InvalidTexture.SetData(data);
         }
 
-		public static Texture2D GetDebugTexture()
-		{
-			return debugTexture;
-		}
 
 		public static void LoadDebugFont(ContentManager Content)
 		{
-            debugFont = Content.Load<SpriteFont>("DebugFont");
+            _debugFont = Content.Load<SpriteFont>("DebugFont");
 		}
 
 		public static SpriteFont GetDebugFont()
 		{
-			return debugFont;
+			return _debugFont;
 		}
 
         /**
          * Retrieves the custom Texture2D object or loads it into memory if not already loaded.
          */
-        public static Texture2D getTexture(String textureID)
+        public static Texture2D GetTexture(String textureID)
         {
-            if (!loadedTextures.ContainsKey(textureID))
+            if (!_loadedTextures.ContainsKey(textureID))
             {
                 Texture2D texture;
 
                 try
                 {
-                    using (FileStream fileStream = new FileStream(contentFolder + textureID, FileMode.Open))
+                    using (FileStream fileStream = new FileStream(ContentFolder + textureID, FileMode.Open))
                     {
-                        texture = Texture2D.FromStream(device, fileStream);
+                        texture = Texture2D.FromStream(_device, fileStream);
 
-                        //Replace the color BLACK with 100% transparency - TODO: this might be very slow
+                        //Replace the color BLACK with 100% transparency
 //                        Color[] bits = new Color[texture.Width * texture.Height];
 //                        texture.GetData(bits);
 //                        for (int i = 0; i < bits.Length; i++)
@@ -114,14 +114,24 @@ namespace X2Game
                 catch(Exception ex)
                 {
                     Logger.Log("Cannot load '" + textureID + "' file! - " + ex.Message, LogLevel.Warning);
-                    texture = new Texture2D(device, 64, 64);
+                    texture = InvalidTexture;
                 }
 
-                loadedTextures.Add(textureID, texture);
+                _loadedTextures.Add(textureID, texture);
                 texture.Name = textureID;
             }
 
-            return loadedTextures[textureID];
+            return _loadedTextures[textureID];
+        }
+
+        public static TileType GetTile(string tileID)
+        {
+            if (!_loadedTiles.ContainsKey(tileID))
+            {
+                _loadedTiles[tileID] = new TileType(ContentFolder + tileID); 
+            }
+
+            return _loadedTiles[tileID];
         }
 
     }

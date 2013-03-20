@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Collections;
 using System.Collections.Specialized;
-using System.IO;
 using Microsoft.Xna.Framework.Graphics;
-using X2Game;
 
 namespace X2Game
 {
     abstract class GenericDataStructure
     {
-        private HybridDictionary values;    //high performance, case insensitive, returns null for non-existing elements
-        private Type enumType;
+        private readonly HybridDictionary _values;    //high performance, case insensitive, returns null for non-existing elements
+        private readonly Type _enumType;
+        private readonly string _filePath;
 
         /// <summary>
         /// All sub-classes must inherit and implement this constructor
@@ -23,8 +19,16 @@ namespace X2Game
         /// <param name="valueID">an enumeration of valid valueIDs we are allowed to parse from the XML</param>
         protected GenericDataStructure(string filePath, Type valueID)
         {
-            enumType = valueID;
-            values = new HybridDictionary(8, true);
+            _filePath = filePath;
+            _enumType = valueID;
+            _values = new HybridDictionary(8, true);
+
+            //Ensure the file exists
+            if (!System.IO.File.Exists(filePath))
+            {
+                Logger.Log("Unable to load XML: " + filePath, LogLevel.Warning);
+                return;
+            }
 
             // Create an XmlReader
             using (XmlReader xml = XmlReader.Create(filePath))
@@ -46,14 +50,14 @@ namespace X2Game
                         }
 
                         //Is this a valid name?
-                        if (!enumType.IsEnumDefined(xml.Name))
+                        if (!_enumType.IsEnumDefined(xml.Name))
                         {
                             Logger.Log("Illegal parse: " + filePath + " - " + xml.Name + " is not a valid value", LogLevel.Warning);
                             continue;
                         }
 
                         //Load value!
-                        values.Add(xml.Name, ParseValue(xml));
+                        _values.Add(xml.Name, ParseValue(xml));
                     }
                 }
             }
@@ -64,7 +68,7 @@ namespace X2Game
             string typeName = xml.GetAttribute("type");
 
             //Default type is string
-            if (typeName == null) xml.ReadElementContentAsString();
+            if (typeName == null) typeName = xml.ReadElementContentAsString();
             typeName = typeName.ToLower();
             
             //Else try to figure out what type this is
@@ -93,11 +97,18 @@ namespace X2Game
 
                 case "texture":
                 case "texture2d":
-                    return ResourceManager.getTexture(xml.ReadElementContentAsString());
+                    return ResourceManager.GetTexture(xml.ReadElementContentAsString());
 
                 case "particle":
-                    Logger.Log("Loaded particle!", LogLevel.Debug);
-                    return ResourceManager.getParticleTemplate(xml.ReadElementContentAsString());
+                    string particleID = xml.ReadElementContentAsString();
+
+                    if (ResourceManager.ContentFolder+particleID == _filePath)
+                    {
+                        Logger.Log("Infinite recursive particle detected: " + xml.BaseURI, LogLevel.Warning);
+                        return null;
+                    }
+
+                    return ResourceManager.GetParticleTemplate(particleID);
 
                 default:
                     Logger.Log("Unknown data type parsed: " + typeName + " (treating it as string)", LogLevel.Warning);
@@ -112,16 +123,16 @@ namespace X2Game
 
         protected void SetDefaultValue(string valueID, object value)
         {
-            if (!enumType.IsEnumDefined(valueID)) throw new ArgumentException(valueID + " is not a valid enum type!");
-            if (values.Contains(valueID)) return; //don't override explicit values
-            values.Add(valueID, value);
+            if (!_enumType.IsEnumDefined(valueID)) throw new ArgumentException(valueID + " is not a valid enum type!");
+            if (_values.Contains(valueID)) return; //don't override explicit values
+            _values.Add(valueID, value);
         }
 
         public T GetValue<T>(string valueID)
         {
-            if (values[valueID] == null) return default(T);  //null, 0.0, "" or whatever
+            if (_values[valueID] == null) return default(T);  //null, 0.0, "" or whatever
 
-            return (T) values[valueID];
+            return (T) _values[valueID];
         }
 
         public T GetValue<T>(Enum valueID)
@@ -140,7 +151,7 @@ namespace X2Game
                 xml.WriteStartElement(GetType().Name);
                 xml.WriteWhitespace("\n");
 
-                foreach (DictionaryEntry entry in values)
+                foreach (DictionaryEntry entry in _values)
                 {
                     xml.WriteWhitespace("\t");
 
@@ -168,6 +179,12 @@ namespace X2Game
                 }
                
             }
+        }
+
+        protected void SetValue(string key, object value)
+        {
+            if(value == null) _values.Remove(key);
+            else              _values[key] = value;
         }
     }
 }

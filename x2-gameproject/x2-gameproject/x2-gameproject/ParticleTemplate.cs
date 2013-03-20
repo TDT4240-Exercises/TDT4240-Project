@@ -28,7 +28,7 @@ namespace X2Game
             particleID = filePath;
             SetDefaultValue(ParticleValues.InitialSize, 1.0f);
             SetDefaultValue(ParticleValues.LifeTime, 3.0f);
-            SetDefaultValue(ParticleValues.Texture, ResourceManager.getTexture("INVALID_TEXTURE"));
+            SetDefaultValue(ParticleValues.Texture, ResourceManager.InvalidTexture);
         }
     }
 
