@@ -10,16 +10,15 @@ namespace X2Game
     /// </summary>
     public class GameInstance : Game
     {
-        private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-        private Stack<GameState> stateStack;
-        private Texture2D _mouseCursor;
+        private SpriteBatch _spriteBatch;
+        private Stack<GameState> _stateStack;
+        private RenderEngine _renderEngine;
 
-        private GameState CurrentGameState { get { return stateStack.Peek(); } }
+        private GameState CurrentGameState { get { return _stateStack.Peek(); } }
 
         public GameInstance()
         {
-            graphics = new GraphicsDeviceManager(this);
+            new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -34,8 +33,8 @@ namespace X2Game
             // TODO: Add your initialization logic here
             ResourceManager.Initialize(GraphicsDevice, "Content/");
 
-			stateStack = new Stack<GameState> ();
-			stateStack.Push (new IntroState ());
+            _stateStack = new Stack<GameState> ();
+            _stateStack.Push (new IntroState ());
 
             base.Initialize();
         }
@@ -47,11 +46,11 @@ namespace X2Game
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _renderEngine = new RenderEngine(_spriteBatch);
 
             ResourceManager.LoadDebugFont(Content);
-            Components.Add(new FPSCounter(this, spriteBatch));
-            _mouseCursor = ResourceManager.GetTexture("cursor.png");
+            Components.Add(new FPSCounter(this, _spriteBatch));
         }
 
         /// <summary>
@@ -74,20 +73,20 @@ namespace X2Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed) Exit();
 
             //Update the current game state and all it's sub-components
-            GameState nextState = CurrentGameState.UpdateAll(Keyboard.GetState(), Mouse.GetState());
+            GameState nextState = CurrentGameState.UpdateAll(gameTime.ElapsedGameTime, Keyboard.GetState(), Mouse.GetState(), _renderEngine);
 
             //Go to previous?
             if (nextState == null)
             {
-                stateStack.Pop();
-                if(stateStack.Count == 0) Exit(); //Last state in stack?
+                _stateStack.Pop();
+                if(_stateStack.Count == 0) Exit(); //Last state in stack?
                 CurrentGameState.NextGameState = CurrentGameState;
             }
 
             //New state?
             else if (nextState != CurrentGameState)
             {
-                stateStack.Push(nextState);
+                _stateStack.Push(nextState);
             }
 
             ParticleEngine.Update(gameTime.ElapsedGameTime);
@@ -101,19 +100,10 @@ namespace X2Game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //Start new frame
-            GraphicsDevice.Clear(Color.Black);
-
-            //Render current state
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			
-            stateStack.Peek().DrawAll(spriteBatch);
-            ParticleEngine.Render(spriteBatch);
-
-            //Draw makeshift mouse pointer
-            spriteBatch.Draw(_mouseCursor, new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 32, 32), Color.White);
-
-            spriteBatch.End();
+            //Main render loop
+            _renderEngine.BeginFrame();
+            CurrentGameState.DrawAll(_renderEngine);
+            _renderEngine.EndFrame();
 
             //Finished this frame
             base.Draw(gameTime);

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace X2Game
 {
@@ -23,8 +24,8 @@ namespace X2Game
         public Particle(Vector2 initialPosition, ParticleTemplate template)
         {
             this.template = template;
-            position = initialPosition;
-            rotation = template.GetValue<float>(ParticleValues.InitialRotation);
+            Position = initialPosition;
+            Rotation = template.GetValue<float>(ParticleValues.InitialRotation);
             size = template.GetValue<float>(ParticleValues.InitialSize);
             secondsRemaining = template.GetValue<float>(ParticleValues.LifeTime);
             texture = template.GetValue<Texture2D>(ParticleValues.Texture);
@@ -41,11 +42,11 @@ namespace X2Game
             ParticleTemplate spawn = template.GetValue<ParticleTemplate>(ParticleValues.SpawnParticleOnEnd);
             if (spawn != null)
             {
-                ParticleEngine.SpawnParticle(position, spawn);
+                ParticleEngine.SpawnParticle(Position, spawn);
             }
         }
 
-        public override void Update(TimeSpan delta)
+        public override void Update(TimeSpan delta, KeyboardState? keyboard, MouseState? mouse)
         {
             float timeUnit = delta.Ticks/(float)TimeSpan.TicksPerSecond;
 
@@ -77,19 +78,19 @@ namespace X2Game
             }
 
             //Update rotation
-            rotation += template.GetValue<float>(ParticleValues.RotationAdd) * timeUnit;
+            Rotation += template.GetValue<float>(ParticleValues.RotationAdd) * timeUnit;
 
             //Update position
-            position += velocity;
+            Position += Velocity;
 
             //Update velocity
-            velocity.X += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;     //TODO: add velocity based on rotation?
-            velocity.Y += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;
+            Velocity.X += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;     //TODO: add velocity based on rotation?
+            Velocity.Y += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;
         }
 
-        public override void Render(SpriteBatch spriteBatch)
+        /*public override void Render(SpriteBatch spriteBatch, Rectangle camera)
         {
-            spriteBatch.Draw(texture, position, null, Color.White * alpha, rotation, centre, size, SpriteEffects.None, 0);
-        }
+            spriteBatch.Draw(texture, Position, null, Color.White * alpha, Rotation, centre, size, SpriteEffects.None, 0);
+        }*/
     }
 }

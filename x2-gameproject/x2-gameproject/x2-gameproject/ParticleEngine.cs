@@ -28,7 +28,7 @@ namespace X2Game
                 while (node != null)
                 {
                     //Update particle
-                    node.Value.Update(delta);
+                    node.Value.Update(delta, null, null);
 
                     //Has this particle been destroyed?
                     if (node.Value.isDestroyed)
@@ -47,7 +47,7 @@ namespace X2Game
             //Parallel update
             else
             {
-                Parallel.ForEach(particleList, particle => particle.Update(delta));
+                Parallel.ForEach(particleList, particle => particle.Update(delta, null, null));
 
                 //Remove destroyed particles
                 for (LinkedListNode<Particle> node = particleList.First; node != null; )
@@ -60,9 +60,9 @@ namespace X2Game
 
         }
 
-        public static void Render(SpriteBatch spriteBatch)
+        public static void Render(RenderEngine renderEngine)
         {
-            foreach (Particle particle in particleList) particle.Render(spriteBatch);
+            foreach (Particle particle in particleList) renderEngine.Render(particle);
         }
 
         public static void SpawnParticle(Vector2 position, ParticleTemplate template)
@@ -74,10 +74,10 @@ namespace X2Game
             spawnList.AddLast(new Particle(position, template));
         }
 
-		public static int Count()
-		{
+        public static int Count()
+        {
             return particleList.Count + spawnList.Count;
-		}
+        }
 
         public static void Clear()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace X2Game
 {
@@ -10,63 +11,56 @@ namespace X2Game
     /// </summary>
     abstract class GameObject
     {
-        protected Vector2 velocity;
-        protected Vector2 position;
+        public Texture2D Texture { get; protected set; }
 
-        protected float rotation;
+        public Vector2 Velocity;
+        public Vector2 Position;
+        public float Rotation { get; protected set; }
 
-        public int width { get; protected set; }
-        public int height { get; protected set; }
+        public int Width { get; protected set; }
+        public int Height { get; protected set; }
 
         public Rectangle hitBox
         {
             get
             {
-                return new Rectangle((int)position.X, (int)position.Y, width, height); //XNA does not support float rectangles natively
+                return new Rectangle(GetX(), GetY(), Width, Height); //XNA does not support float rectangles natively
             }
         }
 
         protected GameObject()
         {
-            velocity = new Vector2();
-            position = new Vector2();
+            Velocity = new Vector2();
+            Position = new Vector2();
+            Texture = ResourceManager.InvalidTexture;
         }
 
         /// <summary>
         /// Abstract update function that is called every update frame
         /// </summary>
         /// <param name="delta">Time since last update</param>
-        public abstract void Update(TimeSpan delta);
+        /// <param name="keyboard"></param>
+        /// <param name="mouse"></param>
+        public abstract void Update(TimeSpan delta, KeyboardState? keyboard, MouseState? mouse);
 
-        /// <summary>
-        /// Abstract function for rendering this GameObject on the screen
-        /// </summary>
-        public abstract void Render(SpriteBatch spriteBatch);
-
-        public float GetX()
+        public int GetX()
         {
-            return position.X;
+            return (int) Position.X;
         }
 
-        public float GetY()
+        public int GetY()
         {
-            return position.Y;
+            return (int) Position.Y;
         }
 
         public Vector2 GetPosition()
         {
-            return new Vector2(position.X, position.Y); //return new instance so that they dont have a reference to our private variable
+            return new Vector2(Position.X, Position.Y); //return new instance so that they dont have a reference to our private variable
         }
 
         public Vector2 GetVelocity()
         {
-            return new Vector2(velocity.X, velocity.Y); //return new instance so that they dont have a reference to our private variable
-        }
-
-        public void AddVelocity(float x, float y)
-        {
-            velocity.X += x;
-            velocity.Y += y;
+            return new Vector2(Velocity.X, Velocity.Y); //return new instance so that they dont have a reference to our private variable
         }
 
         /// <summary>
@@ -79,7 +73,8 @@ namespace X2Game
             //Never collide with ourselves
             if (other.Equals(this)) return false;
 
-            return other.hitBox.Intersects(this.hitBox);
+            return other.hitBox.Intersects(hitBox);
         }
+
     }
 }

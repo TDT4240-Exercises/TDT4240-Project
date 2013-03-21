@@ -26,7 +26,7 @@ namespace X2Game
         {
             SetDefaultValue(TileValues.Texture, ResourceManager.InvalidTexture);
 
-            _tileIndex = new Rectangle(GetValue<int>(TileValues.XIndex), GetValue<int>(TileValues.YIndex), TILE_WIDTH, TILE_HEIGHT);
+            _tileIndex = new Rectangle(GetValue<int>(TileValues.XIndex) * TILE_WIDTH, GetValue<int>(TileValues.YIndex) * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
             _texture = GetValue<Texture2D>(TileValues.Texture);
             BlocksMovement = GetValue<bool>(TileValues.BlocksMovement);
         }

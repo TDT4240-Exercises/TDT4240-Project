@@ -8,7 +8,7 @@ namespace X2Game
     {
         public Rectangle Bounds;
 
-        public abstract void Draw(SpriteBatch spriteBatch);
+        public abstract void Draw(RenderEngine renderEngine);
         public abstract void Update(KeyboardState keyboard, MouseState mouse);
     }
 }

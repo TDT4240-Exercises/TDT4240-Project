@@ -29,26 +29,26 @@ namespace X2Game {
             });
             components.Add (sandboxButton);
         }
-        
-        protected override void Update(KeyboardState keyboard, MouseState mouse)
+
+        protected override void Update(TimeSpan delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
         {
             if (keyboard.IsKeyDown(Keys.P) && !spawnParticle)
             {
-                ParticleEngine.SpawnParticle(new Vector2(rand.Next(800), rand.Next(600)), ResourceManager.GetParticleTemplate("fireball.xml"));
+                ParticleEngine.SpawnParticle(new Vector2(rand.Next(renderEngine.GetScreenWidth()), rand.Next(renderEngine.GetScreenHeight())), ResourceManager.GetParticleTemplate("fireball.xml"));
                 spawnParticle = true;
             }
             else if (keyboard.IsKeyUp(Keys.P) && spawnParticle)
                 spawnParticle = false;
             else if (keyboard.IsKeyDown(Keys.S))
-                ParticleEngine.SpawnParticle(new Vector2(rand.Next(800), rand.Next(600)), ResourceManager.GetParticleTemplate("fireball.xml"));
+                ParticleEngine.SpawnParticle(new Vector2(rand.Next(renderEngine.GetScreenWidth()), rand.Next(renderEngine.GetScreenHeight())), ResourceManager.GetParticleTemplate("fireball.xml"));
             if (keyboard.IsKeyDown(Keys.L))
-                ParticleEngine.SpawnParticle(new Vector2(rand.Next(800), rand.Next(600)), ResourceManager.GetParticleTemplate("blueEnergyBall.xml"));
+                ParticleEngine.SpawnParticle(new Vector2(rand.Next(renderEngine.GetScreenWidth()), rand.Next(renderEngine.GetScreenHeight())), ResourceManager.GetParticleTemplate("blueEnergyBall.xml"));
         }
 
-        protected override void Draw(SpriteBatch spriteBatch)
+        protected override void Draw(RenderEngine renderEngine)
         {
-            spriteBatch.DrawString (ResourceManager.GetDebugFont (), "Main menu", new Vector2 (100, 100), Color.White);
-            spriteBatch.DrawString (ResourceManager.GetDebugFont (), "Particles: " + ParticleEngine.Count (), new Vector2 (10, 10), Color.White);
+            renderEngine.DrawString("Main menu", 100, 100, Color.White);
+            renderEngine.DrawString("Particles: " + ParticleEngine.Count(), 10, 10, Color.White);
         }
         
     }

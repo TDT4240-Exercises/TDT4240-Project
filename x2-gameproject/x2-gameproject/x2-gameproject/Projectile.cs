@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace X2Game
 {
@@ -15,14 +16,9 @@ namespace X2Game
             texture = ResourceManager.GetTexture(textureID);
         }
 
-        public override void Render(SpriteBatch spriteBatch)
+        public override void Update(TimeSpan delta, KeyboardState? keyboard, MouseState? mouse)
         {
-            spriteBatch.Draw(texture, hitBox, Color.White);
-        }
-
-        public override void Update(TimeSpan delta)
-        {
-            position += velocity;
+            Position += Velocity;
         }
 
         public override bool CollidesWith(GameObject other)

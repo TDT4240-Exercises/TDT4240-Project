@@ -27,15 +27,12 @@ namespace X2Game
             _onClickFunction = onClick;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(RenderEngine renderEngine)
         {
-
-            spriteBatch.Draw(ResourceManager.InvalidTexture, Bounds, _mouseIsOver ? ButtonColor * 1.5f : ButtonColor);
+            renderEngine.DrawFilledRectangle(Bounds, _mouseIsOver ? ButtonColor * 1.5f : ButtonColor);
             if (!string.IsNullOrWhiteSpace(Text))
             {
-                SpriteFont font = ResourceManager.GetDebugFont();
-                Vector2 textMeasure = font.MeasureString(Text) / 2;
-                spriteBatch.DrawString(font, Text, new Vector2(Bounds.Center.X - textMeasure.X, Bounds.Center.Y - textMeasure.Y), TextColor);
+                renderEngine.DrawString(Text, Bounds.Center.X, Bounds.Center.Y, TextColor, true);
             }
         }
 

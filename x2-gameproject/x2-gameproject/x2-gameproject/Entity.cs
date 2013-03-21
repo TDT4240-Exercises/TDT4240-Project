@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace X2Game
 {
@@ -19,10 +20,10 @@ namespace X2Game
     class Entity : GameObject
     {
         public const float VELOCITY_FALLOFF = 0.95f;
-        private Texture2D texture;
         private EntityController controller;
 
-        private float health; //TODO: stats etc.
+        protected float Health;
+        protected float TurnRate;
 
         /// <summary>
         /// Constructor for an Entity
@@ -31,32 +32,16 @@ namespace X2Game
         /// <param name="setController">Is this entity controlled by an AI or a player?</param>
         public Entity(String textureID, EntityController setController)
         {
-            texture = ResourceManager.GetTexture(textureID);
+            Texture = ResourceManager.GetTexture(textureID);
             controller = setController;
-            width = texture.Width;
-            height = texture.Height;
+            Width = Texture.Width;
+            Height = Texture.Height;
         }
 
-        public override void Update(TimeSpan delta)
+        public override void Update(TimeSpan delta, KeyboardState? keyboard, MouseState? mouse)
         {
-            position += velocity;
-            velocity *= VELOCITY_FALLOFF;
-        }
-
-        public override void Render(SpriteBatch spriteBatch)
-        {
-            //spriteBatch.Draw(texture, hitBox, Color.White);
-            spriteBatch.Draw (
-                texture, 
-                new Vector2 (GetX (), GetY ()), 
-                null, 
-                Color.White, 
-                rotation, 
-                new Vector2 (width / 2, height / 2), 
-                0.2f, 
-                SpriteEffects.None, 
-                1.0f
-            );
+            Position += Velocity;
+            Velocity *= VELOCITY_FALLOFF;
         }
 
         public EntityController GetController()
