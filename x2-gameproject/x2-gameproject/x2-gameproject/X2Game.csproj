@@ -9,7 +9,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>x2_gameproject</RootNamespace>
     <AssemblyName>x2-gameproject</AssemblyName>
-	
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
@@ -111,30 +110,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Button.cs" />
-    <Compile Include="PlayingState.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="FPSCounter.cs" />
-    <Compile Include="GameInstance.cs" />
-    <Compile Include="GameObject.cs" />
-    <Compile Include="GameState.cs" />
-    <Compile Include="GenericDataStructure.cs" />
-    <Compile Include="GUIComponent.cs" />
-    <Compile Include="IntroState.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="MainMenuState.cs" />
-    <Compile Include="Particle.cs" />
-    <Compile Include="ParticleEngine.cs" />
-    <Compile Include="ParticleTemplate.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Projectile.cs" />
+    <Compile Include="core\GameInstance.cs" />
+    <Compile Include="core\ParticleEngine.cs" />
+    <Compile Include="core\Program.cs" />
+    <Compile Include="core\RenderEngine.cs" />
+    <Compile Include="gamestates\GameState.cs" />
+    <Compile Include="gamestates\IntroState.cs" />
+    <Compile Include="gamestates\MainMenuState.cs" />
+    <Compile Include="gamestates\PlayingState.cs" />
+    <Compile Include="gamestates\SandboxAndersState.cs" />
+    <Compile Include="game\Entity.cs" />
+    <Compile Include="game\GameObject.cs" />
+    <Compile Include="game\Particle.cs" />
+    <Compile Include="game\ParticleTemplate.cs" />
+    <Compile Include="game\Player.cs" />
+    <Compile Include="game\Projectile.cs" />
+    <Compile Include="game\TileMap.cs" />
+    <Compile Include="game\TileType.cs" />
+    <Compile Include="gui\Button.cs" />
+    <Compile Include="gui\FPSCounter.cs" />
+    <Compile Include="gui\GUIComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RenderEngine.cs" />
-    <Compile Include="ResourceManager.cs" />
-    <Compile Include="SandboxAndersState.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="TileType.cs" />
-    <Compile Include="TileMap.cs" />
+    <Compile Include="util\GenericDataStructure.cs" />
+    <Compile Include="util\Logger.cs" />
+    <Compile Include="util\ResourceManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
