@@ -57,7 +57,11 @@ namespace X2Game
                 //Collision with world
                 int tileX = entity.GetX() / TileType.TILE_WIDTH;
                 int tileY = entity.GetY() / TileType.TILE_HEIGHT;
-                if (_tileMap[tileX, tileY].BlocksMovement) entity.Velocity = new Vector2();
+                if (_tileMap[tileX, tileY].BlocksMovement)
+                {
+                    entity.Velocity.X = -entity.Velocity.X * 2;
+                    entity.Velocity.Y = -entity.Velocity.Y * 2;
+                }
             }
         }
 
