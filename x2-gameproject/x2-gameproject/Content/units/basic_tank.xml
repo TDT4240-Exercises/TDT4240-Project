@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UnitType>
+	<Texture type="String">basic_tank.png</Texture>
+	<Health type="Float">20</Health>
+	<TurnRate type="Float">0.1</TurnRate>
+	<Speed type="Float">0.1</Speed>
+</UnitType>

@@ -22,22 +22,24 @@ namespace X2Game
     {
         public const float VELOCITY_FALLOFF = 0.95f;
         private EntityController controller;
+        protected UnitType type;
+        protected float turnRate;
+        protected float health;
         protected ParticleTemplate currentWeapon;
-
-        protected float Health;
-        protected float TurnRate;
 
         /// <summary>
         /// Constructor for an Entity
         /// </summary>
         /// <param name="textureID">The name of the texture file to use</param>
         /// <param name="setController">Is this entity controlled by an AI or a player?</param>
-        public Entity(String textureID, EntityController setController)
+        public Entity(UnitType type, EntityController setController)
         {
-            Texture = ResourceManager.GetTexture(textureID);
             controller = setController;
+            Texture = type.Texture;
             Width = Texture.Width;
             Height = Texture.Height;
+            turnRate = type.GetValue<float>(UnitValues.TurnRate);
+            health = type.GetValue<float>(UnitValues.Health);
             currentWeapon = ResourceManager.GetParticleTemplate("missile.xml");
         }
 

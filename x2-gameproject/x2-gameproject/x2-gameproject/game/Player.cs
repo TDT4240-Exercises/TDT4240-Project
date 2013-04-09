@@ -20,10 +20,10 @@ namespace X2Game
         private readonly Dictionary<Keys, Controllers> _controlMap;
         private readonly string _playerName;
 
-        public Player(string playername) : base("basic_tank.png", EntityController.Player)
+        public Player(string playername, UnitType type)
+            : base(type, EntityController.Player)
         {
             _playerName     = playername;
-            TurnRate 		= 0.025f;
             Position 		= new Vector2 (100, 100);
             _controlMap     = new Dictionary<Keys, Controllers>();
         }
@@ -38,11 +38,11 @@ namespace X2Game
                     switch (key.Value)
                     {
                         case Controllers.Left:
-                            Rotation -= TurnRate;   // Rotate according to keys and turnRate
+                            Rotation -= turnRate;   // Rotate according to keys and turnRate
                             break;
 
                         case Controllers.Right:
-                            Rotation += TurnRate;
+                            Rotation += turnRate;
                             break;
 
                         case Controllers.Forward:
