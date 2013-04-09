@@ -70,6 +70,7 @@ namespace X2Game
             //Don't spawn more particles than the set limit
             if (Count() >= maxParticles || template == null) return;
 
+            Logger.Log("particle spawned: " + template, LogLevel.Info);
             //Spawn it and add it last in our list
             spawnList.AddLast(new Particle(position, template));
         }

@@ -6,14 +6,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace X2Game 
 {
-    class Player : Entity 
+    class Player : Entity
     {
         public enum Controllers 
         {
             Forward,
             Back,
             Left,
-            Right
+            Right,
+            Shoot
         }
 
         private readonly Dictionary<Keys, Controllers> _controlMap;
@@ -29,7 +30,6 @@ namespace X2Game
 
         public override void Update (TimeSpan delta, KeyboardState? keyboard, MouseState? mouse)
         {
-
             //Handle key inputs
             if (GetController() == EntityController.Player && keyboard.HasValue)
             {
@@ -54,27 +54,16 @@ namespace X2Game
                             Velocity.X = (float) -Math.Cos(Rotation);
                             Velocity.Y = (float) -Math.Sin(Rotation);
                             break;
+
+                        case Controllers.Shoot:
+                            ParticleEngine.SpawnParticle(GetPosition(), ResourceManager.GetParticleTemplate("fireball.xml"));
+                            break;
+
                     }
                 }
             }
 
             base.Update (delta, keyboard, mouse);
-        }
-
-        /// <summary>
-        /// Sets the controllers. (deprecated)
-        /// </summary>
-        /// <param name="forward">Forward.</param>
-        /// <param name="back">Back.</param>
-        /// <param name="left">Left.</param>
-        /// <param name="right">Right.</param>
-        public void SetControllers(Keys forward, Keys back, Keys left, Keys right)
-        {
-            // Set all controllers (modify method to add more controllers, or call SetController)
-            _controlMap[forward] = Controllers.Forward;
-            _controlMap[back] = Controllers.Back;
-            _controlMap[left] = Controllers.Left;
-            _controlMap[right] = Controllers.Right;
         }
 
         /// <summary>

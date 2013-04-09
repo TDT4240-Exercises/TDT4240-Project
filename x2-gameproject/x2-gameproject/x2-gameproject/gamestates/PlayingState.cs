@@ -24,6 +24,7 @@ namespace X2Game
             player1.SetController(Player.Controllers.Back, Keys.S);
             player1.SetController(Player.Controllers.Left, Keys.A);
             player1.SetController(Player.Controllers.Right, Keys.D);
+            player1.SetController(Player.Controllers.Shoot, Keys.Space);
             player1.SetPosition(350, 350);
         }
 

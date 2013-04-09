@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace X2Game
 {
+
     public enum EntityController
     {
         None,              //No controller
@@ -21,6 +22,7 @@ namespace X2Game
     {
         public const float VELOCITY_FALLOFF = 0.95f;
         private EntityController controller;
+        protected ParticleTemplate currentWeapon;
 
         protected float Health;
         protected float TurnRate;
@@ -36,6 +38,7 @@ namespace X2Game
             controller = setController;
             Width = Texture.Width;
             Height = Texture.Height;
+            currentWeapon = ResourceManager.GetParticleTemplate("missile.xml");
         }
 
         public override void Update(TimeSpan delta, KeyboardState? keyboard, MouseState? mouse)
