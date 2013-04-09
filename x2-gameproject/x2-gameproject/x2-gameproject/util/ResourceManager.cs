@@ -15,6 +15,7 @@ namespace X2Game
         private static Dictionary<String, Texture2D> _loadedTextures;
         private static Dictionary<String, ParticleTemplate> _loadedParticles;
         private static Dictionary<String, TileType> _loadedTiles;
+        private static Dictionary<String, UnitType> _loadedUnits;
 
         private static GraphicsDevice _device;
         public static string ContentFolder { get; private set; }
@@ -65,6 +66,7 @@ namespace X2Game
             _loadedTextures = new Dictionary<String, Texture2D>();
             _loadedParticles = new Dictionary<String, ParticleTemplate>();
             _loadedTiles = new Dictionary<String, TileType>();
+            _loadedUnits = new Dictionary<String, UnitType>();
             ContentFolder = contentFolder;
 
             //Default white texture
@@ -134,5 +136,14 @@ namespace X2Game
             return _loadedTiles[tileID];
         }
 
+        public static UnitType GetUnitType(string unitID)
+        {
+            if (!_loadedUnits.ContainsKey(unitID))
+            {
+                _loadedUnits[unitID] = new UnitType(ContentFolder + "units/" + unitID);
+            }
+
+            return _loadedUnits[unitID];
+        }
     }
 }

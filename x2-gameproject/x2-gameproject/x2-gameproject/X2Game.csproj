@@ -125,6 +125,7 @@
     <Compile Include="game\ParticleTemplate.cs" />
     <Compile Include="game\Player.cs" />
     <Compile Include="game\Projectile.cs" />
+    <Compile Include="game\UnitType.cs" />
     <Compile Include="game\TileMap.cs" />
     <Compile Include="game\TileType.cs" />
     <Compile Include="gui\Button.cs" />

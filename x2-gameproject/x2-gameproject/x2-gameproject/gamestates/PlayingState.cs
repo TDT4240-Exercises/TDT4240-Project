@@ -18,7 +18,7 @@ namespace X2Game
             _tileMap = new TileMap(100, 100);
 
             //Initialize player TODO: as parameter in constructor
-            player1 = new Player("Player 1");
+            player1 = new Player("Player 1", ResourceManager.GetUnitType("basic_tank.xml"));
             _entities.Add(player1);
             player1.SetController(Player.Controllers.Forward, Keys.W);
             player1.SetController(Player.Controllers.Back, Keys.S);
