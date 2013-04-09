@@ -12,7 +12,7 @@ namespace X2Game
         private static readonly LinkedList<Particle> particleList = new LinkedList<Particle>();
         private static readonly LinkedList<Particle> spawnList = new LinkedList<Particle>();
 
-        public static void Update(TimeSpan delta)
+        public static void Update(GameTime delta)
         {
             //Add new particles to the current list
             foreach (Particle particle in spawnList)
@@ -62,7 +62,10 @@ namespace X2Game
 
         public static void Render(RenderEngine renderEngine)
         {
-            foreach (Particle particle in particleList) renderEngine.Render(particle);
+            foreach (Particle particle in particleList)
+            {
+                renderEngine.Render(particle);
+            }
         }
 
         public static void SpawnParticle(Vector2 position, ParticleTemplate template)
@@ -73,6 +76,21 @@ namespace X2Game
             Logger.Log("particle spawned: " + template, LogLevel.Info);
             //Spawn it and add it last in our list
             spawnList.AddLast(new Particle(position, template));
+        }
+
+        public static void SpawnProjectile(Entity shooter, ParticleTemplate template)
+        {
+            //Don't spawn more particles than the set limit
+            if (Count() >= maxParticles || template == null) return;
+
+            Logger.Log("projectile spawned: " + template, LogLevel.Info);
+
+            Particle projectile = new Particle(shooter.GetPosition(), template);
+            projectile.Rotation = shooter.Rotation;
+            projectile.Speed = 200;
+
+            //Spawn it and add it last in our list
+            spawnList.AddLast(projectile);
         }
 
         public static int Count()

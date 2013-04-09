@@ -28,7 +28,7 @@ namespace X2Game
             _controlMap     = new Dictionary<Keys, Controllers>();
         }
 
-        public override void Update (TimeSpan delta, KeyboardState? keyboard, MouseState? mouse)
+        public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)
         {
             //Handle key inputs
             if (GetController() == EntityController.Player && keyboard.HasValue)
@@ -46,17 +46,17 @@ namespace X2Game
                             break;
 
                         case Controllers.Forward:
-                            Velocity.X = (float) Math.Cos(Rotation);
-                            Velocity.Y = (float) Math.Sin(Rotation);
+                            Velocity.X = (float) Math.Cos(Rotation) * speed;
+                            Velocity.Y = (float)Math.Sin(Rotation) * speed;
                             break;
 
                         case Controllers.Back:
-                            Velocity.X = (float) -Math.Cos(Rotation);
-                            Velocity.Y = (float) -Math.Sin(Rotation);
+                            Velocity.X = (float)-Math.Cos(Rotation) * speed;
+                            Velocity.Y = (float)-Math.Sin(Rotation) * speed;
                             break;
 
                         case Controllers.Shoot:
-                            ParticleEngine.SpawnParticle(GetPosition(), ResourceManager.GetParticleTemplate("fireball.xml"));
+                            FireProjectile();
                             break;
 
                     }

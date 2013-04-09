@@ -28,10 +28,11 @@ namespace X2Game
         {
             Vector2 scale = new Vector2();
 
+            //Scale to size
             scale.X = 1.0f / gameObject.Texture.Width * gameObject.Width;
             scale.Y = 1.0f / gameObject.Texture.Height * gameObject.Height;
 
-            //Calculate draw position on screen
+            //Translate to draw position on screen
             Vector2 realPosition = gameObject.GetPosition();
             realPosition.X -= Camera.X;
             realPosition.Y -= Camera.Y;
@@ -67,6 +68,9 @@ namespace X2Game
             int endX = Math.Min(tileMap.Width, sttX + Camera.Width / TileType.TILE_WIDTH);
             int endY = Math.Min(tileMap.Height, sttY + Camera.Height / TileType.TILE_HEIGHT);
 
+            sttX = 0;
+            sttY = 0;
+
             //Scale each tile to our prefered resolution (how many can we fit inside the camera?)
             int width = (Camera.Width / (endX - sttX - 3));
             int height = (Camera.Height / (endY - sttY));
@@ -82,7 +86,8 @@ namespace X2Game
 
             //Debug info
             _spriteBatch.DrawString(ResourceManager.GetDebugFont(), "Camera: " + Camera, new Vector2(), Color.White);
-            _spriteBatch.DrawString(ResourceManager.GetDebugFont(), "sttX: " + sttX + ", " + "sttY: " + sttY + ", " + "endX: " + endX + ", " + "endY: " + endY, new Vector2(0, 16), Color.White);            
+            _spriteBatch.DrawString(ResourceManager.GetDebugFont(), "sttX: " + sttX + ", " + "sttY: " + sttY + ", " + "endX: " + endX + ", " + "endY: " + endY, new Vector2(0, 16), Color.White);
+            _spriteBatch.DrawString(ResourceManager.GetDebugFont(), "Particles: " + ParticleEngine.Count(), new Vector2(0, 64), Color.White);         
         }
 
         public void DrawString(string text, float x, float y, Color color, bool center = false)

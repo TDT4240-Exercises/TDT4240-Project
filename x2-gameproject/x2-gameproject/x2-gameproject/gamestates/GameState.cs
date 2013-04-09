@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 namespace X2Game {
     abstract class GameState {
@@ -18,7 +19,7 @@ namespace X2Game {
         /// Updates all components in this GameState and figures out what should be the next GameState
         /// </summary>
         /// <returns>Returns what should be the current GameState. If null is returned then it will go back to the previous state</returns>
-        public GameState UpdateAll(TimeSpan delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
+        public GameState UpdateAll(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
         {
             //Update GUI components
             foreach (GUIComponent guiComponent in components)
@@ -31,7 +32,7 @@ namespace X2Game {
             return NextGameState;
         }
 
-        protected virtual void Update(TimeSpan delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
+        protected virtual void Update(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
         {
             //Default no implementation
         }

@@ -23,7 +23,7 @@ namespace X2Game {
             renderEngine.DrawString("Position: " + minTank.GetX () + ", " + minTank.GetY (), 200, 200, Color.White);
         }
 
-        protected override void Update(TimeSpan delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
+        protected override void Update(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
         {
             if (keyboard.IsKeyDown(Keys.Escape)) {
                 NextGameState = null; //Go back to main menu

@@ -30,7 +30,7 @@ namespace X2Game {
             components.Add (sandboxButton);
         }
 
-        protected override void Update(TimeSpan delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
+        protected override void Update(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
         {
             if (keyboard.IsKeyDown(Keys.P) && !spawnParticle)
             {

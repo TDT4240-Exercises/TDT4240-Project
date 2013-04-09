@@ -30,8 +30,11 @@ namespace X2Game
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            //Initialization logic here
             ResourceManager.Initialize(GraphicsDevice, "Content/");
+
+            //Enable full logging
+            Logger.SetLogLevel(LogLevel.Debug);
 
             _stateStack = new Stack<GameState> ();
             _stateStack.Push (new IntroState ());
@@ -73,7 +76,7 @@ namespace X2Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed) Exit();
 
             //Update the current game state and all it's sub-components
-            GameState nextState = CurrentGameState.UpdateAll(gameTime.ElapsedGameTime, Keyboard.GetState(), Mouse.GetState(), _renderEngine);
+            GameState nextState = CurrentGameState.UpdateAll(gameTime, Keyboard.GetState(), Mouse.GetState(), _renderEngine);
 
             //Go to previous?
             if (nextState == null)
@@ -88,8 +91,6 @@ namespace X2Game
             {
                 _stateStack.Push(nextState);
             }
-
-            ParticleEngine.Update(gameTime.ElapsedGameTime);
 
             base.Update(gameTime);
         }

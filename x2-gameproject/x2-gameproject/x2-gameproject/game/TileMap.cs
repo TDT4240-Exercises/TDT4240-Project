@@ -50,32 +50,6 @@ namespace X2Game
             return _tileMap[xIndex, yIndex];
         }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle camera)
-        {
-            //Figure out the visible bounds of our map
-            int sttX = Math.Max(0, camera.X / TileType.TILE_WIDTH - 2);
-            int sttY = Math.Max(0, camera.Y / TileType.TILE_HEIGHT);
-            int endX = Math.Min(Width, sttX + camera.Width / TileType.TILE_WIDTH);
-            int endY = Math.Min(Height, sttY + camera.Height / TileType.TILE_HEIGHT);
-
-            //Scale each tile to our prefered resolution (how many can we fit inside the camera?)
-            int width = (camera.Width / (endX - sttX - 3));
-            int height = (camera.Height / (endY - sttY));
-            
-            //Draw the entire visible map
-            for (int x = sttX; x < endX; ++x)
-            {
-                for (int y = sttY; y < endY; ++y)
-                {
-                    _tileMap[x, y].Draw(x * width - camera.X, y * height - camera.Y, width, height, spriteBatch);
-                }
-            }
-
-            //Debug info
-            spriteBatch.DrawString(ResourceManager.GetDebugFont(), "Camera: " + camera, new Vector2(), Color.White);
-            spriteBatch.DrawString(ResourceManager.GetDebugFont(), "sttX: " + sttX + ", " + "sttY: " + sttY + ", " + "endX: " + endX + ", " + "endY: " + endY, new Vector2(0, 16), Color.White);
-        }
-
         public TileType this[int x, int y]
         {
             get { return _tileMap[x, y]; }

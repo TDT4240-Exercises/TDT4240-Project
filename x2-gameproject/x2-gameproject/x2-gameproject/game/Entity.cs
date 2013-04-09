@@ -25,6 +25,8 @@ namespace X2Game
         protected UnitType type;
         protected float turnRate;
         protected float health;
+        protected float attackCooldown;
+        protected float speed;
         protected ParticleTemplate currentWeapon;
 
         /// <summary>
@@ -34,24 +36,34 @@ namespace X2Game
         /// <param name="setController">Is this entity controlled by an AI or a player?</param>
         public Entity(UnitType type, EntityController setController)
         {
+            this.type = type;
             controller = setController;
             Texture = type.Texture;
             Width = Texture.Width;
             Height = Texture.Height;
             turnRate = type.GetValue<float>(UnitValues.TurnRate);
             health = type.GetValue<float>(UnitValues.Health);
+            speed = type.GetValue<float>(UnitValues.Speed);
             currentWeapon = ResourceManager.GetParticleTemplate("missile.xml");
         }
 
-        public override void Update(TimeSpan delta, KeyboardState? keyboard, MouseState? mouse)
+        public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)
         {
             Position += Velocity;
             Velocity *= VELOCITY_FALLOFF;
+            if (attackCooldown > 0) attackCooldown -= (float)delta.ElapsedGameTime.TotalSeconds;
         }
 
         public EntityController GetController()
         {
             return controller;
+        }
+
+        public void FireProjectile()
+        {
+            if (attackCooldown > 0) return;
+            attackCooldown = 0.5f;
+            ParticleEngine.SpawnProjectile(this, currentWeapon);
         }
 
     }
