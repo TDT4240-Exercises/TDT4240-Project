@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace X2Game
@@ -11,7 +8,8 @@ namespace X2Game
         Health,
         TurnRate,
         Speed,
-        Texture
+        Texture,
+        IsPlayable
     }
 
     class UnitType : GenericDataStructure
