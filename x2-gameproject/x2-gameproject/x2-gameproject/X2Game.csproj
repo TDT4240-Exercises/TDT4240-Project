@@ -118,8 +118,10 @@
     <Compile Include="gamestates\GameState.cs" />
     <Compile Include="gamestates\IntroState.cs" />
     <Compile Include="gamestates\MainMenuState.cs" />
+    <Compile Include="gamestates\OptionsState.cs" />
     <Compile Include="gamestates\PlayingState.cs" />
     <Compile Include="gamestates\SandboxAndersState.cs" />
+    <Compile Include="gamestates\SelectPlayerState.cs" />
     <Compile Include="game\Entity.cs" />
     <Compile Include="game\GameObject.cs" />
     <Compile Include="game\OldTileMap.cs" />
@@ -132,6 +134,8 @@
     <Compile Include="gui\Button.cs" />
     <Compile Include="gui\FPSCounter.cs" />
     <Compile Include="gui\GUIComponent.cs" />
+    <Compile Include="gui\InputField.cs" />
+    <Compile Include="gui\Label.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="util\GenericDataStructure.cs" />
     <Compile Include="util\Logger.cs" />

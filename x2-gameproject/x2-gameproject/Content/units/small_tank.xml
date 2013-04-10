@@ -3,5 +3,6 @@
 	<Texture type="String">small_tank.png</Texture>
 	<Health type="Float">10</Health>
 	<TurnRate type="Float">0.15</TurnRate>
-	<Speed type="Float">0.15</Speed>
+	<Speed type="Float">2</Speed>
+	<IsPlayable type="bool">true</IsPlayable>
 </UnitType>
