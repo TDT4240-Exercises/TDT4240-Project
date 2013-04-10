@@ -20,12 +20,12 @@ namespace X2Game
         private readonly Dictionary<Keys, Controllers> _controlMap;
         private readonly string _playerName;
 
-        public Player(string playername, UnitType type)
+        public Player(string playername, UnitType type, Dictionary<Keys, Controllers> input)
             : base(type, EntityController.Player)
         {
             _playerName     = playername;
             Position 		= new Vector2 (100, 100);
-            _controlMap     = new Dictionary<Keys, Controllers>();
+            _controlMap     = input;
         }
 
         public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)

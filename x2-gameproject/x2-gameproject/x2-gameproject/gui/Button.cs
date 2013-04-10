@@ -63,5 +63,10 @@ namespace X2Game
                 _hotkeyDown = false;
             }
         }
+
+        public void setText(string text)
+        {
+            Text = text;
+        }
     }
 }

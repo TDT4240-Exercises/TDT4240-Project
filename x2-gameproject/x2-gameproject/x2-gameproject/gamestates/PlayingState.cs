@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -10,23 +9,26 @@ namespace X2Game
     {
         private readonly TileMap _tileMap;
         private readonly List<Entity> _entities;
-        private Player player1;
+        private readonly List<Player> _playerList;
 
-        public PlayingState()
+        public PlayingState(List<Player> playerList)
         {
             //Initialize level
             _entities = new List<Entity>(64);
             _tileMap = new TileMap(100, 100);
 
-            //Initialize players TODO: as parameter in constructor
+            //Initialize players
+            _playerList = playerList;
+            _entities.AddRange(playerList);
+            /*
             player1 = new Player("Player 1", ResourceManager.GetUnitType("basic_tank.xml"));
-            _entities.Add(player1);
             player1.SetController(Player.Controllers.Forward, Keys.W);
             player1.SetController(Player.Controllers.Back, Keys.S);
             player1.SetController(Player.Controllers.Left, Keys.A);
             player1.SetController(Player.Controllers.Right, Keys.D);
             player1.SetController(Player.Controllers.Shoot, Keys.Space);
             player1.SetPosition(350, 350);
+            */
 
             //Reset particles
             ParticleEngine.Clear();
@@ -42,8 +44,8 @@ namespace X2Game
             }
 
             //Update camera position
-            renderEngine.Camera.X = player1.GetX() - renderEngine.Camera.Width / 2;
-            renderEngine.Camera.Y = player1.GetY() - renderEngine.Camera.Height / 2;
+            renderEngine.Camera.X = _playerList[0].GetX() - renderEngine.Camera.Width / 2;
+            renderEngine.Camera.Y = _playerList[0].GetY() - renderEngine.Camera.Height / 2;
 
             //Update particle effects
             ParticleEngine.Update(delta);

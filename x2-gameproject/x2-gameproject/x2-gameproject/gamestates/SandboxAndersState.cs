@@ -9,7 +9,7 @@ namespace X2Game {
         
         public SandboxAndersState()
         {
-            minTank = new Player("Player 1", ResourceManager.GetUnitType("basic_tank.xml"));
+            minTank = new Player("Player 1", ResourceManager.GetUnitType("basic_tank.xml"), null);
             minTank.SetController (Player.Controllers.Forward, 	Keys.W);
             minTank.SetController (Player.Controllers.Back, 	Keys.S);
             minTank.SetController (Player.Controllers.Left, 	Keys.A);

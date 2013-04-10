@@ -4,4 +4,5 @@
 	<Health type="Float">20</Health>
 	<TurnRate type="Float">0.05</TurnRate>
 	<Speed type="Float">1</Speed>
+	<IsPlayable type="bool">true</IsPlayable>	
 </UnitType>
