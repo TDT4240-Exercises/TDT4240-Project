@@ -19,6 +19,7 @@ namespace X2Game
         private static Dictionary<String, UnitType> _loadedUnits;
 
         private static GraphicsDevice _device;
+        private static GraphicsDeviceManager _deviceManager;
         public static string ContentFolder { get; private set; }
         public static Texture2D InvalidTexture { get; private set; }
         private static SpriteFont _debugFont;
@@ -61,13 +62,14 @@ namespace X2Game
         /// </summary>
         /// <param name="device">The GraphicsDevice to use when loading textures</param>
         /// <param name="contentFolder">The location of the game assets</param>
-        public static void Initialize(GraphicsDevice device, string contentFolder)
+        public static void Initialize(GraphicsDevice device, GraphicsDeviceManager deviceManager, string contentFolder)
         {
             _device = device;
             _loadedTextures = new Dictionary<String, Texture2D>();
             _loadedParticles = new Dictionary<String, ParticleTemplate>();
             _loadedTiles = new Dictionary<String, TileType>();
             _loadedUnits = new Dictionary<String, UnitType>();
+            _deviceManager = deviceManager;
             ContentFolder = contentFolder;
 
             //Default white texture
@@ -151,5 +153,20 @@ namespace X2Game
         {
             return Directory.GetFiles(ContentFolder + "units/", "*.xml").Select(path => path.Substring(path.LastIndexOf("/"))).Select(GetUnitType).ToList();
         }
+
+        public static void SetScreenSize()
+        {
+    if (_device.Viewport.Height == 480)
+    {
+        _deviceManager.PreferredBackBufferHeight = 768;
+        _deviceManager.PreferredBackBufferWidth = 1024;
+    }
+    else
+    {
+        _deviceManager.PreferredBackBufferHeight = 480;
+        _deviceManager.PreferredBackBufferWidth = 600;
+    }
+    _deviceManager.ApplyChanges();
+}
     }
 }

@@ -15,7 +15,7 @@ namespace X2Game
             rand = new Random();
 
             Button newGameButton = new Button("New Game", 200, 200, 150, 50, Keys.N);
-            newGameButton.SetOnClickFunction(() => NextGameState = new PlayingState());
+            newGameButton.SetOnClickFunction(() => NextGameState = new SelectPlayerState());
 
             Button optionsButton = new Button("Options", 200, 270, 150, 50, Keys.O);
             optionsButton.SetOnClickFunction(() => NextGameState = new OptionsState());
