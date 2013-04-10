@@ -36,7 +36,7 @@ namespace X2Game
             }
         }
 
-        public override void Update(KeyboardState keyboard, MouseState mouse)
+        public override void Update(KeyboardState keyboard, MouseState mouse, GameTime delta)
         {
             //Mouse
             _mouseIsOver = Bounds.Contains(mouse.X, mouse.Y);

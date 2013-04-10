@@ -12,21 +12,26 @@ namespace X2Game
         private UnitType player1;
         private UnitType player2;
         private Button _getInputKey;
-        private readonly List<UnitType> playableUnits = new List<UnitType>(); 
+        private readonly List<UnitType> _playableUnits = new List<UnitType>(); 
 
         public SelectPlayerState()
         {
             //Load all playable tanks
-            playableUnits.AddRange(ResourceManager.GetAllUnitTypes().Where(unit => unit.GetValue<bool>(UnitValues.IsPlayable)));
+            _playableUnits.AddRange(ResourceManager.GetAllUnitTypes().Where(unit => unit.GetValue<bool>(UnitValues.IsPlayable)));
 
             //PLAYER 1 Stuff
             int x = 50;
             int y = 50;
-            Label player1Label = new Label("Player 1", x, y);            
+            Label player1Label = new Label("=PLAYER 1=", x, y);            
             components.Add(player1Label);
+            y += 32;
 
-            player1 = playableUnits[0];
-            player2 = playableUnits[0];
+            components.Add(new Label("Name: ", x, y));
+            InputField player1Name = new InputField("Player 1", x+100, y, 150, 32);
+            components.Add(player1Name);
+
+            player1 = _playableUnits[0];
+            player2 = _playableUnits[0];
 
             //Load default controls
             _player1Input[Keys.Space] = Player.Controllers.Shoot;
@@ -53,8 +58,13 @@ namespace X2Game
             //PLAYER 2 Stuff
             x = 350;
             y = 50;
-            Label player2Label = new Label("Player 2", x, y);
+            Label player2Label = new Label("=PLAYER 2=", x, y);
             components.Add(player2Label);
+
+            y += 32;
+
+            components.Add(new Label("Name: ", x, y));
+            components.Add(new InputField("Player 2", x + 100, y, 150, 32));
 
             //Load default controls
             _player2Input[Keys.LeftControl] = Player.Controllers.Shoot;
@@ -80,7 +90,7 @@ namespace X2Game
 
 
             //Buttons to start game or go back to main menu
-            Button newGameButton = new Button("Start!", 550, 400, 150, 50, Keys.Enter);
+            Button newGameButton = new Button("Start!", 550, 400);
             newGameButton.SetOnClickFunction(() =>
                 {
                     List<Player> playerList = new List<Player>();
@@ -91,7 +101,7 @@ namespace X2Game
                 });
             components.Add(newGameButton);
 
-            Button backButton = new Button("Back", 50, 400, 150, 50, Keys.Enter);
+            Button backButton = new Button("Back", 50, 400, 150, 50, Keys.Escape);
             backButton.SetOnClickFunction(() => NextGameState = null);
             components.Add(backButton);
         }

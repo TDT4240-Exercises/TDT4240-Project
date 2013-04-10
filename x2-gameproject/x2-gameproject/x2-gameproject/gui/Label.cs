@@ -19,9 +19,9 @@ namespace X2Game
             renderEngine.DrawString(_text, Bounds.X, Bounds.Y, Color.White);  
         }
 
-        public override void Update(KeyboardState keyboard, MouseState mouse)
+        public override void Update(KeyboardState keyboard, MouseState mouse, GameTime delta)
         {
-
+            //Nothing
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -10,8 +11,7 @@ namespace X2Game
     /**
      * Atomic class to handle assets and resources
      */
-
-    internal static class ResourceManager
+    static class ResourceManager
     {
         private static Dictionary<String, Texture2D> _loadedTextures;
         private static Dictionary<String, ParticleTemplate> _loadedParticles;
@@ -19,7 +19,6 @@ namespace X2Game
         private static Dictionary<String, UnitType> _loadedUnits;
 
         private static GraphicsDevice _device;
-        private static GraphicsDeviceManager _deviceManager;
         public static string ContentFolder { get; private set; }
         public static Texture2D InvalidTexture { get; private set; }
         private static SpriteFont _debugFont;
@@ -47,22 +46,24 @@ namespace X2Game
                     Logger.Log("Unable to load ParticleTemplate: " + particleID, LogLevel.Warning);
                     _loadedParticles[particleID] = null;
                 }
+                
             }
 
             return _loadedParticles[particleID];
         }
 
 
+        
         /// <summary>
         /// Must be called befure using the ResourceManager to initialize the location for the graphics files and which
         /// GraphicsDevice to load the textures for.
+
         /// </summary>
         /// <param name="device">The GraphicsDevice to use when loading textures</param>
         /// <param name="contentFolder">The location of the game assets</param>
-        public static void Initialize(GraphicsDevice device, GraphicsDeviceManager deviceManager, string contentFolder)
+        public static void Initialize(GraphicsDevice device, string contentFolder)
         {
             _device = device;
-            _deviceManager = deviceManager;
             _loadedTextures = new Dictionary<String, Texture2D>();
             _loadedParticles = new Dictionary<String, ParticleTemplate>();
             _loadedTiles = new Dictionary<String, TileType>();
@@ -90,7 +91,6 @@ namespace X2Game
         /**
          * Retrieves the custom Texture2D object or loads it into memory if not already loaded.
          */
-
         public static Texture2D GetTexture(String textureID)
         {
             if (!_loadedTextures.ContainsKey(textureID))
@@ -104,17 +104,17 @@ namespace X2Game
                         texture = Texture2D.FromStream(_device, fileStream);
 
                         //Replace the color BLACK with 100% transparency
-                        //                        Color[] bits = new Color[texture.Width * texture.Height];
-                        //                        texture.GetData(bits);
-                        //                        for (int i = 0; i < bits.Length; i++)
-                        //                        {  
-                        //                           if((bits[i].PackedValue & 0xFFFFFF) == 0) bits[i] = Color.FromNonPremultiplied(0,0,0,0);
-                        //                        }
-                        //                        texture.SetData(bits);
+//                        Color[] bits = new Color[texture.Width * texture.Height];
+//                        texture.GetData(bits);
+//                        for (int i = 0; i < bits.Length; i++)
+//                        {  
+//                           if((bits[i].PackedValue & 0xFFFFFF) == 0) bits[i] = Color.FromNonPremultiplied(0,0,0,0);
+//                        }
+//                        texture.SetData(bits);
                         Logger.Log("Texture \"" + textureID + "\" loaded.", LogLevel.Info);
                     }
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     Logger.Log("Cannot load '" + textureID + "' file! - " + ex.Message, LogLevel.Warning);
                     texture = InvalidTexture;
@@ -131,7 +131,7 @@ namespace X2Game
         {
             if (!_loadedTiles.ContainsKey(tileID))
             {
-                _loadedTiles[tileID] = new TileType(ContentFolder + tileID);
+                _loadedTiles[tileID] = new TileType(ContentFolder + tileID); 
             }
 
             return _loadedTiles[tileID];
@@ -147,19 +147,9 @@ namespace X2Game
             return _loadedUnits[unitID];
         }
 
-        public static void SetScreenSize()
+        public static List<UnitType> GetAllUnitTypes()
         {
-            if (_device.Viewport.Height == 480)
-            {
-                _deviceManager.PreferredBackBufferHeight = 768;
-                _deviceManager.PreferredBackBufferWidth = 1024;
-            }
-            else
-            {
-                _deviceManager.PreferredBackBufferHeight = 480;
-                _deviceManager.PreferredBackBufferWidth = 640;
-            }
-            _deviceManager.ApplyChanges();
+            return Directory.GetFiles(ContentFolder + "units/", "*.xml").Select(path => path.Substring(path.LastIndexOf("/"))).Select(GetUnitType).ToList();
         }
     }
 }
