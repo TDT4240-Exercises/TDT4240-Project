@@ -10,23 +10,17 @@ namespace X2Game
     {
         private readonly TileMap _tileMap;
         private readonly List<Entity> _entities;
-        private Player player1;
+        private List<Player> _playerList;
 
-        public PlayingState()
+        public PlayingState(List<Player> playerList)
         {
             //Initialize level
             _entities = new List<Entity>(64);
             _tileMap = new TileMap(100, 100);
 
             //Initialize players TODO: as parameter in constructor
-            player1 = new Player("Player 1", ResourceManager.GetUnitType("basic_tank.xml"));
-            _entities.Add(player1);
-            player1.SetController(Player.Controllers.Forward, Keys.W);
-            player1.SetController(Player.Controllers.Back, Keys.S);
-            player1.SetController(Player.Controllers.Left, Keys.A);
-            player1.SetController(Player.Controllers.Right, Keys.D);
-            player1.SetController(Player.Controllers.Shoot, Keys.Space);
-            player1.SetPosition(350, 350);
+            _entities.AddRange(playerList);
+            _playerList = playerList;
 
             //Reset particles
             ParticleEngine.Clear();
@@ -48,7 +42,7 @@ namespace X2Game
 
 
             //Update Camera position
-            Camera.Position = player1.Position - new Vector2(Camera.ViewPortWidth, Camera.ViewPortHeight)/2; //IKKE FERDIG!
+            Camera.Position = _playerList[0].Position - new Vector2(Camera.ViewPortWidth, Camera.ViewPortHeight)/2; //IKKE FERDIG!
 
             //Update particle effects
             ParticleEngine.Update(delta);
