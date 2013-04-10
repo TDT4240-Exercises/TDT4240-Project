@@ -47,6 +47,8 @@ namespace X2Game
             currentWeapon = ResourceManager.GetParticleTemplate("missile.xml");
         }
 
+        public float Speed { get { return speed; } }
+
         public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)
         {
             Position += Velocity;

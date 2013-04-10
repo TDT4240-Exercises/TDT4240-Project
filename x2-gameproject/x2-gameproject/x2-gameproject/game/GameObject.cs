@@ -11,28 +11,82 @@ namespace X2Game
     /// </summary>
     abstract class GameObject
     {
+        #region Declarations
+
         public Texture2D Texture { get; protected set; }
+        private Vector2 position;
+        private Vector2 velocity;
+        private float rotation;
+        private int width;
+        private int height;
 
-        public Vector2 Velocity;
-        public Vector2 Position;
-        public float Rotation;
+        #endregion
 
-        public int Width { get; protected set; }
-        public int Height { get; protected set; }
+        #region Public Methods
+
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        public float X {
+            get { return position.X; }
+            set { position.X = value; }
+        }
+
+        public float Y {
+            get { return position.Y; }
+            set { position.Y = value; }
+        }
+
+        public Vector2 Velocity
+        {
+            get { return velocity; }
+            set { velocity = value; }
+        }
+
+        public float VelX
+        {
+            get { return velocity.X; }
+            set { velocity.X = value; }
+        }
+
+        public float VelY
+        {
+            get { return velocity.Y; }
+            set { velocity.Y = value; }
+        }
+
+        public float Rotation
+        {
+            get { return rotation; }
+            set { rotation = value; }
+        }
+
+        public int Width
+        {
+            get { return width; }
+            set { width = value; }
+        }
+
+        public int Height
+        {
+            get { return height; }
+            set { height = value; }
+        }
+
+        public Vector2 RelativeCenter
+        {
+            get { return new Vector2(Width / 2.0f, Height / 2.0f); }
+        }
 
         public Rectangle hitBox
         {
             get
             {
-                return new Rectangle(GetX(), GetY(), Width, Height); //XNA does not support float rectangles natively
+                return new Rectangle((int)X, (int)Y, Width, Height); //XNA does not support float rectangles natively
             }
-        }
-
-        protected GameObject()
-        {
-            Velocity = new Vector2();
-            Position = new Vector2();
-            Texture = ResourceManager.InvalidTexture;
         }
 
         /// <summary>
@@ -42,26 +96,6 @@ namespace X2Game
         /// <param name="keyboard"></param>
         /// <param name="mouse"></param>
         public abstract void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse);
-
-        public int GetX()
-        {
-            return (int) Position.X;
-        }
-
-        public int GetY()
-        {
-            return (int) Position.Y;
-        }
-
-        public Vector2 GetPosition()
-        {
-            return new Vector2(Position.X, Position.Y); //return new instance so that they dont have a reference to our private variable
-        }
-
-        public Vector2 GetVelocity()
-        {
-            return new Vector2(Velocity.X, Velocity.Y); //return new instance so that they dont have a reference to our private variable
-        }
 
         /// <summary>
         /// Returns true if this object has collided with the specified GameObject. A object cannot collide with itself
@@ -76,5 +110,13 @@ namespace X2Game
             return other.hitBox.Intersects(hitBox);
         }
 
+        #endregion
+
+        protected GameObject()
+        {
+            Velocity = new Vector2();
+            Position = new Vector2();
+            Texture = ResourceManager.InvalidTexture;
+        }
     }
 }

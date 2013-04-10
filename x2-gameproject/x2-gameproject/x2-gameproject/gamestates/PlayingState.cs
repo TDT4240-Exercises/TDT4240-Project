@@ -30,6 +30,11 @@ namespace X2Game
 
             //Reset particles
             ParticleEngine.Clear();
+
+
+            Camera.WorldRectangle = new Rectangle(0, 0, _tileMap.RealWidth, _tileMap.RealHeight);
+            Camera.ViewPortWidth = 800;
+            Camera.ViewPortHeight = 600;
         }
 
         protected override void Update(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
@@ -41,9 +46,9 @@ namespace X2Game
                 return;
             }
 
-            //Update camera position
-            renderEngine.Camera.X = player1.GetX() - renderEngine.Camera.Width / 2;
-            renderEngine.Camera.Y = player1.GetY() - renderEngine.Camera.Height / 2;
+
+            //Update Camera position
+            Camera.Position = player1.Position - new Vector2(Camera.ViewPortWidth, Camera.ViewPortHeight)/2; //IKKE FERDIG!
 
             //Update particle effects
             ParticleEngine.Update(delta);
@@ -54,10 +59,10 @@ namespace X2Game
                 entity.Update(delta, keyboard, mouse);
 
                 //Collision with map edges
-                if (entity.Position.X < 0)                                      entity.Position.X = 0;
-                if (entity.Position.Y < 0)                                      entity.Position.Y = 0;
-                if (entity.Position.X + entity.Width > _tileMap.RealWidth)      entity.Position.X = _tileMap.RealWidth;
-                if (entity.Position.Y + entity.Height > _tileMap.RealHeight)    entity.Position.Y = _tileMap.RealHeight;
+                if (entity.Position.X < 0)                                      entity.X = 0;
+                if (entity.Position.Y < 0)                                      entity.Y = 0;
+                if (entity.Position.X + entity.Width > _tileMap.RealWidth)      entity.X = _tileMap.RealWidth;
+                if (entity.Position.Y + entity.Height > _tileMap.RealHeight)    entity.Y = _tileMap.RealHeight;
 
                 //Collision with world
                 /*int tileX = entity.GetX() / TileType.TILE_WIDTH;
@@ -77,7 +82,7 @@ namespace X2Game
             renderEngine.Render(_tileMap);
             
             //Draw each entity visible on the screen
-            foreach (Entity entity in _entities.Where(entity => renderEngine.IsVisible(entity.hitBox)))
+            foreach (Entity entity in _entities.Where(entity => Camera.ObjectIsVisible(entity.hitBox)))
             {
                 renderEngine.Render(entity);
             }

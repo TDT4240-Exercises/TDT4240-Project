@@ -46,13 +46,13 @@ namespace X2Game
                             break;
 
                         case Controllers.Forward:
-                            Velocity.X = (float) Math.Cos(Rotation) * speed;
-                            Velocity.Y = (float)Math.Sin(Rotation) * speed;
+                            VelX = (float) Math.Cos(Rotation) * speed;
+                            VelY = (float)Math.Sin(Rotation) * speed;
                             break;
 
                         case Controllers.Back:
-                            Velocity.X = (float)-Math.Cos(Rotation) * speed;
-                            Velocity.Y = (float)-Math.Sin(Rotation) * speed;
+                            VelX = (float)-Math.Cos(Rotation) * speed;
+                            VelY = (float)-Math.Sin(Rotation) * speed;
                             break;
 
                         case Controllers.Shoot:
@@ -78,8 +78,8 @@ namespace X2Game
 
         public void SetPosition(int x, int y)
         {
-            Position.X = x;
-            Position.Y = y;
+            X = x;
+            Y = y;
         }
     }
 }

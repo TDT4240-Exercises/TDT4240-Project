@@ -85,8 +85,8 @@ namespace X2Game
             //Update velocity depending on rotation and speed
             if (!template.GetValue<bool>(ParticleValues.RotationIndependentVelocity))
             {
-                Velocity.X = (float)Math.Cos(Rotation) * Speed;
-                Velocity.Y = (float)Math.Sin(Rotation) * Speed;
+                VelX = (float)Math.Cos(Rotation) * Speed;
+                VelY = (float)Math.Sin(Rotation) * Speed;
             }
             else
             {

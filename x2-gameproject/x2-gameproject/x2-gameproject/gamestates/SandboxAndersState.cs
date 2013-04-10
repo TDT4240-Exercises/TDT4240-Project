@@ -20,7 +20,7 @@ namespace X2Game {
         {
             renderEngine.Render(minTank);
             ParticleEngine.Render(renderEngine);
-            renderEngine.DrawString("Position: " + minTank.GetX () + ", " + minTank.GetY (), 200, 200, Color.White);
+            renderEngine.DrawString("Position: " + minTank.X + ", " + minTank.Y, 200, 200, Color.White);
         }
 
         protected override void Update(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)

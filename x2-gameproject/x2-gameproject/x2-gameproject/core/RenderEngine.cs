@@ -10,44 +10,28 @@ namespace X2Game
     {
         private readonly Texture2D _mouseCursor;
         private readonly SpriteBatch _spriteBatch;
-        public Rectangle Camera;
 
         public RenderEngine(SpriteBatch spriteBatch)
         {
             _spriteBatch = spriteBatch;
-            Camera = new Rectangle(0, 0, 800, 600);
             _mouseCursor = ResourceManager.GetTexture("cursor.png");
-        }
-
-        public bool IsVisible(Rectangle rectangle)
-        {
-            return Camera.Intersects(rectangle);
         }
 
         public void Render(GameObject gameObject)
         {
-            Vector2 scale = new Vector2();
-
-            //Scale to size
-            scale.X = 1.0f / gameObject.Texture.Width * gameObject.Width;
-            scale.Y = 1.0f / gameObject.Texture.Height * gameObject.Height;
-
-            //Translate to draw position on screen
-            Vector2 realPosition = gameObject.GetPosition();
-            realPosition.X -= Camera.X;
-            realPosition.Y -= Camera.Y;
-
-            _spriteBatch.Draw(
-                gameObject.Texture,
-                realPosition,
-                null,
-                Color.White,
-                gameObject.Rotation,
-                new Vector2(gameObject.Width / 2.0f, gameObject.Height / 2.0f),
-                scale,
-                SpriteEffects.None,
-                1.0f
-            );
+            if (Camera.ObjectIsVisible(gameObject.hitBox))
+            {
+                _spriteBatch.Draw(
+                    gameObject.Texture,
+                    gameObject.Position - Camera.Position,
+                    null,
+                    Color.White,
+                    gameObject.Rotation,
+                    gameObject.RelativeCenter,
+                    1.0f,
+                    SpriteEffects.None,
+                    0.0f);
+            }
         }
 
         public int GetScreenWidth()
@@ -62,32 +46,7 @@ namespace X2Game
 
         public void Render(TileMap tileMap)
         {
-            //Figure out the visible bounds of our map
-            int sttX = Math.Max(0, Camera.X / TileType.TILE_WIDTH - 2);
-            int sttY = Math.Max(0, Camera.Y / TileType.TILE_HEIGHT);
-            int endX = Math.Min(tileMap.Width, sttX + Camera.Width / TileType.TILE_WIDTH);
-            int endY = Math.Min(tileMap.Height, sttY + Camera.Height / TileType.TILE_HEIGHT);
-
-            sttX = 0;
-            sttY = 0;
-
-            //Scale each tile to our prefered resolution (how many can we fit inside the camera?)
-            int width = (Camera.Width / (endX - sttX - 3));
-            int height = (Camera.Height / (endY - sttY));
-
-            //Draw the entire visible map
-            for (int x = sttX; x < endX; ++x)
-            {
-                for (int y = sttY; y < endY; ++y)
-                {
-                    tileMap[x, y].Draw(x * width - Camera.X, y * height - Camera.Y, width, height, _spriteBatch);
-                }
-            }
-
-            //Debug info
-            _spriteBatch.DrawString(ResourceManager.GetDebugFont(), "Camera: " + Camera, new Vector2(), Color.White);
-            _spriteBatch.DrawString(ResourceManager.GetDebugFont(), "sttX: " + sttX + ", " + "sttY: " + sttY + ", " + "endX: " + endX + ", " + "endY: " + endY, new Vector2(0, 16), Color.White);
-            _spriteBatch.DrawString(ResourceManager.GetDebugFont(), "Particles: " + ParticleEngine.Count(), new Vector2(0, 64), Color.White);         
+            tileMap.Draw(_spriteBatch);
         }
 
         public void DrawString(string text, float x, float y, Color color, bool center = false)

@@ -85,7 +85,7 @@ namespace X2Game
 
             Logger.Log("projectile spawned: " + template, LogLevel.Info);
 
-            Particle projectile = new Particle(shooter.GetPosition(), template);
+            Particle projectile = new Particle(shooter.Position, template);
             projectile.Rotation = shooter.Rotation;
             projectile.Speed = 200;
 
