@@ -14,12 +14,12 @@ namespace X2Game
         private float secondsRemaining;
         private float size;
         private float alpha;
-        
+        public float Speed;
+
         public bool isDestroyed;
 
         //These two are cached for performance reasons
         private Vector2 centre;
-        private Texture2D texture;
 
         public Particle(Vector2 initialPosition, ParticleTemplate template)
         {
@@ -28,8 +28,8 @@ namespace X2Game
             Rotation = template.GetValue<float>(ParticleValues.InitialRotation);
             size = template.GetValue<float>(ParticleValues.InitialSize);
             secondsRemaining = template.GetValue<float>(ParticleValues.LifeTime);
-            texture = template.GetValue<Texture2D>(ParticleValues.Texture);
-            centre = new Vector2(texture.Width / 2, texture.Height / 2);
+            Texture = template.GetValue<Texture2D>(ParticleValues.Texture);
+            centre = new Vector2(Texture.Width / 2, Texture.Height / 2);
             alpha = 1.0f - template.GetValue<float>(ParticleValues.InitialAlpha);
         }
 
@@ -46,14 +46,14 @@ namespace X2Game
             }
         }
 
-        public override void Update(TimeSpan delta, KeyboardState? keyboard, MouseState? mouse)
+        public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)
         {
-            float timeUnit = delta.Ticks/(float)TimeSpan.TicksPerSecond;
+            float timeUnit = delta.ElapsedGameTime.Ticks/(float)TimeSpan.TicksPerSecond;
 
             //Has this particle expired and needs to be removed?
             if (!float.IsInfinity(secondsRemaining))
             {
-                secondsRemaining -= (delta.Ticks / (float)TimeSpan.TicksPerSecond);
+                secondsRemaining -= (delta.ElapsedGameTime.Ticks / (float)TimeSpan.TicksPerSecond);
                 if (secondsRemaining <= 0)
                 {
                     Destroy();
@@ -76,21 +76,27 @@ namespace X2Game
                 Destroy();
                 return;
             }
+            Width = (int) (Texture.Width * size);
+            Height = (int) (Texture.Height * size);
 
             //Update rotation
             Rotation += template.GetValue<float>(ParticleValues.RotationAdd) * timeUnit;
 
+            //Update velocity depending on rotation and speed
+            if (!template.GetValue<bool>(ParticleValues.RotationIndependentVelocity))
+            {
+                Velocity.X = (float)Math.Cos(Rotation) * Speed;
+                Velocity.Y = (float)Math.Sin(Rotation) * Speed;
+            }
+            else
+            {
+               // Velocity.X = Speed;
+               // Velocity.Y = Speed;
+                //TODO: not implemented
+            }
+
             //Update position
-            Position += Velocity;
-
-            //Update velocity
-            Velocity.X += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;     //TODO: add velocity based on rotation?
-            Velocity.Y += template.GetValue<float>(ParticleValues.VelocityAdd) * timeUnit;
+            Position += Velocity * timeUnit;
         }
-
-        /*public override void Render(SpriteBatch spriteBatch, Rectangle camera)
-        {
-            spriteBatch.Draw(texture, Position, null, Color.White * alpha, Rotation, centre, size, SpriteEffects.None, 0);
-        }*/
     }
 }

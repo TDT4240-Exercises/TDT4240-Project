@@ -14,20 +14,25 @@ namespace X2Game
 
         public PlayingState()
         {
+            //Initialize level
             _entities = new List<Entity>(64);
             _tileMap = new TileMap(100, 100);
 
-            //Initialize player TODO: as parameter in constructor
-            player1 = new Player("Player 1");
+            //Initialize players TODO: as parameter in constructor
+            player1 = new Player("Player 1", ResourceManager.GetUnitType("basic_tank.xml"));
             _entities.Add(player1);
             player1.SetController(Player.Controllers.Forward, Keys.W);
             player1.SetController(Player.Controllers.Back, Keys.S);
             player1.SetController(Player.Controllers.Left, Keys.A);
             player1.SetController(Player.Controllers.Right, Keys.D);
+            player1.SetController(Player.Controllers.Shoot, Keys.Space);
             player1.SetPosition(350, 350);
+
+            //Reset particles
+            ParticleEngine.Clear();
         }
 
-        protected override void Update(TimeSpan delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
+        protected override void Update(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
         {
             //TODO: this should open a small ingame menu?
             if (keyboard.IsKeyDown(Keys.Escape))
@@ -55,13 +60,13 @@ namespace X2Game
                 if (entity.Position.Y + entity.Height > _tileMap.RealHeight)    entity.Position.Y = _tileMap.RealHeight;
 
                 //Collision with world
-                int tileX = entity.GetX() / TileType.TILE_WIDTH;
+                /*int tileX = entity.GetX() / TileType.TILE_WIDTH;
                 int tileY = entity.GetY() / TileType.TILE_HEIGHT;
                 if (_tileMap[tileX, tileY].BlocksMovement)
                 {
                     entity.Velocity.X = -entity.Velocity.X * 2;
                     entity.Velocity.Y = -entity.Velocity.Y * 2;
-                }
+                }*/
             }
         }
 

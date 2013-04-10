@@ -15,7 +15,7 @@ namespace X2Game
 
         public Vector2 Velocity;
         public Vector2 Position;
-        public float Rotation { get; protected set; }
+        public float Rotation;
 
         public int Width { get; protected set; }
         public int Height { get; protected set; }
@@ -41,7 +41,7 @@ namespace X2Game
         /// <param name="delta">Time since last update</param>
         /// <param name="keyboard"></param>
         /// <param name="mouse"></param>
-        public abstract void Update(TimeSpan delta, KeyboardState? keyboard, MouseState? mouse);
+        public abstract void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse);
 
         public int GetX()
         {

@@ -13,7 +13,9 @@ namespace X2Game
         VelocityAdd,
         InitialAlpha,
         AlphaAdd,
-        SpawnParticleOnEnd
+        SpawnParticleOnEnd,
+        CanCollide,
+        RotationIndependentVelocity
     }
 
     [ImmutableObject(true)]
