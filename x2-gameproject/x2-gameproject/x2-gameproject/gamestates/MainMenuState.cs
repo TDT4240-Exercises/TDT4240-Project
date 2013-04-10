@@ -14,7 +14,7 @@ namespace X2Game {
             rand = new Random ();
 
             Button newGameButton = new Button("New Game", 200, 200, 150, 50, Keys.N);
-            newGameButton.SetOnClickFunction(() => NextGameState = new PlayingState());
+            newGameButton.SetOnClickFunction(() => NextGameState = new SelectPlayerState());
             components.Add(newGameButton);
 
             components.Add(new Button("Options", 200, 270));

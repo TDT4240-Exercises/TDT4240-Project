@@ -19,7 +19,7 @@ namespace X2Game {
         /// Updates all components in this GameState and figures out what should be the next GameState
         /// </summary>
         /// <returns>Returns what should be the current GameState. If null is returned then it will go back to the previous state</returns>
-        public GameState UpdateAll(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
+        public virtual GameState UpdateAll(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
         {
             //Update GUI components
             foreach (GUIComponent guiComponent in components)
