@@ -28,7 +28,7 @@ namespace X2Game
 
             Camera.WorldRectangle = new Rectangle(0, 0, _tileMap.RealWidth, _tileMap.RealHeight);
             Camera.ViewPortWidth = 800;
-            Camera.ViewPortHeight = 600;
+            Camera.ViewPortHeight = 480;
         }
 
         protected override void Update(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
