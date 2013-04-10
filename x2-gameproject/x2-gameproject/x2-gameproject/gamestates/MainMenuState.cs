@@ -9,7 +9,6 @@ namespace X2Game
     {
         private bool spawnParticle;
         private Random rand;
-        private bool startup = true;
 
         public MainMenuState()
         {
@@ -17,6 +16,9 @@ namespace X2Game
 
             Button newGameButton = new Button("New Game", 200, 200, 150, 50, Keys.N);
             newGameButton.SetOnClickFunction(() => NextGameState = new PlayingState());
+
+            Button optionsButton = new Button("Options", 200, 270, 150, 50, Keys.O);
+            optionsButton.SetOnClickFunction(() => NextGameState = new OptionsState());
            
             Button exitButton = new Button("Exit Game", 200, 340, 150, 50, Keys.Escape);
             exitButton.SetOnClickFunction(() => NextGameState = null);
@@ -25,7 +27,7 @@ namespace X2Game
             sandboxButton.SetOnClickFunction(() => NextGameState = new SandboxAndersState());
             
             components.Add(newGameButton);
-            components.Add(new Button("Options", 200, 270));
+            components.Add(optionsButton);
             components.Add(exitButton);
             components.Add(sandboxButton);
 

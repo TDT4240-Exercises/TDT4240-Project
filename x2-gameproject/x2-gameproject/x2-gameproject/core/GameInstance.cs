@@ -13,12 +13,13 @@ namespace X2Game
         private SpriteBatch _spriteBatch;
         private Stack<GameState> _stateStack;
         private RenderEngine _renderEngine;
+        private GraphicsDeviceManager _deviceManager;
 
         private GameState CurrentGameState { get { return _stateStack.Peek(); } }
 
         public GameInstance()
         {
-            new GraphicsDeviceManager(this);
+            _deviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -31,7 +32,7 @@ namespace X2Game
         protected override void Initialize()
         {
             //Initialization logic here
-            ResourceManager.Initialize(GraphicsDevice, "Content/");
+            ResourceManager.Initialize(GraphicsDevice, _deviceManager,  "Content/");
 
             //Enable full logging
             Logger.SetLogLevel(LogLevel.Debug);

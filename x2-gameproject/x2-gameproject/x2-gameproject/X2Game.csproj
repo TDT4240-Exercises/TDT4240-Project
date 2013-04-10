@@ -117,6 +117,7 @@
     <Compile Include="gamestates\GameState.cs" />
     <Compile Include="gamestates\IntroState.cs" />
     <Compile Include="gamestates\MainMenuState.cs" />
+    <Compile Include="gamestates\OptionsState.cs" />
     <Compile Include="gamestates\PlayingState.cs" />
     <Compile Include="gamestates\SandboxAndersState.cs" />
     <Compile Include="game\Entity.cs" />
