@@ -24,7 +24,7 @@ namespace X2Game {
             //Update GUI components
             foreach (GUIComponent guiComponent in components)
             {
-                guiComponent.Update(keyboard, mouse);
+                guiComponent.Update(keyboard, mouse, delta);
             }
 
             Update(delta, keyboard, mouse, renderEngine);

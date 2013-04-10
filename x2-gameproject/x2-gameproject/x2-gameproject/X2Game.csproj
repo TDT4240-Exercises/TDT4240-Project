@@ -131,6 +131,7 @@
     <Compile Include="gui\Button.cs" />
     <Compile Include="gui\FPSCounter.cs" />
     <Compile Include="gui\GUIComponent.cs" />
+    <Compile Include="gui\InputField.cs" />
     <Compile Include="gui\Label.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="util\GenericDataStructure.cs" />

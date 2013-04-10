@@ -9,6 +9,6 @@ namespace X2Game
         public Rectangle Bounds;
 
         public abstract void Draw(RenderEngine renderEngine);
-        public abstract void Update(KeyboardState keyboard, MouseState mouse);
+        public abstract void Update(KeyboardState keyboard, MouseState mouse, GameTime delta);
     }
 }
