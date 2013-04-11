@@ -58,6 +58,8 @@ namespace X2Game
                 if (entity.Position.X + entity.Width > _tileMap.RealWidth)      entity.X = _tileMap.RealWidth;
                 if (entity.Position.Y + entity.Height > _tileMap.RealHeight)    entity.Y = _tileMap.RealHeight;
 
+				EntityWorldCollision(entity);
+
                 //Collision with world
                 /*int tileX = entity.GetX() / TileType.TILE_WIDTH;
                 int tileY = entity.GetY() / TileType.TILE_HEIGHT;
@@ -68,6 +70,47 @@ namespace X2Game
                 }*/
             }
         }
+
+		private void EntityWorldCollision(Entity entity){
+			Vector2 entityInTile = new Vector2();
+			entityInTile.X = entity.X / TileType.TILE_WIDTH;
+			entityInTile.Y = entity.Y / TileType.TILE_HEIGHT;
+
+			entityInTile = _tileMap.GetSquareAtPixel (entity.Position);
+
+			// Collision detect in a 5x5 grid to where you are
+			for (int i = 0; i < 5; ++i) {
+				for (int j = 0; j < 5; ++j){
+					EntityTileCollision (entity, new Vector2 (entityInTile.X + (i-2), entityInTile.Y + (j-2)));
+				}
+			}
+
+		}
+
+		private void EntityTileCollision(Entity entity, Vector2 tile){
+			if (tile.X < 0 || tile.Y < 0)
+				return;
+
+			if (_tileMap.GetTileAtSquare((int)tile.X, (int)tile.Y).BlocksMovement){
+				Vector2 collisionTileCenter = _tileMap.GetSquareCenter(tile);
+				int collisionTileRadius = _tileMap.TileWidth / 2;
+
+				Vector2 entityCenter = entity.Position;
+				int entityRadius = (entity.Height + entity.Width) / 4;// Average of height and width divided by 2 => 4
+				entityRadius -= 8; // Make it possible to pass between tiles
+
+				Vector2 diffVector = entityCenter - collisionTileCenter; // Tile to Entity
+				int distance = (int)diffVector.Length();
+				
+				if (distance < collisionTileRadius + entityRadius){
+					int moveRadius = (collisionTileRadius + entityRadius) - distance; // how long to move to not collide any more
+					diffVector = diffVector / diffVector.Length();
+					Vector2 moveVector = diffVector * moveRadius;
+					
+					entity.Position += moveVector;
+				}
+			}
+		}
 
 
         protected override void Draw(RenderEngine renderEngine)
