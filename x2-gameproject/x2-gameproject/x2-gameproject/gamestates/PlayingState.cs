@@ -69,7 +69,34 @@ namespace X2Game
                     entity.Velocity.Y = -entity.Velocity.Y * 2;
                 }*/
             }
+
+			for (int i = 0; i < _entities.Count; ++i){
+				for (int j = i + 1; j < _entities.Count; ++j){
+					EntityEntityCollision(_entities[i], _entities[j]);
+				}
+			}
         }
+
+		private void EntityEntityCollision(Entity en1, Entity en2){
+			Vector2 en1Center = en1.Position;
+			int en1Radius = (en1.Height + en1.Width) / 4; // Average of height and width divided by 2 => 4
+			
+			Vector2 en2Center = en2.Position;
+			int en2Radius = (en2.Height + en2.Width) / 4; // Average of height and width divided by 2 => 4
+
+			Vector2 diffVector = en1Center - en2Center; // From en2 to en1
+			int distance = (int)diffVector.Length ();
+
+			if (distance < en1Radius + en2Radius){ // Collision
+				int moveDistance = (en1Radius + en2Radius) - distance;
+				diffVector /= distance;
+
+				diffVector *= moveDistance / 2;
+
+				en1.Position += diffVector;
+				en2.Position -= diffVector;
+			}
+		}
 
 		private void EntityWorldCollision(Entity entity){
 			Vector2 entityInTile = new Vector2();
@@ -102,9 +129,9 @@ namespace X2Game
 				Vector2 diffVector = entityCenter - collisionTileCenter; // Tile to Entity
 				int distance = (int)diffVector.Length();
 				
-				if (distance < collisionTileRadius + entityRadius){
+				if (distance < collisionTileRadius + entityRadius){ // Collision
 					int moveRadius = (collisionTileRadius + entityRadius) - distance; // how long to move to not collide any more
-					diffVector = diffVector / diffVector.Length();
+					diffVector /= diffVector.Length();
 					Vector2 moveVector = diffVector * moveRadius;
 					
 					entity.Position += moveVector;

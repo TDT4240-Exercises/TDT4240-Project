@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 namespace X2Game
 {
@@ -96,6 +97,7 @@ namespace X2Game
                     List<Player> playerList = new List<Player>();
                     if (player1 != null) playerList.Add(new Player("Player 1", player1, _player1Input));
                     if (player2 != null) playerList.Add(new Player("Player 2", player2, _player2Input));
+					playerList[0].Position = new Vector2(150, 150);
 
                     NextGameState = new PlayingState(playerList);
                 });
