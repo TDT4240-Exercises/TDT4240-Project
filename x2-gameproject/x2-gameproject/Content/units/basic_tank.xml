@@ -5,4 +5,5 @@
 	<TurnRate type="Float">0.05</TurnRate>
 	<Speed type="Float">1</Speed>
 	<IsPlayable type="bool">true</IsPlayable>	
+	<PrimaryWeapon type="String">missile.xml</PrimaryWeapon>
 </UnitType>

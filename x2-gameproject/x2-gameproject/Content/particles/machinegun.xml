@@ -5,8 +5,10 @@
 	<InitialRotation type="Float">0.0</InitialRotation>
 	<SizeAdd type="Float">0.0</SizeAdd>
 	<RotationAdd type="Float">0.0</RotationAdd>
-	<Texture type="Texture">missile.png</Texture>
+	<Texture type="String">missile.png</Texture>
 	<AlphaAdd type="Float">0</AlphaAdd>
 	<InitialAlpha type="Float">0</InitialAlpha>
-	<SpawnParticleOnEnd type="particle">fireball.xml</SpawnParticleOnEnd>
+	<SpawnParticleOnEnd type="particle">explosion.xml</SpawnParticleOnEnd>
+	<CanCollide type="boolean">true</CanCollide>
+	<SoundEffectOnSpawn type="String">firemissile.wav</SoundEffectOnSpawn>
 </ParticleTemplate>

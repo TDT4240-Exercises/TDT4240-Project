@@ -15,7 +15,8 @@ namespace X2Game
         AlphaAdd,
         SpawnParticleOnEnd,
         CanCollide,
-        RotationIndependentVelocity
+        RotationIndependentVelocity,
+        SoundEffectOnSpawn
     }
 
     [ImmutableObject(true)]
@@ -26,11 +27,10 @@ namespace X2Game
         public ParticleTemplate(string filePath)
             : base(filePath, typeof(ParticleValues))
         {
-            ParticleValues.LifeTime.GetType();
             particleID = filePath;
             SetDefaultValue(ParticleValues.InitialSize, 1.0f);
             SetDefaultValue(ParticleValues.LifeTime, 3.0f);
-            SetDefaultValue(ParticleValues.Texture, ResourceManager.InvalidTexture);
+            SetDefaultValue(ParticleValues.Texture, "MISSING_TEXTURE");
         }
     }
 

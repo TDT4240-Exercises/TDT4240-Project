@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
@@ -17,6 +18,7 @@ namespace X2Game
         private static Dictionary<String, ParticleTemplate> _loadedParticles;
         private static Dictionary<String, TileType> _loadedTiles;
         private static Dictionary<String, UnitType> _loadedUnits;
+        private static Dictionary<String, SoundEffect> _loadedSounds;
 
         private static GraphicsDevice _device;
         private static GraphicsDeviceManager _deviceManager;
@@ -34,13 +36,37 @@ namespace X2Game
             _loadedTextures.Clear();
         }
 
+        public static void PlaySoundEffect(string soundID)
+        {
+            if (!_loadedSounds.ContainsKey(soundID))
+            {
+                try
+                {
+                    using (FileStream fileStream = new FileStream(ContentFolder + "sounds/" + soundID, FileMode.Open))
+                    {
+                        _loadedSounds[soundID] = SoundEffect.FromStream(fileStream);
+                        Logger.Log("Sound Effect \"" + soundID + "\" loaded.", LogLevel.Info);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Logger.Log("Unable to load Sound Effect: " + ContentFolder + "sounds/" + soundID + " - " + ex, LogLevel.Warning);
+                    _loadedSounds[soundID] = null;
+                    return;
+                }
+                
+            }
+
+            if (_loadedSounds[soundID] != null) _loadedSounds[soundID].Play(1, 1, 0);
+        }
+
         public static ParticleTemplate GetParticleTemplate(string particleID)
         {
             if (!_loadedParticles.ContainsKey(particleID))
             {
                 try
                 {
-                    _loadedParticles[particleID] = new ParticleTemplate(ContentFolder + particleID);
+                    _loadedParticles[particleID] = new ParticleTemplate(ContentFolder + "particles/" + particleID);
                 }
                 catch
                 {
@@ -69,6 +95,7 @@ namespace X2Game
             _loadedParticles = new Dictionary<String, ParticleTemplate>();
             _loadedTiles = new Dictionary<String, TileType>();
             _loadedUnits = new Dictionary<String, UnitType>();
+            _loadedSounds = new Dictionary<string, SoundEffect>();
             _deviceManager = deviceManager;
             ContentFolder = contentFolder;
 

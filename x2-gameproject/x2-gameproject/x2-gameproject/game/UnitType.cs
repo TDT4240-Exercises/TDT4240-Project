@@ -9,7 +9,8 @@ namespace X2Game
         TurnRate,
         Speed,
         Texture,
-        IsPlayable
+        IsPlayable,
+        PrimaryWeapon
     }
 
     class UnitType : GenericDataStructure

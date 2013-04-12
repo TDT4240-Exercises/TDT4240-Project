@@ -21,38 +21,39 @@ namespace X2Game
         private readonly string _playerName;
 
         public Player(string playername, UnitType type, Dictionary<Keys, Controllers> input)
-            : base(type, EntityController.Player)
+            : base(type)
         {
             _playerName     = playername;
             Position 		= new Vector2 (100, 100);
             _controlMap     = input;
+            Team = 'P';     //Team Player
         }
 
         public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)
         {
             //Handle key inputs
-            if (GetController() == EntityController.Player && keyboard.HasValue)
+            if (keyboard.HasValue)
             {
                 foreach (var key in _controlMap.Where(key => keyboard.Value.IsKeyDown(key.Key)))
                 {
                     switch (key.Value)
                     {
                         case Controllers.Left:
-                            Rotation -= turnRate;   // Rotate according to keys and turnRate
+                            Rotation -= TurnRate;   // Rotate according to keys and turnRate
                             break;
 
                         case Controllers.Right:
-                            Rotation += turnRate;
+                            Rotation += TurnRate;
                             break;
 
                         case Controllers.Forward:
-                            VelX = (float) Math.Cos(Rotation) * speed;
-                            VelY = (float)Math.Sin(Rotation) * speed;
+                            VelX = (float) Math.Cos(Rotation) * Speed;
+                            VelY = (float) Math.Sin(Rotation) * Speed;
                             break;
 
                         case Controllers.Back:
-                            VelX = (float)-Math.Cos(Rotation) * speed;
-                            VelY = (float)-Math.Sin(Rotation) * speed;
+                            VelX = (float)-Math.Cos(Rotation) * Speed;
+                            VelY = (float)-Math.Sin(Rotation) * Speed;
                             break;
 
                         case Controllers.Shoot:

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,36 +12,42 @@ namespace X2Game
     /// </summary>
     class Particle : GameObject
     {
-        private ParticleTemplate template;
-        private float secondsRemaining;
-        private float size;
-        private float alpha;
+        private static readonly Random _rand = new Random();
+        private readonly ParticleTemplate _template;
+        private float _secondsRemaining;
+        internal float Size;
+        internal float Alpha;
         public float Speed;
 
-        public bool isDestroyed;
-
-        //These two are cached for performance reasons
-        private Vector2 centre;
+        public bool IsDestroyed;
 
         public Particle(Vector2 initialPosition, ParticleTemplate template)
         {
-            this.template = template;
-            Position = initialPosition;
+            _template = template;
+
+            //Rotation
             Rotation = template.GetValue<float>(ParticleValues.InitialRotation);
-            size = template.GetValue<float>(ParticleValues.InitialSize);
-            secondsRemaining = template.GetValue<float>(ParticleValues.LifeTime);
-            Texture = template.GetValue<Texture2D>(ParticleValues.Texture);
-            centre = new Vector2(Texture.Width / 2, Texture.Height / 2);
-            alpha = 1.0f - template.GetValue<float>(ParticleValues.InitialAlpha);
+            if ((int)Rotation == -1) Rotation = (float)_rand.NextDouble();
+
+            Size = template.GetValue<float>(ParticleValues.InitialSize);
+            _secondsRemaining = template.GetValue<float>(ParticleValues.LifeTime);
+            Texture = ResourceManager.GetTexture("particles/" + template.GetValue<string>(ParticleValues.Texture));
+            Alpha = 1.0f - template.GetValue<float>(ParticleValues.InitialAlpha);
+            IsCollidable = template.GetValue<bool>(ParticleValues.CanCollide);
+            Position = initialPosition;
+
+            //Sound effect
+            string spawnSound = template.GetValue<string>(ParticleValues.SoundEffectOnSpawn);
+            if (spawnSound != null) ResourceManager.PlaySoundEffect(spawnSound);
         }
 
         public void Destroy()
         {
-            if (isDestroyed) return;
-            isDestroyed = true;
+            if (IsDestroyed) return;
+            IsDestroyed = true;
 
             //Spawn other particles on death?
-            ParticleTemplate spawn = template.GetValue<ParticleTemplate>(ParticleValues.SpawnParticleOnEnd);
+            ParticleTemplate spawn = _template.GetValue<ParticleTemplate>(ParticleValues.SpawnParticleOnEnd);
             if (spawn != null)
             {
                 ParticleEngine.SpawnParticle(Position, spawn);
@@ -48,13 +56,12 @@ namespace X2Game
 
         public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)
         {
-            float timeUnit = delta.ElapsedGameTime.Ticks/(float)TimeSpan.TicksPerSecond;
 
             //Has this particle expired and needs to be removed?
-            if (!float.IsInfinity(secondsRemaining))
+            if (!float.IsInfinity(_secondsRemaining))
             {
-                secondsRemaining -= (delta.ElapsedGameTime.Ticks / (float)TimeSpan.TicksPerSecond);
-                if (secondsRemaining <= 0)
+                _secondsRemaining -= (delta.ElapsedGameTime.Ticks / (float)TimeSpan.TicksPerSecond);
+                if (_secondsRemaining <= 0)
                 {
                     Destroy();
                     return;
@@ -62,28 +69,29 @@ namespace X2Game
             }
 
             //Update alpha
-            alpha -= template.GetValue<float>(ParticleValues.AlphaAdd) * timeUnit;
-            if (alpha <= 0)
+            Alpha -= _template.GetValue<float>(ParticleValues.AlphaAdd);
+            if (Alpha <= 0)
             {
                 Destroy();
                 return;
             }
+            if (Alpha > 1.0f) Alpha = 1;
 
             //Update size
-            size += template.GetValue<float>(ParticleValues.SizeAdd) * timeUnit;
-            if (size <= 0)
+            Size += _template.GetValue<float>(ParticleValues.SizeAdd);
+            if (Size <= 0)
             {
                 Destroy();
                 return;
             }
-            Width = (int) (Texture.Width * size);
-            Height = (int) (Texture.Height * size);
+            Width = (int) (Texture.Width * Size);
+            Height = (int) (Texture.Height * Size);
 
             //Update rotation
-            Rotation += template.GetValue<float>(ParticleValues.RotationAdd) * timeUnit;
+            Rotation += _template.GetValue<float>(ParticleValues.RotationAdd);
 
             //Update velocity depending on rotation and speed
-            if (!template.GetValue<bool>(ParticleValues.RotationIndependentVelocity))
+            if (!_template.GetValue<bool>(ParticleValues.RotationIndependentVelocity))
             {
                 VelX = (float)Math.Cos(Rotation) * Speed;
                 VelY = (float)Math.Sin(Rotation) * Speed;
@@ -96,7 +104,30 @@ namespace X2Game
             }
 
             //Update position
-            Position += Velocity * timeUnit;
+            Position += Velocity;
+        }
+
+        public void Update(GameTime delta, List<Entity> entities, TileMap tileMap)
+        {
+            if (IsCollidable)
+            {
+                //Did we hit a wall?
+                if (tileMap.WorldCollision(this))
+                {
+                    Destroy();
+                    return;
+                }
+
+                //Do we hit an gameObject?
+                if (entities.Where(entity => entity.IsCollidable).Any(entity => entity.Team != Team && entity.HandleCollision(this, false)))
+                {
+                    Destroy();
+                    return;
+                }
+            }
+
+
+            Update(delta, (KeyboardState?)null, null);
         }
     }
 }

@@ -1,41 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace X2Game
 {
     static class ParticleEngine
     {
-        public static uint maxParticles = 10000;
-        private static readonly LinkedList<Particle> particleList = new LinkedList<Particle>();
-        private static readonly LinkedList<Particle> spawnList = new LinkedList<Particle>();
+        public static uint MaxParticles = 7000;
+        private static readonly LinkedList<Particle> ParticleList = new LinkedList<Particle>();
+        private static readonly LinkedList<Particle> SpawnList = new LinkedList<Particle>();
 
-        public static void Update(GameTime delta)
+        public static void Update(GameTime delta, List<Entity> entities, TileMap tileMap)
         {
             //Add new particles to the current list
-            foreach (Particle particle in spawnList)
+            foreach (Particle particle in SpawnList)
             {
-                particleList.AddLast(particle);
+                ParticleList.AddLast(particle);
             }
-            spawnList.Clear();
+            SpawnList.Clear();
 
             //Single threaded update
-            if (particleList.Count < 100)
+            if (ParticleList.Count < 100)
             {
-                LinkedListNode<Particle> node = particleList.First;
+                LinkedListNode<Particle> node = ParticleList.First;
                 while (node != null)
                 {
                     //Update particle
-                    node.Value.Update(delta, null, null);
+                    node.Value.Update(delta, entities, tileMap);
 
                     //Has this particle been destroyed?
-                    if (node.Value.isDestroyed)
+                    if (node.Value.IsDestroyed)
                     {
                         LinkedListNode<Particle> remove = node;
                         node = node.Next;
-                        particleList.Remove(remove);
+                        ParticleList.Remove(remove);
                         continue;
                     }
 
@@ -47,13 +46,13 @@ namespace X2Game
             //Parallel update
             else
             {
-                Parallel.ForEach(particleList, particle => particle.Update(delta, null, null));
+                Parallel.ForEach(ParticleList, particle => particle.Update(delta, null, null));
 
                 //Remove destroyed particles
-                for (LinkedListNode<Particle> node = particleList.First; node != null; )
+                for (LinkedListNode<Particle> node = ParticleList.First; node != null; )
                 {
                     LinkedListNode<Particle> next = node.Next;
-                    if (node.Value.isDestroyed) particleList.Remove(node);
+                    if (node.Value.IsDestroyed) ParticleList.Remove(node);
                     node = next;
                 }
             }
@@ -62,45 +61,50 @@ namespace X2Game
 
         public static void Render(RenderEngine renderEngine)
         {
-            foreach (Particle particle in particleList)
+            foreach (Particle particle in ParticleList)
             {
                 renderEngine.Render(particle);
             }
         }
 
-        public static void SpawnParticle(Vector2 position, ParticleTemplate template)
+        public static void SpawnParticle(Vector2 position, ParticleTemplate template, bool centre = false)
         {
             //Don't spawn more particles than the set limit
-            if (Count() >= maxParticles || template == null) return;
+            if (Count() >= MaxParticles || template == null) return;
 
-            Logger.Log("particle spawned: " + template, LogLevel.Info);
+            Logger.Log("particle spawned: " + template, LogLevel.Debug);
             //Spawn it and add it last in our list
-            spawnList.AddLast(new Particle(position, template));
+            SpawnList.AddLast(new Particle(position, template));
         }
 
         public static void SpawnProjectile(Entity shooter, ParticleTemplate template)
         {
             //Don't spawn more particles than the set limit
-            if (Count() >= maxParticles || template == null) return;
+            if (Count() >= MaxParticles || template == null) return;
 
-            Logger.Log("projectile spawned: " + template, LogLevel.Info);
+            Logger.Log("projectile spawned: " + template, LogLevel.Debug);
 
             Particle projectile = new Particle(shooter.Position, template);
             projectile.Rotation = shooter.Rotation;
-            projectile.Speed = 200;
+            projectile.Speed = 10;
+            projectile.Team = shooter.Team;
+
+            //Spawn projectile from gun barrel and not unit origin
+            projectile.X += (float)Math.Cos(shooter.Rotation) * shooter.Width/2;
+            projectile.Y += (float)Math.Sin(shooter.Rotation) * shooter.Width/2;
 
             //Spawn it and add it last in our list
-            spawnList.AddLast(projectile);
+            SpawnList.AddLast(projectile);
         }
 
         public static int Count()
         {
-            return particleList.Count + spawnList.Count;
+            return ParticleList.Count + SpawnList.Count;
         }
 
         public static void Clear()
         {
-            particleList.Clear();
+            ParticleList.Clear();
         }
 
     }

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<InitialSize type="Float">0.002</InitialSize>
+	<InitialRotation type="Float">-1</InitialRotation>
+	<SizeAdd type="Float">0.004</SizeAdd>
+	<RotationAdd type="Float">0.20</RotationAdd>
+	<Texture type="String">explosion.png</Texture>
+	<AlphaAdd type="Float">0.01</AlphaAdd>
+	<InitialAlpha type="Float">0.0</InitialAlpha>
+	<SoundEffectOnSpawn type="String">explosion.wav</SoundEffectOnSpawn>
+</ParticleTemplate>

@@ -19,7 +19,7 @@ namespace X2Game
 
         public void Render(GameObject gameObject)
         {
-            if (Camera.ObjectIsVisible(gameObject.hitBox))
+            if (Camera.ObjectIsVisible(gameObject.Bounds))
             {
                 _spriteBatch.Draw(
                     gameObject.Texture,
@@ -32,6 +32,21 @@ namespace X2Game
                     SpriteEffects.None,
                     0.0f);
             }
+        }
+
+        public void Render(Particle particle)
+        {
+            Rectangle target = particle.Bounds;
+
+            if (!Camera.ObjectIsVisible(target)) return;
+
+            //Calculate screen position
+            target.X -= (int) Camera.Position.X;
+            target.Y -= (int) Camera.Position.Y;
+
+            //Draw it there
+            _spriteBatch.Draw(particle.Texture, target, null, new Color(particle.Alpha, particle.Alpha, particle.Alpha, particle.Alpha), 
+                particle.Rotation, new Vector2(particle.Texture.Width / 2.0f, particle.Texture.Height / 2.0f), SpriteEffects.None, 0);
         }
 
         public int GetScreenWidth()

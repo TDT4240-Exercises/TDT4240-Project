@@ -30,12 +30,11 @@ namespace X2Game
             components.Add(optionsButton);
             components.Add(exitButton);
             components.Add(sandboxButton);
-
         }
 
         protected override void Update(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
         {
-
+            
             if (keyboard.IsKeyDown(Keys.P) && !spawnParticle)
             {
                 ParticleEngine.SpawnParticle(new Vector2(rand.Next(renderEngine.GetScreenWidth()), rand.Next(renderEngine.GetScreenHeight())), ResourceManager.GetParticleTemplate("fireball.xml"));

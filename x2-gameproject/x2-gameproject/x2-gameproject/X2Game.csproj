@@ -122,6 +122,7 @@
     <Compile Include="gamestates\PlayingState.cs" />
     <Compile Include="gamestates\SandboxAndersState.cs" />
     <Compile Include="gamestates\SelectPlayerState.cs" />
+    <Compile Include="game\AIControlledEntity.cs" />
     <Compile Include="game\Entity.cs" />
     <Compile Include="game\GameObject.cs" />
     <Compile Include="game\OldTileMap.cs" />

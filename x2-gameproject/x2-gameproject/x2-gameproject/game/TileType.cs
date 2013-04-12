@@ -31,13 +31,6 @@ namespace X2Game
             BlocksMovement = GetValue<bool>(TileValues.BlocksMovement);
         }
 
-        /*
-        public void Draw(int x, int y, int width, int height, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, new Rectangle(x, y, width, height), _tileIndex, Color.White);
-        }
-        */
-
         public void Draw(Rectangle destinationRectangle, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, destinationRectangle, _tileIndex, Color.White);

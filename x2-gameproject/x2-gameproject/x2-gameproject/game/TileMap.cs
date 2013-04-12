@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,7 +8,7 @@ namespace X2Game
     class TileMap
     {
         #region Declarations
-        private readonly TileType[,] mapSquares;
+        private readonly TileType[,] _mapSquares;
         public readonly int TileWidth = TileType.TILE_WIDTH;
         public readonly int TileHeight = TileType.TILE_HEIGHT;
         public readonly int MapWidth;
@@ -29,7 +27,7 @@ namespace X2Game
         {
             MapWidth = mapWidth;
             MapHeight = mapHeight;
-            mapSquares = new TileType[MapWidth, MapHeight];
+            _mapSquares = new TileType[MapWidth, MapHeight];
 
             //Fill tilemap with grass
             for (int x = 0; x < mapWidth; ++x)
@@ -37,9 +35,9 @@ namespace X2Game
                 for (int y = 0; y < mapHeight; ++y)
                 {
                     if (rand.Next(100) > 20)
-                        mapSquares[x, y] = ResourceManager.GetTile("grass.xml");
+                        _mapSquares[x, y] = ResourceManager.GetTile("grass.xml");
                     else
-                        mapSquares[x, y] = ResourceManager.GetTile("brickwall.xml");
+                        _mapSquares[x, y] = ResourceManager.GetTile("brickwall.xml");
                 }
             }
 
@@ -62,9 +60,9 @@ namespace X2Game
             return pixelY / TileHeight;
         }
 
-        public Vector2 GetSquareAtPixel(Vector2 pixelLocation)
+        public Point GetSquareAtPixel(Vector2 pixelLocation)
         {
-            return new Vector2(
+            return new Point(
                 GetSquareByPixelX((int)pixelLocation.X),
                 GetSquareByPixelY((int)pixelLocation.Y));
         }
@@ -117,7 +115,7 @@ namespace X2Game
             if ((tileX >= 0) && (tileX < MapWidth) &&
                 (tileY >= 0) && (tileY < MapHeight))
             {
-                return mapSquares[tileX, tileY];
+                return _mapSquares[tileX, tileY];
             }
             else
             {
@@ -130,7 +128,7 @@ namespace X2Game
             if ((tileX >= 0) && (tileX < MapWidth) &&
                 (tileY >= 0) && (tileY < MapHeight))
             {
-                mapSquares[tileX, tileY] = tile;
+                _mapSquares[tileX, tileY] = tile;
             }
         }
 
@@ -160,16 +158,84 @@ namespace X2Game
             int endY = GetSquareByPixelY((int)Camera.Position.Y +
                       Camera.ViewPortHeight);
 
+            //Clip to valid ranges
+            startX = Math.Min(Math.Max(0, startX), MapWidth - 1);
+            startY = Math.Min(Math.Max(0, startY), MapHeight - 1);
+            endX = Math.Min(Math.Max(0, endX), MapWidth - 1);
+            endY = Math.Min(Math.Max(0, endY), MapHeight - 1);
+
             for (int x = startX; x <= endX; x++)
                 for (int y = startY; y <= endY; y++)
                 {
-                    if ((x >= 0) && (y >= 0) &&
-                        (x < MapWidth) && (y < MapHeight))
-                    {
-                        GetTileAtSquare(x, y).Draw(SquareScreenRectangle(x, y), spriteBatch);
-                    }
+                    _mapSquares[x, y].Draw(SquareScreenRectangle(x, y), spriteBatch);
                 }
         }
         #endregion
+
+        #region Collision Detection
+
+        /// <summary>
+        /// Detects and handles collision between GameObjects and the World.
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <returns>true if there occured an collision</returns>
+        public bool WorldCollision(GameObject gameObject)
+        {
+            bool hasCollided = false;
+
+            Point entityInTile = GetSquareAtPixel(gameObject.Position);
+
+            // Collision detect in a 5x5 grid to where you are
+            for (int i = 0; i < 5; ++i)
+            {
+                for (int j = 0; j < 5; ++j)
+                {
+                    hasCollided |= HandleTileCollision(gameObject, new Vector2(entityInTile.X + (i - 2), entityInTile.Y + (j - 2)));
+                }
+            }
+
+            return hasCollided;
+        }
+
+        private bool HandleTileCollision(GameObject gameObject, Vector2 tile)
+        {
+            //Prevent array out of bounds
+            if (tile.X < 0 || tile.Y < 0 || tile.X >= MapWidth || tile.Y >= MapHeight) return false;
+
+            //Is the tile collidable?
+            if (!_mapSquares[(int)tile.X, (int)tile.Y].BlocksMovement) return false;
+
+            Vector2 collisionTileCenter = GetSquareCenter(tile);
+            int collisionTileRadius = TileWidth / 2;
+
+            Vector2 entityCenter = gameObject.Position;
+            int entityRadius = (gameObject.Height + gameObject.Width) / 4;// Average of height and width divided by 2 => 4
+            entityRadius -= 8; // Make it possible to pass between tiles
+
+            Vector2 diffVector = entityCenter - collisionTileCenter; // Tile to Entity
+            int distance = (int)diffVector.Length();
+
+            //Collision?
+            if (distance < collisionTileRadius + entityRadius)
+            { 
+                int moveRadius = (collisionTileRadius + entityRadius) - distance; // how long to move to not collide any more
+                diffVector /= diffVector.Length();
+                Vector2 moveVector = diffVector * moveRadius;
+
+                gameObject.Position += moveVector;
+                return true;
+            }
+
+            return false;
+        }
+        #endregion
+
+        public bool IsWalkable(int tileX, int tileY)
+        {
+            //Everything outside the map is impassable
+            if (tileX < 0 || tileY < 0 || tileX >= MapWidth || tileY >= MapWidth) return false;
+
+            return !_mapSquares[tileX, tileY].BlocksMovement;
+        }
     }
 }

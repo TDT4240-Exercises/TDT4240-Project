@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -82,9 +83,15 @@ namespace X2Game
             //Go to previous?
             if (nextState == null)
             {
-                _stateStack.Pop();
-                if(_stateStack.Count == 0) Exit(); //Last state in stack?
-                CurrentGameState.NextGameState = CurrentGameState;
+                try
+                {
+                    _stateStack.Pop();
+                    CurrentGameState.NextGameState = CurrentGameState;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Exit(); //Last state in stack?
+                }
             }
 
             //New state?

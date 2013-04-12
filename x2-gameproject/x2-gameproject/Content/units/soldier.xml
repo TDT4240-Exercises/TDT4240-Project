@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UnitType>
+	<Texture type="String">soldier.png</Texture>
+	<Health type="Float">5</Health>
+	<TurnRate type="Float">0.15</TurnRate>
+	<Speed type="Float">1</Speed>
+	<PrimaryWeapon type="String">machinegun.xml</PrimaryWeapon>
+	<IsPlayable type="bool">true</IsPlayable>
+</UnitType>
