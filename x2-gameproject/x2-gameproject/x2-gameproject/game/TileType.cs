@@ -10,7 +10,9 @@ namespace X2Game
         BlocksSight,
         Destructible,
         XIndex,
-        YIndex
+        YIndex,
+        DestroyedTile,
+        Health
     }
 
     class TileType : GenericDataStructure

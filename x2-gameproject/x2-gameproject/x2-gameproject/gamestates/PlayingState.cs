@@ -62,10 +62,10 @@ namespace X2Game
                 entity.Update(delta, keyboard, mouse);
 
                 //Collision with map edges
-                if (entity.Position.X < 0)                                      entity.X = 0;
-                if (entity.Position.Y < 0)                                      entity.Y = 0;
-                if (entity.Position.X + entity.Width > _tileMap.RealWidth)      entity.X = _tileMap.RealWidth;
-                if (entity.Position.Y + entity.Height > _tileMap.RealHeight)    entity.Y = _tileMap.RealHeight;
+                if (entity.Position.X < 0)                                          entity.X = 0;
+                if (entity.Position.Y < 0)                                          entity.Y = 0;
+                if (entity.Position.X + entity.Width / 2.0f > _tileMap.RealWidth)   entity.X = _tileMap.RealWidth - entity.Width / 2.0f;
+                if (entity.Position.Y + entity.Height / 2.0f > _tileMap.RealHeight) entity.Y = _tileMap.RealHeight - entity.Height / 2.0f;
 
                 //Collision with world
                 if(entity.IsCollidable) _tileMap.WorldCollision(entity);
@@ -103,8 +103,6 @@ namespace X2Game
             {
                 renderEngine.Render(entity);
             }
-
-            renderEngine.DrawString("vec: " + _tileMap.GetSquareAtPixel(_playerList[0].Position), 32, 64, Color.White);
 
             //Draw particle effects
             ParticleEngine.Render(renderEngine);

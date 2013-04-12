@@ -112,8 +112,10 @@ namespace X2Game
             if (IsCollidable)
             {
                 //Did we hit a wall?
-                if (tileMap.WorldCollision(this))
+                Point? tileCollision = tileMap.GetCollidedTile(this);
+                if (tileCollision.HasValue)
                 {
+                    tileMap.DestroyTile(tileCollision.Value.X, tileCollision.Value.Y, _template.GetValue<float>(ParticleValues.Damage));
                     Destroy();
                     return;
                 }

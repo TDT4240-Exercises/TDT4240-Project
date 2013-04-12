@@ -2,10 +2,9 @@
 <TileType>
 	<Texture type="Texture">tiles.png</Texture>
 	<XIndex type="Integer">1</XIndex>
-	<YIndex type="Integer">0</YIndex>
+	<YIndex type="Integer">1</YIndex>
 	<Destructible type="Boolean">true</Destructible>
-	<Health type="Float">40</Health>
 	<BlocksMovement type="Boolean">true</BlocksMovement>
-	<BlocksSight type="Boolean">false</BlocksSight>
-	<DestroyedTile type="String">gravel.xml</DestroyedTile>
+	<BlocksSight type="Boolean">true</BlocksSight>
+	<DestroyedTile type="String">deadoak.xml</DestroyedTile>
 </TileType>

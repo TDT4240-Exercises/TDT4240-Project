@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TileType>
+	<Texture type="Texture">tiles.png</Texture>
+	<XIndex type="Integer">3</XIndex>
+	<YIndex type="Integer">1</YIndex>
+	<Destructible type="Boolean">false</Destructible>
+	<BlocksMovement type="Boolean">false</BlocksMovement>
+	<BlocksSight type="Boolean">false</BlocksSight>
+</TileType>
