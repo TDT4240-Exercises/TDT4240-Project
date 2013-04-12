@@ -74,7 +74,8 @@ namespace X2Game
 
                 TileType wallType;
 
-                if (rand.NextDouble() > 0.5) wallType = ResourceManager.GetTile("brickwall.xml");
+                //25% iron wall
+                if (rand.NextDouble() > 0.25) wallType = ResourceManager.GetTile("brickwall.xml");
                 else wallType = ResourceManager.GetTile("ironwall.xml");
 
                 //Place the house itself
@@ -128,12 +129,24 @@ namespace X2Game
                 }
 
                 //Furniture
-                int nrOfFeatures = rand.Next(0, 2);
+                int nrOfFeatures = rand.Next(0, 4);
                 while (nrOfFeatures-- >= 0)
                 {
                     int dx = rand.Next(1, width - 1);
                     int dy = rand.Next(1, height - 1);
-                    _mapSquares[x+dx, y+dy] = ResourceManager.GetTile("supplies.xml"); 
+                    switch (rand.Next(1, 3))
+                    {
+                        case 1:
+                            _mapSquares[x+dx, y+dy] = ResourceManager.GetTile("supplies.xml");
+                            break;
+                        case 2:
+                            _mapSquares[x + dx, y + dy] = ResourceManager.GetTile("tables.xml");
+                            break;
+                        case 3:
+                            _mapSquares[x + dx, y + dy] = ResourceManager.GetTile("boxes.xml");
+                            break;
+                    }
+                    
                 }
             }
         }
