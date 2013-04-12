@@ -11,4 +11,6 @@
 	<SpawnParticleOnEnd type="particle">explosion.xml</SpawnParticleOnEnd>
 	<CanCollide type="boolean">true</CanCollide>
 	<SoundEffectOnSpawn type="String">firemissile.wav</SoundEffectOnSpawn>
+	<AttackCooldown type="Float">0.5</AttackCooldown>
+	<Damage type="Float">4.0</Damage>
 </ParticleTemplate>

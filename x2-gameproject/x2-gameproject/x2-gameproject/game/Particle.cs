@@ -119,8 +119,9 @@ namespace X2Game
                 }
 
                 //Do we hit an gameObject?
-                if (entities.Where(entity => entity.IsCollidable).Any(entity => entity.Team != Team && entity.HandleCollision(this, false)))
+                foreach (Entity entity in entities.Where(entity => entity.IsCollidable && entity.HandleCollision(this, false) && entity.Team != Team))
                 {
+                    entity.Damage(_template.GetValue<float>(ParticleValues.Damage));
                     Destroy();
                     return;
                 }

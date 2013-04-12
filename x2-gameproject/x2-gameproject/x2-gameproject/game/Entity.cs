@@ -13,9 +13,12 @@ namespace X2Game
         protected UnitType type;
         protected float TurnRate;
         protected float Health;
+        protected float MaxHealth;
         protected float AttackCooldown;
         protected ParticleTemplate CurrentWeapon;
         public float Speed;
+
+        public bool IsDestroyed { get; protected set; }
 
         /// <summary>
         /// Constructor for an Entity
@@ -29,7 +32,7 @@ namespace X2Game
             Width = Texture.Width;
             Height = Texture.Height;
             TurnRate = type.GetValue<float>(UnitValues.TurnRate);
-            Health = type.GetValue<float>(UnitValues.Health);
+            MaxHealth = Health = type.GetValue<float>(UnitValues.Health);
             Speed = type.GetValue<float>(UnitValues.Speed);
             CurrentWeapon = ResourceManager.GetParticleTemplate(type.GetValue<string>(UnitValues.PrimaryWeapon));
         }
@@ -44,9 +47,19 @@ namespace X2Game
         public void FireProjectile()
         {
             if (AttackCooldown > 0) return;
-            AttackCooldown = 0.5f;
+            AttackCooldown = CurrentWeapon.GetValue<float>(ParticleValues.AttackCooldown);
             ParticleEngine.SpawnProjectile(this, CurrentWeapon);
         }
 
+        public void Damage(float amount)
+        {
+            Health -= amount;
+            if(Health < 0) Destroy();
+        }
+
+        private void Destroy()
+        {
+            IsDestroyed = true;
+        }
     }
 }

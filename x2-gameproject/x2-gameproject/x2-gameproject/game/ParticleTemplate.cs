@@ -16,7 +16,9 @@ namespace X2Game
         SpawnParticleOnEnd,
         CanCollide,
         RotationIndependentVelocity,
-        SoundEffectOnSpawn
+        SoundEffectOnSpawn,
+        AttackCooldown,
+        Damage
     }
 
     [ImmutableObject(true)]
@@ -30,6 +32,7 @@ namespace X2Game
             particleID = filePath;
             SetDefaultValue(ParticleValues.InitialSize, 1.0f);
             SetDefaultValue(ParticleValues.LifeTime, 3.0f);
+            SetDefaultValue(ParticleValues.AttackCooldown, 1.0f);
             SetDefaultValue(ParticleValues.Texture, "MISSING_TEXTURE");
         }
     }

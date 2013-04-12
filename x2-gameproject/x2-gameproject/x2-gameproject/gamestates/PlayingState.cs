@@ -10,20 +10,24 @@ namespace X2Game
     {
         private readonly TileMap _tileMap;
         private readonly List<Entity> _entities;
-        private List<Player> _playerList;
+        private readonly List<Player> _playerList;
 
         public PlayingState(List<Player> playerList)
         {
             //Initialize level
             _entities = new List<Entity>(64);
-            _tileMap = new TileMap(100, 100);
+            _tileMap = new TileMap(24, 24);
 
             //Initialize players
             _entities.AddRange(playerList);
             _playerList = playerList;
 
-            _entities.Add(new AIControlledEntity(ResourceManager.GetUnitType("soldier.xml"), AIControlledEntity.AIType.DefaultAI, _entities, _tileMap));
-            _entities.Last().Position = new Vector2(100, 100);
+            //Spawn some random opponents
+            Random rand = new Random();
+            for (int i = 0; i < 5; ++i) {
+                _entities.Add(new AIControlledEntity(rand.NextDouble() > 0.5 ? ResourceManager.GetUnitType("soldier.xml") : ResourceManager.GetUnitType("small_tank.xml"), _entities, _tileMap));
+                _entities.Last().Position = new Vector2(rand.Next(_tileMap.RealWidth), rand.Next(_tileMap.RealHeight));
+            }
 
             //Reset particles
             ParticleEngine.Clear();
@@ -51,6 +55,7 @@ namespace X2Game
             ParticleEngine.Update(delta, _entities, _tileMap);
 
             //Update all entities (TODO: this could be done in parallel?)
+            Queue<Entity> destroyedEntities = new Queue<Entity>();
             foreach (Entity entity in _entities)
             {
                 //Update the entity itself (run AI, check input, etc.)
@@ -64,7 +69,17 @@ namespace X2Game
 
                 //Collision with world
                 if(entity.IsCollidable) _tileMap.WorldCollision(entity);
+
+                if (entity.IsDestroyed)
+                {
+                    destroyedEntities.Enqueue(entity);
+                }
             }
+
+            foreach (var destroyedEntity in destroyedEntities) {
+                _entities.Remove(destroyedEntity);
+            }
+     
 
             //Entity to entity collision detection
 			for (int i = 0; i < _entities.Count; ++i)

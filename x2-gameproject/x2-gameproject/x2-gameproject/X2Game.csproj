@@ -138,6 +138,7 @@
     <Compile Include="gui\InputField.cs" />
     <Compile Include="gui\Label.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="util\AStarPathfinder.cs" />
     <Compile Include="util\GenericDataStructure.cs" />
     <Compile Include="util\Logger.cs" />
     <Compile Include="util\ResourceManager.cs" />

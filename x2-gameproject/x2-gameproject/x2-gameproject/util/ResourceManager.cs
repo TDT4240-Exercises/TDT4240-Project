@@ -57,7 +57,7 @@ namespace X2Game
                 
             }
 
-            if (_loadedSounds[soundID] != null) _loadedSounds[soundID].Play(1, 1, 0);
+            if (_loadedSounds[soundID] != null) _loadedSounds[soundID].Play(1, 0, 0);
         }
 
         public static ParticleTemplate GetParticleTemplate(string particleID)
