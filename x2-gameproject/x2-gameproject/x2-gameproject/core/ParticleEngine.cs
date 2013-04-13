@@ -21,7 +21,7 @@ namespace X2Game
             SpawnList.Clear();
 
             //Single threaded update
-            if (ParticleList.Count < 100)
+            if (ParticleList.Count < 1000)
             {
                 LinkedListNode<Particle> node = ParticleList.First;
                 while (node != null)
@@ -72,7 +72,6 @@ namespace X2Game
             //Don't spawn more particles than the set limit
             if (Count() >= MaxParticles || template == null) return;
 
-            Logger.Log("particle spawned: " + template, LogLevel.Debug);
             //Spawn it and add it last in our list
             SpawnList.AddLast(new Particle(position, template));
         }
@@ -82,11 +81,9 @@ namespace X2Game
             //Don't spawn more particles than the set limit
             if (Count() >= MaxParticles || template == null) return;
 
-            Logger.Log("projectile spawned: " + template, LogLevel.Debug);
-
             Particle projectile = new Particle(shooter.Position, template);
             projectile.Rotation = shooter.Rotation;
-            projectile.Speed = 10;
+            projectile.Speed = template.GetValue<float>(ParticleValues.Speed);
             projectile.Team = shooter.Team;
 
             //Spawn projectile from gun barrel and not unit origin

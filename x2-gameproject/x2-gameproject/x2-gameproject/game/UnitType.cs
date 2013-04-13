@@ -10,7 +10,10 @@ namespace X2Game
         Speed,
         Texture,
         IsPlayable,
-        PrimaryWeapon
+        PrimaryWeapon,
+        DestroyOnCollision,
+        DeathParticle,
+        SecondaryWeapon
     }
 
     class UnitType : GenericDataStructure

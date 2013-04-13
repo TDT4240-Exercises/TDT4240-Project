@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<LifeTime type="Float">6.0</LifeTime>
+	<InitialSize type="Float">0.5</InitialSize>
+	<Texture type="String">nuke.png</Texture>
+	<SpawnParticleOnEnd type="particle">nuke_blast.xml</SpawnParticleOnEnd>
+	<CanCollide type="boolean">false</CanCollide>
+	<SoundEffectOnSpawn type="String">nuke_alarm.wav</SoundEffectOnSpawn>
+	<AttackCooldown type="Float">120</AttackCooldown>
+	<Damage type="Float">0</Damage>
+	<Speed type="Float">0</Speed>
+</ParticleTemplate>

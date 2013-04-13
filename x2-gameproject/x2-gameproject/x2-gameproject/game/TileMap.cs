@@ -49,14 +49,14 @@ namespace X2Game
             }
 
             //Place a sign
-            _mapSquares[rand.Next(0, MapWidth - 1), rand.Next(0, MapWidth - 1)] = ResourceManager.GetTile("sign.xml");
+            _mapSquares[rand.Next(1, MapWidth - 2), rand.Next(1, MapWidth - 2)] = ResourceManager.GetTile("sign.xml");
 
             //Place some trees
             int nrOfTrees = rand.Next(10, 40);
             while (nrOfTrees-- >= 0)
             {
-                int x = rand.Next(0, MapWidth-1);
-                int y = rand.Next(0, MapHeight-1);
+                int x = rand.Next(2, MapWidth-3);
+                int y = rand.Next(2, MapHeight-3);
                 if(rand.NextDouble() > 0.5)
                     _mapSquares[x, y] = ResourceManager.GetTile("pinetree.xml");
                 else
@@ -69,8 +69,8 @@ namespace X2Game
             {
                 int width = rand.Next(3, 8);
                 int height = rand.Next(3, 8);
-                int x = rand.Next(MapWidth - width - 2);
-                int y = rand.Next(MapHeight - height - 2);
+                int x = rand.Next(3, MapWidth - width - 3);
+                int y = rand.Next(3, MapHeight - height - 3);
 
                 TileType wallType;
 
@@ -373,6 +373,10 @@ namespace X2Game
 
         public void DestroyTile(int x, int y, float damage)
         {
+            //Outside level?
+            if (x < 0 || y < 0 || x >= MapWidth || y >= MapWidth) return;
+
+            //can tile be damaged?
             if (!_mapSquares[x, y].GetValue<bool>(TileValues.Destructible)) return;
 
             //Deal some love

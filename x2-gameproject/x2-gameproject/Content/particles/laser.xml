@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<LifeTime type="Float">10.0</LifeTime>
+	<InitialSize type="Float">0.1</InitialSize>
+	<Texture type="String">laser.png</Texture>
+	<InitialAlpha type="Float">0.25</InitialAlpha>
+	<CanCollide type="boolean">true</CanCollide>
+	<SoundEffectOnSpawn type="String">laser.wav</SoundEffectOnSpawn>
+	<AttackCooldown type="Float">1</AttackCooldown>
+	<Damage type="Float">2.5</Damage>
+</ParticleTemplate>

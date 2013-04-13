@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<InitialSize type="Float">0.5</InitialSize>
+	<InitialRotation type="Float">-1</InitialRotation>
+	<Texture type="String">blood.png</Texture>
+	<AlphaAdd type="Float">0.01</AlphaAdd>
+	<SoundEffectOnSpawn type="String">death.wav</SoundEffectOnSpawn>
+</ParticleTemplate>

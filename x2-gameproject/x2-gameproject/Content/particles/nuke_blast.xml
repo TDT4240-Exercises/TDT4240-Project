@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<InitialSize type="Float">2</InitialSize>
+	<SizeAdd type="Float">0.005</SizeAdd>
+	<Texture type="String">kaboom.png</Texture>
+	<AlphaAdd type="Float">0.0015</AlphaAdd>
+	<CameraShake type="Integer">3000</CameraShake>
+	<SoundEffectOnSpawn type="String">nuke.wav</SoundEffectOnSpawn>
+	<CanCollide type="boolean">true</CanCollide>
+	<Damage type="Float">500</Damage>
+	<AreaOfEffect type="boolean">true</AreaOfEffect>
+</ParticleTemplate>

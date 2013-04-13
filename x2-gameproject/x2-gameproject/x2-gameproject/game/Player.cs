@@ -14,7 +14,8 @@ namespace X2Game
             Back,
             Left,
             Right,
-            Shoot
+            Primary,
+            Secondary
         }
 
         private readonly Dictionary<Keys, Controllers> _controlMap;
@@ -56,8 +57,9 @@ namespace X2Game
                             VelY = (float)-Math.Sin(Rotation) * Speed;
                             break;
 
-                        case Controllers.Shoot:
-                            FireProjectile();
+                        case Controllers.Secondary:
+                        case Controllers.Primary:
+                            FireProjectile(key.Value == Controllers.Primary);
                             break;
 
                     }

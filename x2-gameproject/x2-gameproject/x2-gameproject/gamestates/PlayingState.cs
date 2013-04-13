@@ -11,6 +11,8 @@ namespace X2Game
         private readonly TileMap _tileMap;
         private readonly List<Entity> _entities;
         private readonly List<Player> _playerList;
+        private double _enemySpawnRate;
+        private Random rand = new Random();
 
         public PlayingState(List<Player> playerList)
         {
@@ -22,20 +24,66 @@ namespace X2Game
             _entities.AddRange(playerList);
             _playerList = playerList;
 
-            //Spawn some random opponents
-            Random rand = new Random();
-            for (int i = 0; i < 5; ++i) {
-                _entities.Add(new AIControlledEntity(rand.NextDouble() > 0.5 ? ResourceManager.GetUnitType("soldier.xml") : ResourceManager.GetUnitType("small_tank.xml"), _entities, _tileMap));
-                _entities.Last().Position = new Vector2(rand.Next(_tileMap.RealWidth), rand.Next(_tileMap.RealHeight));
-            }
+            //Place players somewher safe
+            playerList[0].Position = GetRandomSpawnPosition();
+
 
             //Reset particles
             ParticleEngine.Clear();
 
-
             Camera.WorldRectangle = new Rectangle(0, 0, _tileMap.RealWidth, _tileMap.RealHeight);
             Camera.ViewPortWidth = 800;
             Camera.ViewPortHeight = 480;
+        }
+
+        private void SpawnEnemies(GameTime delta)
+        {
+            if (delta.TotalGameTime.TotalSeconds < _enemySpawnRate) return;
+            _enemySpawnRate = delta.TotalGameTime.TotalSeconds + 20.0; //spawn next wave in 20 seconds
+
+            //Spawn some random opponents
+            _entities.Add(new AIControlledEntity(ResourceManager.GetUnitType("small_tank.xml"), _entities, _tileMap));
+            _entities.Last().Position = GetRandomSpawnPosition();
+
+            _entities.Add(new AIControlledEntity(ResourceManager.GetUnitType("biker_duo.xml"), _entities, _tileMap));
+            _entities.Last().Position = GetRandomSpawnPosition();
+
+            for (int i = 0; i < 3; ++i)
+            {
+                _entities.Add(new AIControlledEntity(ResourceManager.GetUnitType("laser_trooper.xml"), _entities, _tileMap));
+                _entities.Last().Position = GetRandomSpawnPosition();
+            }
+
+            //Spawn some squads
+            for (int i = 0; i < 3; ++i)
+            {
+                Entity leader = new AIControlledEntity(ResourceManager.GetUnitType("soldier_captain.xml"), _entities, _tileMap);
+                _entities.Add(leader);
+                leader.Position = GetRandomSpawnPosition();
+                for (int j = 0; j < 5; ++j)
+                {
+                    _entities.Add(new AIControlledEntity(ResourceManager.GetUnitType("soldier.xml"), _entities, _tileMap, leader));
+                    _entities.Last().Position = leader.Position;
+                }
+            }
+        }
+
+        private Vector2 GetRandomSpawnPosition()
+        {
+            switch (rand.Next(1, 4))
+            {
+                case 1:
+                     return new Vector2(0, rand.Next(_tileMap.RealHeight));
+       
+                case 2:
+                     return new Vector2(rand.Next(_tileMap.RealWidth), 0);
+
+                case 3:
+                    return new Vector2(_tileMap.RealWidth, rand.Next(_tileMap.RealHeight));
+
+                default:
+                    return new Vector2(rand.Next(_tileMap.RealWidth), _tileMap.RealHeight);
+            }
         }
 
         protected override void Update(GameTime delta, KeyboardState keyboard, MouseState mouse, RenderEngine renderEngine)
@@ -47,9 +95,9 @@ namespace X2Game
                 return;
             }
 
-
             //Update Camera position
             Camera.Position = _playerList[0].Position - new Vector2(Camera.ViewPortWidth, Camera.ViewPortHeight)/2; //IKKE FERDIG!
+            if (Camera.shake > 0) Camera.shake -= delta.ElapsedGameTime.Milliseconds;
 
             //Update particle effects
             ParticleEngine.Update(delta, _entities, _tileMap);
@@ -91,6 +139,9 @@ namespace X2Game
                     _entities[i].HandleCollision(_entities[j]);
 				}
 			}
+
+            //Spawn new waves of enemies!
+            SpawnEnemies(delta);
         }
 
         protected override void Draw(RenderEngine renderEngine)

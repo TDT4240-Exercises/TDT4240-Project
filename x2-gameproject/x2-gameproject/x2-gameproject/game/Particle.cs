@@ -18,8 +18,8 @@ namespace X2Game
         internal float Size;
         internal float Alpha;
         public float Speed;
-
-        public bool IsDestroyed;
+        private HashSet<Entity> _areaOfEffect;
+        private bool aoeFinished;
 
         public Particle(Vector2 initialPosition, ParticleTemplate template)
         {
@@ -39,9 +39,17 @@ namespace X2Game
             //Sound effect
             string spawnSound = template.GetValue<string>(ParticleValues.SoundEffectOnSpawn);
             if (spawnSound != null) ResourceManager.PlaySoundEffect(spawnSound);
+
+            //camera shake effect
+            Camera.shake += template.GetValue<int>(ParticleValues.CameraShake);
+
+            if (template.GetValue<bool>(ParticleValues.AreaOfEffect))
+            {
+                _areaOfEffect = new HashSet<Entity>();
+            }
         }
 
-        public void Destroy()
+        public override void Destroy()
         {
             if (IsDestroyed) return;
             IsDestroyed = true;
@@ -111,26 +119,58 @@ namespace X2Game
         {
             if (IsCollidable)
             {
-                //Did we hit a wall?
-                Point? tileCollision = tileMap.GetCollidedTile(this);
-                if (tileCollision.HasValue)
+                //Area of effect!
+                if (_areaOfEffect != null)
                 {
-                    tileMap.DestroyTile(tileCollision.Value.X, tileCollision.Value.Y, _template.GetValue<float>(ParticleValues.Damage));
-                    Destroy();
-                    return;
+                    //Do we hit an gameObject?
+                    foreach (Entity entity in entities.Where(entity => entity.IsCollidable && entity.HandleCollision(this, false) && entity.Team != Team && !_areaOfEffect.Contains(entity)))
+                    {
+                        entity.Damage(_template.GetValue<float>(ParticleValues.Damage));
+                        _areaOfEffect.Add(entity);
+                    }
                 }
 
-                //Do we hit an gameObject?
-                foreach (Entity entity in entities.Where(entity => entity.IsCollidable && entity.HandleCollision(this, false) && entity.Team != Team))
+                //Single target only
+                else
                 {
-                    entity.Damage(_template.GetValue<float>(ParticleValues.Damage));
-                    Destroy();
-                    return;
+                    //Did we hit a wall?
+                    Point? tileCollision = tileMap.GetCollidedTile(this);
+                    if (tileCollision.HasValue)
+                    {
+                        tileMap.DestroyTile(tileCollision.Value.X, tileCollision.Value.Y, _template.GetValue<float>(ParticleValues.Damage));
+                        Destroy();
+                        return;
+                    }
+
+                    //Do we hit an gameObject?
+                    foreach (Entity entity in entities.Where(entity => entity.IsCollidable && entity.HandleCollision(this, false) && entity.Team != Team))
+                    {
+                        entity.Damage(_template.GetValue<float>(ParticleValues.Damage));
+                        Destroy();
+                        return;
+                    }
                 }
+
             }
 
 
             Update(delta, (KeyboardState?)null, null);
+
+            //Make AOE apply damage to tiles (but only once)
+            if (IsCollidable && _areaOfEffect != null && !aoeFinished)
+            {
+                aoeFinished = true;
+                Vector2 bounds = new Vector2(Width, Height);
+                Point start = tileMap.GetSquareAtPixel(Position - bounds/2);
+                Point end = tileMap.GetSquareAtPixel(Position + bounds/2);
+                for (int x = start.X; x <= end.X; ++x)
+                {
+                    for (int y = start.Y; y <= end.Y; ++y)
+                    {
+                        tileMap.DestroyTile(x, y, _template.GetValue<float>(ParticleValues.Damage));
+                    }
+                }
+            }
         }
     }
 }

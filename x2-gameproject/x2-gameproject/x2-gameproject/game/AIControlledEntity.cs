@@ -7,11 +7,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace X2Game
 {
-
     class AIControlledEntity : Entity
     {
-        private const int AttackDistance = 131070;
-        private const int DetectDistance = 262140;
+        private const int AttackDistance = 151070;
+        private const int DetectDistance = 282140;
 
         public enum AIState
         {
@@ -29,8 +28,11 @@ namespace X2Game
         private readonly AStarPathfinder _pathfinder;
 
         private Entity _target;
+        private Entity _leader;
+        private readonly Random rand = new Random();
+        private long _waypointTimeout = 0;
 
-        public AIControlledEntity(UnitType type, List<Entity> entities, TileMap world) : base(type)
+        public AIControlledEntity(UnitType type, List<Entity> entities, TileMap world, Entity leader = null) : base(type)
         {
             Team = 'A'; //Team AI
             _tileMap = world;
@@ -38,6 +40,7 @@ namespace X2Game
             _state = AIState.Wander;
             _waypoints = new Stack<AStarPathfinder.Node>();
             _pathfinder = new AStarPathfinder();
+            _leader = leader;
         }
 
         public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)
@@ -57,19 +60,27 @@ namespace X2Game
                 }
             }
 
+            //Clear all waypoints if we use more than 2 seconds to reach the next waypoint
+            if (_waypointTimeout < delta.TotalGameTime.TotalMilliseconds)
+            {
+                _waypointTimeout = (int)delta.TotalGameTime.TotalMilliseconds + 1500;
+                _waypoints.Clear();
+                _currentWaypoint = null;
+            }
+
             //Get next waypoint?
             if (_currentWaypoint == null && _waypoints.Count > 0)
             {
                 _currentWaypoint = _waypoints.Pop();
+                _waypointTimeout = (int)delta.TotalGameTime.TotalMilliseconds + 1500;
             }
 
             //Move towards next waypoint
             if (_currentWaypoint != null)
             {
                 //Reached our waypoint?
-                int tileX = _tileMap.GetSquareByPixelX((int)X);
-                int tileY = _tileMap.GetSquareByPixelY((int)Y);
-                if (tileX == _currentWaypoint.X && tileY == _currentWaypoint.Y)
+                targetTile = _tileMap.GetSquareAtPixel(Position);
+                if (targetTile.X == _currentWaypoint.X && targetTile.Y == _currentWaypoint.Y)
                 {
                     _currentWaypoint = null;
                 }
@@ -106,18 +117,29 @@ namespace X2Game
                         distance = (entity.Position - Position).LengthSquared();
                         if (distance > DetectDistance) continue;
                         _target = entity;
-                        _state = AIState.Search;
+                        _state = AIState.Intercept;
                         break;
                     }
 
-                    //Randomly wander around
                     if (_currentWaypoint == null)
                     {
-                        Random rand = new Random();
-                        targetTile = _tileMap.GetSquareAtPixel(Position);
-                        int x = targetTile.X + rand.Next(16) - 8;
-                        int y = targetTile.Y + rand.Next(16) - 8;
-                        if (_tileMap.IsWalkable(x, y)) _waypoints = _pathfinder.FindPath(targetTile.X, targetTile.Y, x, y, _tileMap);
+                        //Follow our leader
+                        if (_leader != null)
+                        {
+                            targetTile = _tileMap.GetSquareAtPixel(_leader.Position);
+                            _currentWaypoint = new AStarPathfinder.Node(targetTile.X, targetTile.Y);
+
+                            //Has our leader died?
+                            if (_leader.IsDestroyed) _leader = null;
+                        }
+
+                        //Randomly wander around
+                        else
+                        {
+                            Point ourTile = _tileMap.GetSquareAtPixel(Position+new Vector2(Width, Height));
+                            targetTile = _tileMap.GetSquareAtPixel(new Vector2(rand.Next(_tileMap.RealWidth), rand.Next(_tileMap.RealHeight)));
+                            if (_tileMap.IsWalkable(targetTile.X, targetTile.Y)) _waypoints = _pathfinder.FindPath(targetTile.X, targetTile.Y, ourTile.X, ourTile.Y, _tileMap);
+                        }
                     }
 
                     break;

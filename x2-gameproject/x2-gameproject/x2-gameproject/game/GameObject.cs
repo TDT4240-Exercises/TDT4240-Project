@@ -19,6 +19,9 @@ namespace X2Game
         protected internal bool IsCollidable;
         protected internal char Team;
 
+        protected bool DestroyOnCollsion;
+        public bool IsDestroyed { get; protected set; }
+
         protected GameObject()
         {
             Velocity = new Vector2();
@@ -117,7 +120,7 @@ namespace X2Game
             int distance = (int)diffVector.Length();
 
             //Collision?
-            if (distance >= en1Radius + en2Radius) return false;
+            if (distance >= en1Radius + en2Radius || distance == 0) return false;
 
             if (applyForce)
             {
@@ -128,9 +131,20 @@ namespace X2Game
                 other.Position -= diffVector;
             }
 
+            if (other.Team != Team && other.DestroyOnCollsion != DestroyOnCollsion)
+            {
+                if (other.DestroyOnCollsion) other.Destroy();
+                if (DestroyOnCollsion)       Destroy();
+            }
+
             return true;
         }
 
         #endregion
+
+        public virtual void Destroy()
+        {
+            IsDestroyed = true;
+        }
     }
 }

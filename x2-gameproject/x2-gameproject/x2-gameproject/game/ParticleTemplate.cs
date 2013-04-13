@@ -4,21 +4,23 @@ namespace X2Game
 {
     public enum ParticleValues
     {
-        InitialSize,
-        SizeAdd,
-        InitialRotation,
-        RotationAdd,
-        LifeTime,
-        Texture,
-        VelocityAdd,
-        InitialAlpha,
-        AlphaAdd,
-        SpawnParticleOnEnd,
-        CanCollide,
-        RotationIndependentVelocity,
-        SoundEffectOnSpawn,
-        AttackCooldown,
-        Damage
+        InitialSize,                    //Starting size (float)
+        SizeAdd,                        //Size change every frame
+        InitialRotation,                //Starting rotation (-1 for random)
+        RotationAdd,                    //Rotation add every frame
+        LifeTime,                       //Seconds before it dies
+        Texture,                        //Which texture to use (string)
+        InitialAlpha,                   //Staring transperancy
+        AlphaAdd,                       //Transperancy change every frame
+        SpawnParticleOnEnd,             //Which particle to spawn when this ends
+        CanCollide,                     //Can collide with enemy entities?
+        RotationIndependentVelocity,    //Does not rotate in velocity direction
+        SoundEffectOnSpawn,             //Play this sound when particle spawns
+        AttackCooldown,                 //Seconds between each attack
+        Damage,                         //How much damage it deals
+        Speed,                          //Maximum speed
+        CameraShake,                    //Cause camera shake?
+        AreaOfEffect                    //Can hit multiple enemies?
     }
 
     [ImmutableObject(true)]
@@ -33,6 +35,7 @@ namespace X2Game
             SetDefaultValue(ParticleValues.InitialSize, 1.0f);
             SetDefaultValue(ParticleValues.LifeTime, 3.0f);
             SetDefaultValue(ParticleValues.AttackCooldown, 1.0f);
+            SetDefaultValue(ParticleValues.Speed, 10.0f);
             SetDefaultValue(ParticleValues.Texture, "MISSING_TEXTURE");
         }
     }

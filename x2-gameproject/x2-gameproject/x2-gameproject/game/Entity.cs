@@ -14,11 +14,12 @@ namespace X2Game
         protected float TurnRate;
         protected float Health;
         protected float MaxHealth;
-        protected float AttackCooldown;
-        protected ParticleTemplate CurrentWeapon;
+        protected float PrimaryAttackCooldown;
+        protected float SecondaryAttackCooldown;
+        protected ParticleTemplate PrimaryWeapon;
+        protected ParticleTemplate SecondaryWeapon;
         public float Speed;
 
-        public bool IsDestroyed { get; protected set; }
 
         /// <summary>
         /// Constructor for an Entity
@@ -34,21 +35,34 @@ namespace X2Game
             TurnRate = type.GetValue<float>(UnitValues.TurnRate);
             MaxHealth = Health = type.GetValue<float>(UnitValues.Health);
             Speed = type.GetValue<float>(UnitValues.Speed);
-            CurrentWeapon = ResourceManager.GetParticleTemplate(type.GetValue<string>(UnitValues.PrimaryWeapon));
+            PrimaryWeapon = ResourceManager.GetParticleTemplate(type.GetValue<string>(UnitValues.PrimaryWeapon));
+            SecondaryWeapon = ResourceManager.GetParticleTemplate(type.GetValue<string>(UnitValues.SecondaryWeapon));
+            DestroyOnCollsion = type.GetValue<bool>(UnitValues.DestroyOnCollision);
         }
 
         public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)
         {
             Position += Velocity;
             Velocity *= VelocityFalloff;
-            if (AttackCooldown > 0) AttackCooldown -= (float)delta.ElapsedGameTime.TotalSeconds;
+            if (PrimaryAttackCooldown > 0) PrimaryAttackCooldown -= (float)delta.ElapsedGameTime.TotalSeconds;
+            if (SecondaryAttackCooldown > 0) SecondaryAttackCooldown -= (float)delta.ElapsedGameTime.TotalSeconds;
         }
 
-        public void FireProjectile()
+        public void FireProjectile(bool primary = true)
         {
-            if (AttackCooldown > 0) return;
-            AttackCooldown = CurrentWeapon.GetValue<float>(ParticleValues.AttackCooldown);
-            ParticleEngine.SpawnProjectile(this, CurrentWeapon);
+            if (primary)
+            {
+                if (PrimaryAttackCooldown > 0) return;
+                PrimaryAttackCooldown = PrimaryWeapon.GetValue<float>(ParticleValues.AttackCooldown);
+                ParticleEngine.SpawnProjectile(this, PrimaryWeapon);
+            }
+            else
+            {
+                if (SecondaryAttackCooldown > 0) return;
+                SecondaryAttackCooldown = SecondaryWeapon.GetValue<float>(ParticleValues.AttackCooldown);
+                ParticleEngine.SpawnProjectile(this, SecondaryWeapon);
+            }
+
         }
 
         public void Damage(float amount)
@@ -57,9 +71,13 @@ namespace X2Game
             if(Health < 0) Destroy();
         }
 
-        private void Destroy()
+        public override void Destroy()
         {
-            IsDestroyed = true;
+            if (IsDestroyed) return;
+            string deathParticle = type.GetValue<string>(UnitValues.DeathParticle);
+            if(deathParticle != null) ParticleEngine.SpawnParticle(Position, ResourceManager.GetParticleTemplate(deathParticle), true);
+            base.Destroy();
         }
+
     }
 }

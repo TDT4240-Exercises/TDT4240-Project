@@ -62,6 +62,8 @@ namespace X2Game
 
         public static ParticleTemplate GetParticleTemplate(string particleID)
         {
+            if (particleID == null) return null;
+
             if (!_loadedParticles.ContainsKey(particleID))
             {
                 try

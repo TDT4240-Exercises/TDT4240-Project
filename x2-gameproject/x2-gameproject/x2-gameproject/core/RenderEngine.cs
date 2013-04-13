@@ -45,7 +45,7 @@ namespace X2Game
             target.Y -= (int) Camera.Position.Y;
 
             //Draw it there
-            _spriteBatch.Draw(particle.Texture, target, null, new Color(particle.Alpha, particle.Alpha, particle.Alpha, particle.Alpha), 
+            _spriteBatch.Draw(particle.Texture, target, null, Color.White * particle.Alpha, 
                 particle.Rotation, new Vector2(particle.Texture.Width / 2.0f, particle.Texture.Height / 2.0f), SpriteEffects.None, 0);
         }
 
@@ -99,7 +99,7 @@ namespace X2Game
             _spriteBatch.GraphicsDevice.Clear(Color.Black);
 
             //Render current state
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
         }
 
         public void EndFrame()

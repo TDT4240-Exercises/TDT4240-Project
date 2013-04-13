@@ -35,7 +35,8 @@ namespace X2Game
             player2 = _playableUnits[0];
 
             //Load default controls
-            _player1Input[Keys.Space] = Player.Controllers.Shoot;
+            _player1Input[Keys.RightShift] = Player.Controllers.Secondary;
+            _player1Input[Keys.RightControl] = Player.Controllers.Primary;
             _player1Input[Keys.Right] = Player.Controllers.Right;
             _player1Input[Keys.Up] = Player.Controllers.Forward;
             _player1Input[Keys.Down] = Player.Controllers.Back;
@@ -47,7 +48,7 @@ namespace X2Game
                 Label inputMap = new Label(input.Value.ToString() + ":", x, y);
                 components.Add(inputMap);
 
-                Button keyMap = new Button(input.Key.ToString(), x + 100, y, 150, 32);
+                Button keyMap = new Button(input.Key.ToString(), x + 150, y, 150, 32);
                 keyMap.SetOnClickFunction(() =>
                     {
                         keyMap.setText("...");
@@ -57,7 +58,7 @@ namespace X2Game
             }
 
             //PLAYER 2 Stuff
-            x = 350;
+            x = 450;
             y = 50;
             Label player2Label = new Label("=PLAYER 2=", x, y);
             components.Add(player2Label);
@@ -68,7 +69,8 @@ namespace X2Game
             components.Add(new InputField("Player 2", x + 100, y, 150, 32));
 
             //Load default controls
-            _player2Input[Keys.LeftControl] = Player.Controllers.Shoot;
+            _player2Input[Keys.LeftControl] = Player.Controllers.Primary;
+            _player2Input[Keys.LeftShift] = Player.Controllers.Secondary;
             _player2Input[Keys.D] = Player.Controllers.Right;
             _player2Input[Keys.W] = Player.Controllers.Forward;
             _player2Input[Keys.S] = Player.Controllers.Back;
@@ -80,7 +82,7 @@ namespace X2Game
                 Label inputMap = new Label(input.Value.ToString() + ":", x, y);
                 components.Add(inputMap);
 
-                Button keyMap = new Button(input.Key.ToString(), x + 100, y, 150, 32);
+                Button keyMap = new Button(input.Key.ToString(), x + 150, y, 150, 32);
                 keyMap.SetOnClickFunction(() =>
                 {
                     keyMap.setText("...");

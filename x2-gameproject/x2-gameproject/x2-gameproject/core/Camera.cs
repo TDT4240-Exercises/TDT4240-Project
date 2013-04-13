@@ -12,12 +12,24 @@ namespace X2Game
         private static Vector2 position = Vector2.Zero;
         private static Vector2 viewPortSize = Vector2.Zero;
         private static Rectangle worldRectangle = new Rectangle(0, 0, 0, 0);
+        public static long shake;
+        private static readonly Random rand = new Random();
         #endregion
 
         #region Properties
         public static Vector2 Position
         {
-            get { return position; }
+            get
+            {
+                if (shake > 0)
+                {
+                    return position + new Vector2(rand.Next(128) - 64, rand.Next(129) - 64);
+                }
+                else
+                {
+                    return position;
+                }
+            }
             set
             {
                 position = new Vector2(

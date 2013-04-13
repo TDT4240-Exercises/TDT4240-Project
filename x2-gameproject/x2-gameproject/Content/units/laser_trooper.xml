@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UnitType>
-	<Texture type="String">soldier.png</Texture>
+	<Texture type="String">laser_trooper.png</Texture>
 	<Health type="Float">5</Health>
 	<TurnRate type="Float">0.15</TurnRate>
 	<Speed type="Float">1</Speed>
-	<PrimaryWeapon type="String">machinegun.xml</PrimaryWeapon>
-	<IsPlayable type="bool">true</IsPlayable>
+	<PrimaryWeapon type="String">laser.xml</PrimaryWeapon>
 	<DestroyOnCollision type="bool">true</DestroyOnCollision>
 	<DeathParticle type="string">blood.xml</DeathParticle>
 </UnitType>
