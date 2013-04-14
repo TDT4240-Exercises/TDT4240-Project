@@ -12,8 +12,8 @@ namespace X2Game
         public const float VelocityFalloff = 0.95f;
         protected UnitType type;
         protected float TurnRate;
-        protected float Health;
-        protected float MaxHealth;
+        protected internal float Health;
+        protected internal float MaxHealth;
         protected float PrimaryAttackCooldown;
         protected float SecondaryAttackCooldown;
         protected ParticleTemplate PrimaryWeapon;
@@ -52,13 +52,13 @@ namespace X2Game
         {
             if (primary)
             {
-                if (PrimaryAttackCooldown > 0) return;
+                if (PrimaryAttackCooldown > 0 || PrimaryWeapon == null) return;
                 PrimaryAttackCooldown = PrimaryWeapon.GetValue<float>(ParticleValues.AttackCooldown);
                 ParticleEngine.SpawnProjectile(this, PrimaryWeapon);
             }
             else
             {
-                if (SecondaryAttackCooldown > 0) return;
+                if (SecondaryAttackCooldown > 0 || SecondaryWeapon == null) return;
                 SecondaryAttackCooldown = SecondaryWeapon.GetValue<float>(ParticleValues.AttackCooldown);
                 ParticleEngine.SpawnProjectile(this, SecondaryWeapon);
             }

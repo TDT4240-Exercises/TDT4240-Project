@@ -11,7 +11,7 @@ namespace X2Game
         public string Text = null;
         public Color TextColor = Color.GhostWhite;
         public Color ButtonColor = Color.Brown;
-        private bool _mouseIsOver, _hotkeyDown;
+        private bool _mouseIsOver, _hotkeyDown, _mouseIsDown;
         private OnButtonClick _onClickFunction;
         private Keys _hotKey;
 
@@ -48,7 +48,19 @@ namespace X2Game
             if (_onClickFunction == null) return;
             
             //Mouse click?
-            if (_mouseIsOver && mouse.LeftButton == ButtonState.Pressed) _onClickFunction();
+            if (_mouseIsOver)
+            {
+                if (mouse.LeftButton == ButtonState.Pressed) _mouseIsDown = true;
+                else if (_mouseIsDown && mouse.LeftButton == ButtonState.Released)
+                {
+                    _mouseIsDown = false;
+                    _onClickFunction();
+                }
+            }
+            else if (!_mouseIsOver)
+            {
+                _mouseIsDown = false;
+            }
             
             //Trigger hotkey?
             else if (_hotkeyDown && keyboard.IsKeyUp(_hotKey))

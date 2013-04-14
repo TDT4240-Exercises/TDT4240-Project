@@ -121,6 +121,7 @@
     <Compile Include="gamestates\OptionsState.cs" />
     <Compile Include="gamestates\PlayingState.cs" />
     <Compile Include="gamestates\SandboxAndersState.cs" />
+    <Compile Include="gamestates\SelectGameModeScreen.cs" />
     <Compile Include="gamestates\SelectPlayerState.cs" />
     <Compile Include="game\AIControlledEntity.cs" />
     <Compile Include="game\Entity.cs" />

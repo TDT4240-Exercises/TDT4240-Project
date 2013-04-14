@@ -15,6 +15,7 @@ namespace X2Game
         private Stack<GameState> _stateStack;
         private RenderEngine _renderEngine;
         private GraphicsDeviceManager _deviceManager;
+        private bool _stateChanged;
 
         private GameState CurrentGameState { get { return _stateStack.Peek(); } }
 
@@ -77,8 +78,23 @@ namespace X2Game
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed) Exit();
 
+            GameState nextState = CurrentGameState;
+
+            //This code snippet forces player to release all input between game state changes
+            if (_stateChanged && Keyboard.GetState().GetPressedKeys().Length == 0 &&
+                Mouse.GetState().LeftButton == ButtonState.Released)
+            {
+                _stateChanged = false;
+            }
+
             //Update the current game state and all it's sub-components
-            GameState nextState = CurrentGameState.UpdateAll(gameTime, Keyboard.GetState(), Mouse.GetState(), _renderEngine);
+            if (!_stateChanged)
+            {
+                nextState = CurrentGameState.UpdateAll(gameTime, Keyboard.GetState(), Mouse.GetState(), _renderEngine);
+            }
+
+            //Destroy any states
+            while (CurrentGameState.IsDestroyed) _stateStack.Pop();
 
             //Go to previous?
             if (nextState == null)
@@ -88,7 +104,7 @@ namespace X2Game
                     _stateStack.Pop();
                     CurrentGameState.NextGameState = CurrentGameState;
                 }
-                catch (InvalidOperationException ex)
+                catch
                 {
                     Exit(); //Last state in stack?
                 }
@@ -98,6 +114,7 @@ namespace X2Game
             else if (nextState != CurrentGameState)
             {
                 _stateStack.Push(nextState);
+                _stateChanged = true;
             }
 
             base.Update(gameTime);

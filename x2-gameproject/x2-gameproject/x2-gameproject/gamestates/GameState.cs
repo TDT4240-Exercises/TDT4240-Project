@@ -8,11 +8,17 @@ namespace X2Game {
     abstract class GameState {
         protected readonly List<GUIComponent> components;
         public GameState NextGameState;
+        public bool IsDestroyed { get; private set; }
 
         protected GameState()
         {
             components = new List<GUIComponent>();
             NextGameState = this;
+        }
+
+        protected void DestroyCurrentState()
+        {
+            IsDestroyed = true;
         }
 
         /// <summary>

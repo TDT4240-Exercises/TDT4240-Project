@@ -17,20 +17,31 @@ namespace X2Game
             _mouseCursor = ResourceManager.GetTexture("cursor.png");
         }
 
-        public void Render(GameObject gameObject)
+        public void Render(Entity entity)
         {
-            if (Camera.ObjectIsVisible(gameObject.Bounds))
+            if (Camera.ObjectIsVisible(entity.Bounds))
             {
+                Vector2 drawPosition = entity.Position - Camera.Position;
+
+                //the unit itself
                 _spriteBatch.Draw(
-                    gameObject.Texture,
-                    gameObject.Position - Camera.Position,
+                    entity.Texture,
+                    drawPosition,
                     null,
                     Color.White,
-                    gameObject.Rotation,
-                    gameObject.RelativeCenter,
+                    entity.Rotation,
+                    entity.RelativeCenter,
                     1.0f,
                     SpriteEffects.None,
                     0.0f);
+
+                //Max health
+                DrawFilledRectangle((int)drawPosition.X - entity.Width / 2, (int)drawPosition.Y - entity.Height / 2 - 24, 
+                    entity.Width, 4, Color.Black);
+
+                //remaining health
+                DrawFilledRectangle((int)drawPosition.X - entity.Width / 2, (int)drawPosition.Y - entity.Height / 2 - 24,
+                    (int)(entity.Width * (1.0 / entity.MaxHealth * entity.Health)), 4, entity is Player ? Color.Green : Color.Red);
             }
         }
 
