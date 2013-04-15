@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<LifeTime type="Float">6</LifeTime>
+	<InitialSize type="Float">3.25</InitialSize>
+	<SizeAdd type="Float">-0.01</SizeAdd>
+	<Texture type="String">kaboom.png</Texture>
+	<AlphaAdd type="Float">0.0015</AlphaAdd>
+	<InitialAlpha type="Float">0.25</InitialAlpha>
+</ParticleTemplate>

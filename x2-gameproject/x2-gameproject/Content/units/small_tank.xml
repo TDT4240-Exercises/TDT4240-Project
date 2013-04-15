@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UnitType>
 	<Texture type="String">small_tank.png</Texture>
-	<Health type="Float">10</Health>
-	<TurnRate type="Float">0.15</TurnRate>
-	<Speed type="Float">2</Speed>
+	<Health type="Float">80</Health>
+	<TurnRate type="Float">0.1</TurnRate>
+	<Speed type="Float">3.5</Speed>
 	<IsPlayable type="bool">true</IsPlayable>
 	<PrimaryWeapon type="String">missile.xml</PrimaryWeapon>
+	<DeathParticle type="string">explosion.xml</DeathParticle>
 </UnitType>

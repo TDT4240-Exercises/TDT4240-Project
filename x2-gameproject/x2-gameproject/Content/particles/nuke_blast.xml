@@ -9,4 +9,5 @@
 	<CanCollide type="boolean">true</CanCollide>
 	<Damage type="Float">500</Damage>
 	<AreaOfEffect type="boolean">true</AreaOfEffect>
+	<SpawnParticleOnEnd type="particle">nuke_shrink.xml</SpawnParticleOnEnd>
 </ParticleTemplate>

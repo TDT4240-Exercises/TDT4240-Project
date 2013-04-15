@@ -67,13 +67,13 @@ namespace X2Game
             }
         }
 
-        public static void SpawnParticle(Vector2 position, ParticleTemplate template, bool centre = false)
+        public static void SpawnParticle(Vector2 position, ParticleTemplate template, bool centre = false, Entity owner = null)
         {
             //Don't spawn more particles than the set limit
             if (Count() >= MaxParticles || template == null) return;
 
             //Spawn it and add it last in our list
-            SpawnList.AddLast(new Particle(position, template));
+            SpawnList.AddLast(new Particle(position, template, owner));
         }
 
         public static void SpawnProjectile(Entity shooter, ParticleTemplate template)
@@ -81,7 +81,7 @@ namespace X2Game
             //Don't spawn more particles than the set limit
             if (Count() >= MaxParticles || template == null) return;
 
-            Particle projectile = new Particle(shooter.Position, template);
+            Particle projectile = new Particle(shooter.Position, template, shooter);
             projectile.Rotation = shooter.Rotation;
             projectile.Speed = template.GetValue<float>(ParticleValues.Speed);
             projectile.Team = shooter.Team;

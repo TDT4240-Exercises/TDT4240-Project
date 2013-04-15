@@ -133,8 +133,16 @@ namespace X2Game
 
             if (other.Team != Team && other.DestroyOnCollsion != DestroyOnCollsion)
             {
-                if (other.DestroyOnCollsion) other.Destroy();
-                if (DestroyOnCollsion)       Destroy();
+                if (other.DestroyOnCollsion)
+                {
+                    if (this is Entity && other is Entity) (this as Entity).Score += (int)(other as Entity).MaxHealth*5;
+                    other.Destroy();
+                }
+                if (DestroyOnCollsion)
+                {
+                    if (this is Entity && other is Entity) (other as Entity).Score += (int) (this as Entity).MaxHealth*5;
+                    Destroy();
+                }
             }
 
             return true;

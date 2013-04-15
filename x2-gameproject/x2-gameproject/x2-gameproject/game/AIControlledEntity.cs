@@ -226,7 +226,7 @@ namespace X2Game
                     else
                     {
                         Rotation = (float)(Math.PI / 2 - Math.Atan2(_target.X - X, _target.Y - Y));
-                        FireProjectile();
+                        FireProjectile(rand.NextDouble() > 0.5);
                     }
 
                     break;

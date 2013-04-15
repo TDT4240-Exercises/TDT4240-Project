@@ -12,21 +12,26 @@ namespace X2Game
         private readonly List<Entity> _entities;
         private readonly List<Player> _playerList;
         private double _enemySpawnRate;
-        private Random rand = new Random();
+        private readonly Random rand = new Random();
+        private readonly bool _versusMode;
+        private readonly Label _player1Score;
 
-        public PlayingState(List<Player> playerList)
+        public PlayingState(List<Player> playerList, bool versusMode)
         {
             //Initialize level
             _entities = new List<Entity>(64);
             _tileMap = new TileMap(24, 24);
+            _versusMode = versusMode;
 
             //Initialize players
             _entities.AddRange(playerList);
             _playerList = playerList;
 
             //Place players somewher safe
-            playerList[0].Position = GetRandomSpawnPosition();
-
+            foreach (Player player in playerList)
+            {
+                player.Position = GetRandomSpawnPosition();
+            }
 
             //Reset particles
             ParticleEngine.Clear();
@@ -34,6 +39,13 @@ namespace X2Game
             Camera.WorldRectangle = new Rectangle(0, 0, _tileMap.RealWidth, _tileMap.RealHeight);
             Camera.ViewPortWidth = 800;
             Camera.ViewPortHeight = 480;
+
+            //Player 1 GUI
+            Label player1Name = new Label(_playerList[0].Name, 500, 5);
+            components.Add(player1Name);
+
+            _player1Score = new Label("SCORE: 0", 500, 32);
+            components.Add(_player1Score);
         }
 
         private void SpawnEnemies(GameTime delta)
@@ -41,16 +53,13 @@ namespace X2Game
             if (delta.TotalGameTime.TotalSeconds < _enemySpawnRate) return;
             _enemySpawnRate = delta.TotalGameTime.TotalSeconds + 20.0; //spawn next wave in 20 seconds
 
+            List<UnitType> unitTypes = ResourceManager.GetAllUnitTypes();
+            
+
             //Spawn some random opponents
-            _entities.Add(new AIControlledEntity(ResourceManager.GetUnitType("small_tank.xml"), _entities, _tileMap));
-            _entities.Last().Position = GetRandomSpawnPosition();
-
-            _entities.Add(new AIControlledEntity(ResourceManager.GetUnitType("biker_duo.xml"), _entities, _tileMap));
-            _entities.Last().Position = GetRandomSpawnPosition();
-
             for (int i = 0; i < 3; ++i)
             {
-                _entities.Add(new AIControlledEntity(ResourceManager.GetUnitType("laser_trooper.xml"), _entities, _tileMap));
+                _entities.Add(new AIControlledEntity(unitTypes[rand.Next(unitTypes.Count - 1)], _entities, _tileMap));
                 _entities.Last().Position = GetRandomSpawnPosition();
             }
 
@@ -94,6 +103,15 @@ namespace X2Game
                 NextGameState = null; //Go back to main menu
                 return;
             }
+
+            //15 seconds until first wave spawns
+            if ((int)_enemySpawnRate == 0)
+            {
+                _enemySpawnRate = delta.TotalGameTime.TotalSeconds + 15;
+            }
+
+            //Update highscore
+            _player1Score.Text = "SCORE: " + _playerList[0].Score;
 
             //Update Camera position
             Camera.Position = _playerList[0].Position - new Vector2(Camera.ViewPortWidth, Camera.ViewPortHeight)/2; //IKKE FERDIG!
@@ -141,7 +159,7 @@ namespace X2Game
 			}
 
             //Spawn new waves of enemies!
-            SpawnEnemies(delta);
+            if(!_versusMode) SpawnEnemies(delta);
         }
 
         protected override void Draw(RenderEngine renderEngine)

@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UnitType>
 	<Texture type="String">big_tank.png</Texture>
-	<Health type="Float">200</Health>
-	<TurnRate type="Float">0.04</TurnRate>
-	<Speed type="Float">4</Speed>
+	<Health type="Float">175</Health>
+	<TurnRate type="Float">0.02</TurnRate>
+	<Speed type="Float">1.5</Speed>
 	<IsPlayable type="bool">true</IsPlayable>	
-	<PrimaryWeapon type="String">missile.xml</PrimaryWeapon>
+	<PrimaryWeapon type="String">fast_missile.xml</PrimaryWeapon>
+	<SecondaryWeapon type="String">mine.xml</SecondaryWeapon>
+	<DeathParticle type="string">explosion_shrink.xml</DeathParticle>
 </UnitType>

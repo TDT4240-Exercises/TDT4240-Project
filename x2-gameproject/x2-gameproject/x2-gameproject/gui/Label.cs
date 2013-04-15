@@ -5,18 +5,19 @@ namespace X2Game
 {
     class Label : GUIComponent
     {
-        private string _text;
+        public string Text;
 
         public Label(string text, int x, int y)
         {
-            _text = text;
+            Text = text;
             Bounds.X = x;
             Bounds.Y = y;
         }
 
+
         public override void Draw(RenderEngine renderEngine)
         {
-            renderEngine.DrawString(_text, Bounds.X, Bounds.Y, Color.White);  
+            renderEngine.DrawString(Text, Bounds.X, Bounds.Y, Color.White);  
         }
 
         public override void Update(KeyboardState keyboard, MouseState mouse, GameTime delta)

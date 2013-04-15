@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<LifeTime type="Float">360.0</LifeTime>
+	<InitialSize type="Float">0.75</InitialSize>
+	<Texture type="String">mine.png</Texture>
+	<SpawnParticleOnEnd type="particle">explosion_shrink.xml</SpawnParticleOnEnd>
+	<CanCollide type="boolean">true</CanCollide>
+	<AttackCooldown type="Float">3</AttackCooldown>
+	<Damage type="Float">20</Damage>
+	<Speed type="Float">0</Speed>
+	<SoundEffectOnSpawn type="String">mine.wav</SoundEffectOnSpawn>
+</ParticleTemplate>

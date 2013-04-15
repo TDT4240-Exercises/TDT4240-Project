@@ -19,16 +19,17 @@ namespace X2Game
         }
 
         private readonly Dictionary<Keys, Controllers> _controlMap;
-        private readonly string _playerName;
+        public readonly string Name;
 
         public Player(string playername, UnitType type, Dictionary<Keys, Controllers> input)
             : base(type)
         {
-            _playerName     = playername;
+            Name = playername;
             Position 		= new Vector2 (100, 100);
             _controlMap     = input;
             Team = 'P';     //Team Player
         }
+
 
         public override void Update(GameTime delta, KeyboardState? keyboard, MouseState? mouse)
         {

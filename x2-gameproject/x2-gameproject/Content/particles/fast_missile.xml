@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<LifeTime type="Float">10.0</LifeTime>
+	<InitialSize type="Float">0.4</InitialSize>
+	<Texture type="String">supermissile.png</Texture>
+	<AlphaAdd type="Float">0</AlphaAdd>
+	<InitialAlpha type="Float">0</InitialAlpha>
+	<SpawnParticleOnEnd type="particle">green_explosion.xml</SpawnParticleOnEnd>
+	<CanCollide type="boolean">true</CanCollide>
+	<SoundEffectOnSpawn type="String">minirocket.wav</SoundEffectOnSpawn>
+	<AttackCooldown type="Float">0.35</AttackCooldown>
+	<Damage type="Float">2.0</Damage>
+</ParticleTemplate>

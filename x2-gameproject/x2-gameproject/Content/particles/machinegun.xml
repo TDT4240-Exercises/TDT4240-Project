@@ -11,5 +11,5 @@
 	<CanCollide type="boolean">true</CanCollide>
 	<SoundEffectOnSpawn type="String">gunshot.wav</SoundEffectOnSpawn>
 	<AttackCooldown type="Float">0.4</AttackCooldown>
-	<Damage type="Float">1.0</Damage>
+	<Damage type="Float">0.5</Damage>
 </ParticleTemplate>

@@ -19,6 +19,7 @@ namespace X2Game
         protected ParticleTemplate PrimaryWeapon;
         protected ParticleTemplate SecondaryWeapon;
         public float Speed;
+        public int Score;
 
 
         /// <summary>
@@ -65,10 +66,14 @@ namespace X2Game
 
         }
 
-        public void Damage(float amount)
+        public void Damage(float amount, Entity attacker)
         {
             Health -= amount;
-            if(Health < 0) Destroy();
+            if (Health < 0)
+            {
+                Destroy();
+                if(attacker != null) attacker.Score += (int)MaxHealth * 5;
+            }
         }
 
         public override void Destroy()

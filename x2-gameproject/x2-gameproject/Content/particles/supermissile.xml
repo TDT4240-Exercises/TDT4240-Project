@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<LifeTime type="Float">10.0</LifeTime>
+	<InitialSize type="Float">0.75</InitialSize>
+	<Texture type="String">supermissile.png</Texture>
+	<AlphaAdd type="Float">0</AlphaAdd>
+	<InitialAlpha type="Float">0</InitialAlpha>
+	<SpawnParticleOnEnd type="particle">energyball.xml</SpawnParticleOnEnd>
+	<CanCollide type="boolean">true</CanCollide>
+	<SoundEffectOnSpawn type="String">launch.wav</SoundEffectOnSpawn>
+	<AttackCooldown type="Float">2.5</AttackCooldown>
+	<Damage type="Float">8.0</Damage>
+</ParticleTemplate>

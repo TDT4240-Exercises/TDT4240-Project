@@ -18,12 +18,14 @@ namespace X2Game
         internal float Size;
         internal float Alpha;
         public float Speed;
-        private HashSet<Entity> _areaOfEffect;
-        private bool aoeFinished;
+        private readonly HashSet<Entity> _areaOfEffect;
+        private bool _aoeFinished;
+        private readonly Entity _owner;
 
-        public Particle(Vector2 initialPosition, ParticleTemplate template)
+        public Particle(Vector2 initialPosition, ParticleTemplate template, Entity owner)
         {
             _template = template;
+            _owner = owner;
 
             //Rotation
             Rotation = template.GetValue<float>(ParticleValues.InitialRotation);
@@ -58,7 +60,7 @@ namespace X2Game
             ParticleTemplate spawn = _template.GetValue<ParticleTemplate>(ParticleValues.SpawnParticleOnEnd);
             if (spawn != null)
             {
-                ParticleEngine.SpawnParticle(Position, spawn);
+                ParticleEngine.SpawnParticle(Position, spawn, false, _owner);
             }
         }
 
@@ -125,7 +127,7 @@ namespace X2Game
                     //Do we hit an gameObject?
                     foreach (Entity entity in entities.Where(entity => entity.IsCollidable && entity.HandleCollision(this, false) && entity.Team != Team && !_areaOfEffect.Contains(entity)))
                     {
-                        entity.Damage(_template.GetValue<float>(ParticleValues.Damage));
+                        entity.Damage(_template.GetValue<float>(ParticleValues.Damage), _owner);
                         _areaOfEffect.Add(entity);
                     }
                 }
@@ -145,7 +147,7 @@ namespace X2Game
                     //Do we hit an gameObject?
                     foreach (Entity entity in entities.Where(entity => entity.IsCollidable && entity.HandleCollision(this, false) && entity.Team != Team))
                     {
-                        entity.Damage(_template.GetValue<float>(ParticleValues.Damage));
+                        entity.Damage(_template.GetValue<float>(ParticleValues.Damage), _owner);
                         Destroy();
                         return;
                     }
@@ -157,9 +159,9 @@ namespace X2Game
             Update(delta, (KeyboardState?)null, null);
 
             //Make AOE apply damage to tiles (but only once)
-            if (IsCollidable && _areaOfEffect != null && !aoeFinished)
+            if (IsCollidable && _areaOfEffect != null && !_aoeFinished)
             {
-                aoeFinished = true;
+                _aoeFinished = true;
                 Vector2 bounds = new Vector2(Width, Height);
                 Point start = tileMap.GetSquareAtPixel(Position - bounds/2);
                 Point end = tileMap.GetSquareAtPixel(Position + bounds/2);

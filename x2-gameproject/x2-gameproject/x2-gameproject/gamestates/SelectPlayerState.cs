@@ -93,6 +93,7 @@ namespace X2Game
             newGameButton.SetOnClickFunction(() =>
                 {
                     playerList.Add(new Player(player1Name.Text, _unitType, _playerInput));
+                    if(versus) playerList.Last().Team += (char)playerList.Count;
 
                     if (playerList.Count < numberOfplayers)
                     {
@@ -100,7 +101,7 @@ namespace X2Game
                     }
                     else
                     {
-                        NextGameState = new PlayingState(playerList);
+                        NextGameState = new PlayingState(playerList, versus);
                         DestroyCurrentState();
                     }
 

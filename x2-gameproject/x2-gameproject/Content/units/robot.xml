@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UnitType>
+	<Texture type="String">robot.png</Texture>
+	<Health type="Float">50</Health>
+	<TurnRate type="Float">0.05</TurnRate>
+	<Speed type="Float">0.5</Speed>
+	<PrimaryWeapon type="String">green_ball.xml</PrimaryWeapon>
+	<DeathParticle type="string">explosion_shrink.xml</DeathParticle>
+	<IsPlayable type="bool">true</IsPlayable>	
+</UnitType>

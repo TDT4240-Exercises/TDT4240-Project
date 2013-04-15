@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ParticleTemplate>
+	<LifeTime type="Float">3</LifeTime>
+	<InitialSize type="Float">0.25</InitialSize>
+	<InitialRotation type="Float">-1</InitialRotation>
+	<RotationAdd type="Float">0.3</RotationAdd>
+	<Texture type="String">energyball.png</Texture>
+	<AlphaAdd type="Float">0.0075</AlphaAdd>
+	<InitialAlpha type="Float">0.0</InitialAlpha>
+	<SoundEffectOnSpawn type="String">zap.wav</SoundEffectOnSpawn>
+	<Damage type="Float">10</Damage>
+	<AreaOfEffect type="boolean">true</AreaOfEffect>
+</ParticleTemplate>

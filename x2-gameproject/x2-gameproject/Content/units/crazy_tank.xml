@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UnitType>
+	<Texture type="String">crazy_tank.png</Texture>
+	<Health type="Float">100</Health>
+	<TurnRate type="Float">0.01</TurnRate>
+	<Speed type="Float">1</Speed>
+	<IsPlayable type="bool">true</IsPlayable>	
+	<PrimaryWeapon type="String">super_machinegun.xml</PrimaryWeapon>
+	<SecondaryWeapon type="String">green_ball.xml</SecondaryWeapon>
+	<DeathParticle type="string">explosion_shrink.xml</DeathParticle>
+</UnitType>
