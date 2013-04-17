@@ -94,6 +94,11 @@ namespace X2Game
             _spriteBatch.Draw(texture, new Rectangle((int)x, (int)y, (int)width, (int)height), Color.White);
         }
 
+        public void Draw(Texture2D texture, float x, float y, float width, float height, Color color)
+        {
+            _spriteBatch.Draw(texture, new Rectangle((int)x, (int)y, (int)width, (int)height), color);
+        }
+
         public void DrawFilledRectangle(Rectangle rectangle, Color color)
         {
             _spriteBatch.Draw(ResourceManager.InvalidTexture, rectangle, color);
