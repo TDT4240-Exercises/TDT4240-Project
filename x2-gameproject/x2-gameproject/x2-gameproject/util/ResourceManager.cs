@@ -183,6 +183,8 @@ namespace X2Game
             return Directory.GetFiles(ContentFolder + "units/", "*.xml").Select(path => path.Substring(path.LastIndexOf("/"))).Select(GetUnitType).ToList();
         }
 
+
+
         public static void SetScreenSize()
         {
     if (_device.Viewport.Height == 480)

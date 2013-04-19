@@ -13,6 +13,7 @@ namespace X2Game
         private readonly Dictionary<Keys, Player.Controllers> _playerInput = new Dictionary<Keys, Player.Controllers>();
         private UnitType _unitType;
         private Button _getInputKey;
+        private Player.Controllers _getControlKey;
 
         public SelectPlayerState(int numberOfplayers, bool versus, List<Player> playerList = null)
         {
@@ -65,24 +66,41 @@ namespace X2Game
             //Load default controls
             x = 50;
             y = 82;
-            _playerInput[Keys.RightShift] = Player.Controllers.Secondary;
-            _playerInput[Keys.RightControl] = Player.Controllers.Primary;
-            _playerInput[Keys.Right] = Player.Controllers.Right;
-            _playerInput[Keys.Up] = Player.Controllers.Forward;
-            _playerInput[Keys.Down] = Player.Controllers.Back;
-            _playerInput[Keys.Left] = Player.Controllers.Left;
+            if (playerList.Count == 0)
+            {
+                _playerInput[Keys.RightShift] = Player.Controllers.Secondary;
+                _playerInput[Keys.RightControl] = Player.Controllers.Primary;
+                _playerInput[Keys.Right] = Player.Controllers.Right;
+                _playerInput[Keys.Up] = Player.Controllers.Forward;
+                _playerInput[Keys.Down] = Player.Controllers.Back;
+                _playerInput[Keys.Left] = Player.Controllers.Left;
+            }
+            else
+            {
+                _playerInput[Keys.LeftShift] = Player.Controllers.Secondary;
+                _playerInput[Keys.LeftControl] = Player.Controllers.Primary;
+                _playerInput[Keys.A] = Player.Controllers.Right;
+                _playerInput[Keys.W] = Player.Controllers.Forward;
+                _playerInput[Keys.S] = Player.Controllers.Back;
+                _playerInput[Keys.D] = Player.Controllers.Left;
+            }
 
             foreach (var input in _playerInput)
             {
+                Keys key = input.Key;
+                Player.Controllers controller = input.Value;
+
                 y += 32;
-                Label inputMap = new Label(input.Value.ToString() + ":", x, y);
+                Label inputMap = new Label(controller.ToString() + ":", x, y);
                 components.Add(inputMap);
 
-                Button keyMap = new Button(input.Key.ToString(), x + 150, y, 150, 32);
+                Button keyMap = new Button(key.ToString(), x + 150, y, 150, 32);
                 keyMap.SetOnClickFunction(() =>
                     {
                         keyMap.setText("...");
+                        _getControlKey = controller;
                         _getInputKey = keyMap;
+                        _playerInput.Remove(key);
                     });
                 components.Add(keyMap);
             }
@@ -132,6 +150,7 @@ namespace X2Game
 
             foreach (var key in keyboard.GetPressedKeys())
             {
+                _playerInput[key] = _getControlKey;
                 _getInputKey.setText(key.ToString());
                 _getInputKey = null;
                 break;
