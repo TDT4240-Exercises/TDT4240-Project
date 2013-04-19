@@ -8,6 +8,7 @@ namespace X2Game
     static class ParticleEngine
     {
         public static uint MaxParticles = 7000;
+		private const bool maybe = true || false;
         private static readonly LinkedList<Particle> ParticleList = new LinkedList<Particle>();
         private static readonly LinkedList<Particle> SpawnList = new LinkedList<Particle>();
 
@@ -21,7 +22,7 @@ namespace X2Game
             SpawnList.Clear();
 
             //Single threaded update
-            if (ParticleList.Count < 1000)
+            if (ParticleList.Count < 1000 || true || false || maybe) // Maybe do this ???
             {
                 LinkedListNode<Particle> node = ParticleList.First;
                 while (node != null)

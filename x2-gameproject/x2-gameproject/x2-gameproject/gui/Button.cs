@@ -9,19 +9,22 @@ namespace X2Game
         public delegate void OnButtonClick();
 
         public string Text = null;
-        public Color TextColor = Color.GhostWhite;
-        public Color ButtonColor = Color.Brown;
+        public Color TextColor = Color.WhiteSmoke;
+        public Color ButtonColor = Color.DarkRed;
         private bool _mouseIsOver, _hotkeyDown, _mouseIsDown;
         private OnButtonClick _onClickFunction;
         private Keys _hotKey;
+        private Texture2D btnTexture;
 
         public Button(string buttonText, int x, int y, int width = 150, int height = 50, Keys hotKey = Keys.None)
         {
             Text = buttonText;
             Bounds = new Rectangle(x, y, width, height);
             _hotKey = hotKey;
+            btnTexture = ResourceManager.GetTexture("button.png");
         }
 
+      
         public void SetOnClickFunction(OnButtonClick onClick)
         {
             _onClickFunction = onClick;
@@ -29,7 +32,7 @@ namespace X2Game
 
         public override void Draw(RenderEngine renderEngine)
         {
-            renderEngine.DrawFilledRectangle(Bounds, _mouseIsOver ? ButtonColor * 1.5f : ButtonColor);
+            renderEngine.Draw(btnTexture, Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height, _mouseIsOver ? ButtonColor * 1.5f : ButtonColor);
             if (!string.IsNullOrWhiteSpace(Text))
             {
                 renderEngine.DrawString(Text, Bounds.Center.X, Bounds.Center.Y, TextColor, true);
