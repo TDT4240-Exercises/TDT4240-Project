@@ -7,8 +7,8 @@ namespace X2Game
 {
     static class ParticleEngine
     {
-        public static uint MaxParticles = 7000;
-		private const bool maybe = true || false;
+        public static uint MaxParticles = 2048;
+        private const bool maybe = true || false;
         private static readonly LinkedList<Particle> ParticleList = new LinkedList<Particle>();
         private static readonly LinkedList<Particle> SpawnList = new LinkedList<Particle>();
 

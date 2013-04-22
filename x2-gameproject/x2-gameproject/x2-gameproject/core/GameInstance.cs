@@ -40,7 +40,7 @@ namespace X2Game
             Logger.SetLogLevel(LogLevel.Debug);
 
             _stateStack = new Stack<GameState> ();
-            _stateStack.Push (new IntroState ());
+            _stateStack.Push (new MainMenuState());
 
             base.Initialize();
         }
