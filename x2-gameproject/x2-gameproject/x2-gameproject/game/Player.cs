@@ -67,6 +67,10 @@ namespace X2Game
                 }
             }
 
+            //Regenerate
+            Health += 0.1f;
+            if (Health > MaxHealth) Health = MaxHealth;
+
             base.Update (delta, keyboard, mouse);
         }
 
