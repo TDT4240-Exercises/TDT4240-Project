@@ -251,7 +251,7 @@ namespace X2Game
         #endregion
 
         #region Drawing
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, int cameraOffset)
         {
             int startX = GetSquareByPixelX((int)Camera.Position.X);
             int endX = GetSquareByPixelX((int)Camera.Position.X +
@@ -271,6 +271,7 @@ namespace X2Game
                 for (int y = startY; y <= endY; y++)
                 {
                     Rectangle target = SquareScreenRectangle(x, y);
+                    target.X += cameraOffset;
                     _mapSquares[x, y].Draw(target, spriteBatch);
                     
                     //Damaged tile overlay?

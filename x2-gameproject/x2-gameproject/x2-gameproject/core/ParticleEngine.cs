@@ -60,11 +60,11 @@ namespace X2Game
 
         }
 
-        public static void Render(RenderEngine renderEngine)
+        public static void Render(RenderEngine renderEngine, int cameraOffset)
         {
             foreach (Particle particle in ParticleList)
             {
-                renderEngine.Render(particle);
+                renderEngine.Render(particle, cameraOffset);
             }
         }
 

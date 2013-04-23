@@ -15,6 +15,7 @@ namespace X2Game
         private readonly Random rand = new Random();
         private readonly bool _versusMode;
         private readonly Label _player1Score;
+        private readonly Label _player2Score;
 
         public PlayingState(List<Player> playerList, bool versusMode)
         {
@@ -37,15 +38,23 @@ namespace X2Game
             ParticleEngine.Clear();
 
             Camera.WorldRectangle = new Rectangle(0, 0, _tileMap.RealWidth, _tileMap.RealHeight);
-            Camera.ViewPortWidth = 800;
-            Camera.ViewPortHeight = 480;
 
             //Player 1 GUI
-            Label player1Name = new Label(_playerList[0].Name, 500, 5);
+            Label player1Name = new Label(_playerList[0].Name, 200, 5);
             components.Add(player1Name);
 
-            _player1Score = new Label("SCORE: 0", 500, 32);
+            _player1Score = new Label("SCORE: 0", 200, 32);
             components.Add(_player1Score);
+
+            //Player 2 GUI
+            if (_playerList.Count > 1)
+            {
+                Label player2Name = new Label(_playerList[1].Name, 500, 5);
+                components.Add(player2Name);
+
+                _player2Score = new Label("SCORE: 0", 500, 32);
+                components.Add(_player2Score);
+            }
         }
 
         private void SpawnEnemies(GameTime delta)
@@ -112,9 +121,9 @@ namespace X2Game
 
             //Update highscore
             _player1Score.Text = "SCORE: " + _playerList[0].Score;
+            if(_playerList.Count > 1) _player2Score.Text = "SCORE: " + _playerList[1].Score;
 
-            //Update Camera position
-            Camera.Position = _playerList[0].Position - new Vector2(Camera.ViewPortWidth, Camera.ViewPortHeight)/2; //IKKE FERDIG!
+            //Update Camera shake
             if (Camera.shake > 0) Camera.shake -= delta.ElapsedGameTime.Milliseconds;
 
             //Update particle effects
@@ -164,17 +173,66 @@ namespace X2Game
 
         protected override void Draw(RenderEngine renderEngine)
         {
-            //Draw the level
-            renderEngine.Render(_tileMap);
-            
-            //Draw each entity visible on the screen
-            foreach (Entity entity in _entities.Where(entity => Camera.ObjectIsVisible(entity.Bounds)))
+            int cameraOffset = 0;
+
+            //Splitscreen camera?
+            if (_playerList.Count == 2 && (_playerList[0].Position - _playerList[1].Position).LengthSquared() >= 800*480 / 2)
             {
-                renderEngine.Render(entity);
+                foreach (Player player in _playerList)
+                {
+                    Camera.ViewPortWidth = 800 / _playerList.Count;
+                    Camera.ViewPortHeight = 480;
+
+                    Camera.Position = player.Position - new Vector2(Camera.ViewPortWidth, Camera.ViewPortHeight) / 2;
+
+                    //Draw the level
+                    renderEngine.Render(_tileMap, cameraOffset);
+
+                    //Draw each entity visible on the screen
+                    foreach (Entity entity in _entities.Where(entity => Camera.ObjectIsVisible(entity.Bounds)))
+                    {
+                        renderEngine.Render(entity, cameraOffset);
+                    }
+
+                    //Draw particle effects
+                    ParticleEngine.Render(renderEngine, cameraOffset);
+
+                    cameraOffset += Camera.ViewPortWidth + 32;
+                }
+
+                //Draw splitscreen bar
+                if (_playerList.Count > 1)
+                {
+                    renderEngine.Draw(ResourceManager.GetTexture("split.png"), Camera.ViewPortWidth - 32, 0, 64, Camera.ViewPortHeight, Color.White);
+                }
             }
 
-            //Draw particle effects
-            ParticleEngine.Render(renderEngine);
+            //Normal Camera
+            else
+            {
+                Camera.ViewPortWidth = 800;
+                Camera.ViewPortHeight = 480;
+
+                if (_playerList.Count == 1)
+                    Camera.Position = _playerList[0].Position - new Vector2(Camera.ViewPortWidth, Camera.ViewPortHeight) / 2;
+                else
+                {
+                    Camera.Position = (_playerList[0].Position + _playerList[1].Position)/2 - new Vector2(Camera.ViewPortWidth, Camera.ViewPortHeight) / 2;
+                }
+
+                //Draw the level
+                renderEngine.Render(_tileMap, cameraOffset);
+
+                //Draw each entity visible on the screen
+                foreach (Entity entity in _entities.Where(entity => Camera.ObjectIsVisible(entity.Bounds)))
+                {
+                    renderEngine.Render(entity, cameraOffset);
+                }
+
+                //Draw particle effects
+                ParticleEngine.Render(renderEngine, cameraOffset);
+            }
+
         }
     }
 }

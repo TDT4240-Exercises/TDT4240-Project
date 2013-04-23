@@ -79,10 +79,10 @@ namespace X2Game
             {
                 _playerInput[Keys.LeftShift] = Player.Controllers.Secondary;
                 _playerInput[Keys.LeftControl] = Player.Controllers.Primary;
-                _playerInput[Keys.A] = Player.Controllers.Right;
+                _playerInput[Keys.D] = Player.Controllers.Right;
                 _playerInput[Keys.W] = Player.Controllers.Forward;
                 _playerInput[Keys.S] = Player.Controllers.Back;
-                _playerInput[Keys.D] = Player.Controllers.Left;
+                _playerInput[Keys.A] = Player.Controllers.Left;
             }
 
             foreach (var input in _playerInput)

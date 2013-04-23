@@ -17,11 +17,12 @@ namespace X2Game
             _mouseCursor = ResourceManager.GetTexture("cursor.png");
         }
 
-        public void Render(Entity entity)
+        public void Render(Entity entity, int cameraOffset)
         {
             if (Camera.ObjectIsVisible(entity.Bounds))
             {
                 Vector2 drawPosition = entity.Position - Camera.Position;
+                drawPosition.X += cameraOffset;
 
                 //the unit itself
                 _spriteBatch.Draw(
@@ -45,15 +46,17 @@ namespace X2Game
             }
         }
 
-        public void Render(Particle particle)
+        public void Render(Particle particle, int cameraOffset)
         {
             Rectangle target = particle.Bounds;
 
+
             if (!Camera.ObjectIsVisible(target)) return;
 
+
             //Calculate screen position
-            target.X -= (int) Camera.Position.X;
-            target.Y -= (int) Camera.Position.Y;
+            target.X -= (int)Camera.Position.X - cameraOffset;
+            target.Y -= (int)Camera.Position.Y;
 
             //Draw it there
             _spriteBatch.Draw(particle.Texture, target, null, Color.White * particle.Alpha, 
@@ -70,9 +73,9 @@ namespace X2Game
             return _spriteBatch.GraphicsDevice.Viewport.Height;
         }
 
-        public void Render(TileMap tileMap)
+        public void Render(TileMap tileMap, int cameraOffset)
         {
-            tileMap.Draw(_spriteBatch);
+            tileMap.Draw(_spriteBatch, cameraOffset);
         }
 
         public void DrawString(string text, float x, float y, Color color, bool center = false)
