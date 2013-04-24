@@ -131,7 +131,8 @@ namespace X2Game
                 other.Position -= diffVector;
             }
 
-            if (other.Team != Team && other.DestroyOnCollsion != DestroyOnCollsion)
+            //Die on collision code
+            if (other.Team != Team && other.DestroyOnCollsion != DestroyOnCollsion && !(other is Particle) && !(this is Particle))
             {
                 if (other.DestroyOnCollsion)
                 {

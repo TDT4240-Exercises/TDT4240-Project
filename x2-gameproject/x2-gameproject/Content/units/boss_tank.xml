@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UnitType>
 	<Texture type="String">boss_tank.png</Texture>
-	<Health type="Float">100</Health>
-	<TurnRate type="Float">0.01</TurnRate>
-	<Speed type="Float">1</Speed>
-	<IsPlayable type="bool">true</IsPlayable>	
+	<Health type="Float">50</Health>
+	<TurnRate type="Float">0.25</TurnRate>
+	<Speed type="Float">2</Speed>
+	<IsPlayable type="bool">false</IsPlayable>	
 	<PrimaryWeapon type="String">fireball.xml</PrimaryWeapon>
 	<SecondaryWeapon type="String">supermissile.xml</SecondaryWeapon>
 	<DeathParticle type="string">explosion_shrink.xml</DeathParticle>

@@ -6,5 +6,6 @@
 	<Speed type="Float">3.5</Speed>
 	<IsPlayable type="bool">true</IsPlayable>
 	<PrimaryWeapon type="String">missile.xml</PrimaryWeapon>
+	<SecondaryWeapon type="String">mine.xml</SecondaryWeapon>
 	<DeathParticle type="string">explosion.xml</DeathParticle>
 </UnitType>

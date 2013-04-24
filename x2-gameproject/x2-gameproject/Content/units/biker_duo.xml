@@ -4,6 +4,6 @@
 	<Health type="Float">10</Health>
 	<TurnRate type="Float">0.15</TurnRate>
 	<Speed type="Float">5</Speed>
-	<IsPlayable type="bool">true</IsPlayable>
+	<IsPlayable type="bool">false</IsPlayable>
 	<PrimaryWeapon type="String">laser.xml</PrimaryWeapon>
 </UnitType>

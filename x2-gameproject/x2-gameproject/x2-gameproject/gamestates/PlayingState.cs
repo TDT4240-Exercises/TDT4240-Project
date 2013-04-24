@@ -62,8 +62,9 @@ namespace X2Game
             if (delta.TotalGameTime.TotalSeconds < _enemySpawnRate) return;
             _enemySpawnRate = delta.TotalGameTime.TotalSeconds + 20.0; //spawn next wave in 20 seconds
 
-            List<UnitType> unitTypes = ResourceManager.GetAllUnitTypes();
-            
+            //Get all non-playable unit types
+            List<UnitType> unitTypes = ResourceManager.GetAllUnitTypes().Where(unit => !unit.GetValue<bool>(UnitValues.IsPlayable)).ToList();
+
 
             //Spawn some random opponents
             for (int i = 0; i < 3; ++i)
