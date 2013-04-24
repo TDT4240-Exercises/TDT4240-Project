@@ -68,11 +68,21 @@ namespace X2Game
 
         public void Damage(float amount, Entity attacker)
         {
+            //Apply difficulity factor
+            if (attacker is Player)
+            {
+                amount *= OptionsState.GetDifficulity();
+            }
+            else
+            {
+                amount /= OptionsState.GetDifficulity();
+            }
+
             Health -= amount;
             if (Health < 0)
             {
                 Destroy();
-                if(attacker != null) attacker.Score += (int)MaxHealth * 5;
+                if(attacker != null) attacker.Score += (int) (MaxHealth * 5f / OptionsState.GetDifficulity());
             }
         }
 
